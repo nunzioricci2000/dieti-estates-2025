@@ -1,7 +1,7 @@
 export {
-    type User,
-    type Agent, 
-    type Admin
+    User,
+    Agent, 
+    Admin
 }
 
 abstract class User {

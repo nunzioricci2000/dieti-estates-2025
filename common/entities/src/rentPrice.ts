@@ -1,17 +1,17 @@
+import { Price } from "./price.js"
+
 export {
-    type RentPrice,
-    type Period,
+    RentPrice,
+    Period,
 }
 
 class RentPrice {
-    significand: number;
-    multiplier: number;
+    price: Price;
     period: Period;
 
-    constructor(significand: number, multiplier: number, period: Period) {
-        this.significand = significand;
-        this.multiplier = multiplier;
-        this.period = period
+    constructor(value: number, period: Period) {
+        this.price = new Price(value);
+        this.period = period;
     }
 }
 

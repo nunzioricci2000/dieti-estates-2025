@@ -1,13 +1,14 @@
 export {
-    type Price,
+    Price,
 }
 
 class Price {
-    significand: number;
-    multiplier: number;
+    value: number;
 
-    constructor(significand: number, multiplier: number) {
-        this.significand = significand;
-        this.multiplier = multiplier;
+    constructor(value: number) {
+        if (!Number.isInteger(value)) {
+            throw new TypeError("The value must be an integer");
+        }
+        this.value = value;
     }
 }

@@ -1,5 +1,5 @@
 export {
-    type Image,
+    Image,
 }
 
 class Image {

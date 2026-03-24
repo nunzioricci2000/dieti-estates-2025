@@ -1,13 +1,13 @@
-import { type Coordinates } from "./coordinates";
-import { type Price } from "./price";
-import { type RentPrice } from "./rentPrice";
-import { type Agent } from "./user";
-import { type Image } from "./image";
+import { Coordinates } from "./coordinates.js";
+import { Price } from "./price.js";
+import { RentPrice } from "./rentPrice.js";
+import { Agent } from "./user.js";
+import { Image } from "./image.js";
 
 export {
-    type Advertisement, 
-    type Sale, 
-    type Rental,
+    Advertisement, 
+    Sale, 
+    Rental,
 }
 
 abstract class Advertisement {
