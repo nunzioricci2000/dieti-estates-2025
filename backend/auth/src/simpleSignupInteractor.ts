@@ -2,14 +2,15 @@ import { User } from "@dieti-estates-2025/entities";
 import type { AuthRegister } from "./authRegister.js";
 import type { SignupPresenter } from "./interfaces.js";
 import { UserAlreadySignedException } from "./errors.js";
+import type { Logger } from "@dieti-estates-2025/utilities";
 
 export class SimpleSignupInteractor {
-    authRegister: AuthRegister;
-    presenter: SignupPresenter;
-    
-    constructor(authRegister: AuthRegister, presenter: SignupPresenter) {
-        this.authRegister = authRegister;
-        this.presenter = presenter;
+    constructor(
+        private authRegister: AuthRegister, 
+        private presenter: SignupPresenter,
+        private logger: Logger,
+    ) {
+        logger.info("Created!");
     }
 
     execute(username: string, password: string): User | null {
