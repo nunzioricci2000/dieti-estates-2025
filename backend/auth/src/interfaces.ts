@@ -21,11 +21,11 @@ export interface ThirdPartyAuthService {
 }
 
 export interface UserRepository {
-    createUser(user: User): User;
+    createUser(username: string): User;
     readUserWithUsername(username: string): User;
     existsUserWithUsername(username: string): boolean;
 }
 export interface PasswordRepository {
     savePassword(user: User, password: string): void;
-    verifyPassword(user: User, password: string): void;
+    verifyPassword(user: User, password: string): boolean;
 }
