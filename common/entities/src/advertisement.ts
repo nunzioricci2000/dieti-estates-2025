@@ -28,7 +28,7 @@ abstract class Advertisement {
     constructor(id: number, address: string, city: string, location: Coordinates,
         images: Image[], description: string, dimensions: number, 
         numberOfRooms: number, energyClass: string, additionalServices: string[],
-        nearbyPOIs: [], available: boolean, agent: Agent
+        nearbyPOIs: string[], available: boolean, agent: Agent
     ) {
         this.id = id;
         this.address = address;
@@ -52,7 +52,7 @@ class Sale extends Advertisement {
     constructor(id: number, address: string, city: string, location: Coordinates,
         images: Image[], description: string, dimensions: number, 
         numberOfRooms: number, energyClass: string, additionalServices: string[],
-        nearbyPOIs: [], available: boolean, agent: Agent, price: Price
+        nearbyPOIs: string[], available: boolean, agent: Agent, price: Price
     ) {
         super(id, address, city, location, images, description, dimensions, 
             numberOfRooms, energyClass, additionalServices, nearbyPOIs, available,
@@ -68,7 +68,7 @@ class Rental extends Advertisement {
     constructor(id: number, address: string, city: string, location: Coordinates,
         images: Image[], description: string, dimensions: number, 
         numberOfRooms: number, energyClass: string, additionalServices: string[],
-        nearbyPOIs: [], available: boolean, agent: Agent, rentPrice: RentPrice
+        nearbyPOIs: string[], available: boolean, agent: Agent, rentPrice: RentPrice
     ) {
         super(id, address, city, location, images, description, dimensions, 
             numberOfRooms, energyClass, additionalServices, nearbyPOIs, available,
