@@ -1,6 +1,6 @@
 import type { AuthRegister } from "./authRegister.js";
 import type { LoginPresenter } from "./interfaces.js";
-import { User } from "../../../common/entities/src/user.js";
+import { User } from "@dieti-estates-2025/entities";
 
 export class ThirdPartyLoginInteractor {
     authRegister: AuthRegister;

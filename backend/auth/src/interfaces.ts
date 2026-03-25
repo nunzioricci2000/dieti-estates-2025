@@ -1,4 +1,4 @@
-import type { User } from "../../../common/entities/src/user.js";
+import type { User } from "@dieti-estates-2025/entities";
 
 export interface LoginPresenter {
     present(token: string): void;
