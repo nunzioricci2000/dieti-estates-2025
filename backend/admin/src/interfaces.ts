@@ -1,4 +1,4 @@
-import type { Admin, Agent } from "../../../common/entities/src/user.js";
+import type { Admin, Agent } from "@dieti-estates-2025/entities";
 
 export interface FirstAdminConfig {
     getUsername(): string;
