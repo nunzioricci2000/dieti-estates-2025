@@ -12,9 +12,8 @@ export class CreateNewAdvertisementInteractor {
         logger.info("Created!");
     }
 
-    execute(advertisement: Advertisement): number {
-        // TODO we cannot create a full instance of Advertisement before we know its id. 
-        // It may not be a good parameter
+    execute(advertisement: Advertisement): Advertisement {
+        // TODO implement
         throw new Error("To be implemented");
     }
 }
