@@ -6,10 +6,13 @@ export class Request {
     query: Map<string, any>;
     headers: Map<string, string>;
     body: Map<string, any>;
+    pathParams: Map<string, string>;
     user?: User;
 
     constructor(method: string, path: string, query: Map<string, any>, 
-        headers: Map<string, string>, body: Map<string, any>, user?: User) {
+        headers: Map<string, string>, body: Map<string, any>, 
+        pathParams: Map<string, string>,  user?: User)
+    {
             this.method = method;
             this.path = path;
             this.query = query;
@@ -18,5 +21,6 @@ export class Request {
             if (user) {
                 this.user = user;
             }
+            this.pathParams = pathParams;
         }
 }

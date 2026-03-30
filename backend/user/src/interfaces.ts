@@ -6,7 +6,7 @@ export interface ViewAdvertisementPresenter {
     presentError(error: Error): void;
 }
 
-export interface FilterAdvertisementPresenter {
+export interface FilterAdvertisementsPresenter {
     present(advertisements: Advertisement[]): void;
     presentError(error: Error): void;
 }

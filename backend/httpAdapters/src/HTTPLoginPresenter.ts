@@ -1,5 +1,5 @@
 import type { Logger } from "@dieti-estates-2025/utilities";
-import type { LoginPresenter } from "../auth/src/interfaces.js";
+import type { LoginPresenter } from "../../auth/src/interfaces.js";
 import type { ResponseManager } from "./responseManager.js";
 import { Response } from "./response.js";
 
