@@ -1,0 +1,1 @@
+class AdvertisementNotExistsError extends Error {}
