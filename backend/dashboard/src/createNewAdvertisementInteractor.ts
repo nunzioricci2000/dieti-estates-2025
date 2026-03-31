@@ -13,7 +13,10 @@ export class CreateNewAdvertisementInteractor {
     }
 
     execute(advertisement: Advertisement): Advertisement {
-        // TODO implement
-        throw new Error("To be implemented");
+        const POIs = this.detectPOIsService.detectPOIs(advertisement.location);
+        advertisement.nearbyPOIs = POIs;
+        const newAd = this.repository.createAdvertisement(advertisement);
+        this.presenter.present(newAd);
+        return newAd;
     }
 }
