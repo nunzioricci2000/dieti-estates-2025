@@ -1,10 +1,10 @@
-import type { Logger } from "../../../common/utilities/src/index.js";
-import type { BookVisitEvent } from "./events.js";
+import type { EventPublisher, Logger } from "../../../common/utilities/src/index.js";
+import { BookVisitEvent } from "./events.js";
 import type { BookVisitPresenter } from "./interfaces.js";
 
 export class BookVisitInteractor {
     constructor( 
-        private event: BookVisitEvent,
+        private publisher: EventPublisher,
         private presenter: BookVisitPresenter,
         private logger: Logger,
     ) {
@@ -12,7 +12,8 @@ export class BookVisitInteractor {
     }
 
     execute(advertisementId: number): boolean {
-        // TODO implement
-        throw new Error("To be implemented");
-    }
+        this.publisher.publish(new BookVisitEvent(advertisementId));
+        // TODO complete implemetation
+        throw new Error("implementation incomplete.");
+    }   
 }
