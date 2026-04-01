@@ -1,10 +1,10 @@
-import { type Coordinates } from "@dieti-estates-2025/entities";
+import { Advertisement, type Coordinates } from "@dieti-estates-2025/entities";
 import type { Logger } from "../../../common/utilities/src/index.js";
-import type { AdvertisementReader, FilterAdvertisementsPresenter } from "./interfaces.js";
+import type { AdvertisementsReader, FilterAdvertisementsPresenter } from "./interfaces.js";
 
 export class FilterAdvertisementsInteractor {
     constructor(
-        private reader: AdvertisementReader,
+        private reader: AdvertisementsReader,
         private presenter: FilterAdvertisementsPresenter,
         private logger: Logger,
     ) {
@@ -12,7 +12,13 @@ export class FilterAdvertisementsInteractor {
     }
     
         execute(filters: SearchFilters): boolean {
-            const results = this.reader.filterAdvertisements(filters);
+            let results: Advertisement[];
+            try {
+                results = this.reader.filterAdvertisements(filters);
+            } catch(err) {
+                this.logger.error("UnexpectedErrorOccurred");
+                throw err;
+            }
             this.presenter.present(results);
             return results.length > 0;
         }

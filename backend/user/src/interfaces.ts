@@ -1,5 +1,6 @@
 import { Advertisement, Agent} from "@dieti-estates-2025/entities";
 import type { FilterAdvertisementsInteractor, SearchFilters } from "./filterAdvertisementsInteractor.js";
+import type { ReaderOf } from "@dieti-estates-2025/utilities";
 
 export interface ViewAdvertisementPresenter {
     present(advertisement: Advertisement): void;
@@ -11,8 +12,7 @@ export interface FilterAdvertisementsPresenter {
     presentError(error: Error): void;
 }
 
-export interface AdvertisementReader {
-    readAdvertisementById(id: number): Advertisement;
+export interface AdvertisementsReader extends ReaderOf<"Advertisement", Advertisement, number> {
     readAllAdvertisements(): Advertisement[];
     filterAdvertisements(filters: SearchFilters): Advertisement[];
 }
