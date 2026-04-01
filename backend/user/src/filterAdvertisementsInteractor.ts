@@ -11,7 +11,14 @@ export class FilterAdvertisementsInteractor {
         logger.info("Created!");
     }
     
-    public SearchFilters = class {
+        execute(filters: SearchFilters): boolean {
+            const results = this.reader.filterAdvertisements(filters);
+            this.presenter.present(results);
+            return results.length > 0;
+        }
+}
+
+export interface SearchFilters {
         area?: string;
         location?: Coordinates;
         distance?: number;
@@ -21,14 +28,3 @@ export class FilterAdvertisementsInteractor {
         numberOfRoomsMax?: number;
         acceptableEnergyClasses?: string[];
     }
-    
-        execute(filters: any): boolean {
-            if(!(filters instanceof this.SearchFilters)){
-                // TODO consider alternative ways to implement this
-                throw new TypeError("Filters must be an instance of SearchFilters");
-            }
-            const results = this.reader.filterAdvertisements(filters);
-            this.presenter.present(results);
-            return results.length > 0;
-        }
-}

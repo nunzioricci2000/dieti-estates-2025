@@ -1,5 +1,5 @@
 import { Advertisement, Agent} from "@dieti-estates-2025/entities";
-import type { FilterAdvertisementsInteractor } from "./filterAdvertisementsInteractor.js";
+import type { FilterAdvertisementsInteractor, SearchFilters } from "./filterAdvertisementsInteractor.js";
 
 export interface ViewAdvertisementPresenter {
     present(advertisement: Advertisement): void;
@@ -14,8 +14,7 @@ export interface FilterAdvertisementsPresenter {
 export interface AdvertisementReader {
     readAdvertisementById(id: number): Advertisement;
     readAllAdvertisements(): Advertisement[];
-    // NOTE: filters type should actually be FilterAdvertisementsInteractor.SearchFilters
-    filterAdvertisements(filters: any): Advertisement[];
+    filterAdvertisements(filters: SearchFilters): Advertisement[];
 }
 
 export interface MakePurchaseOfferPresenter {
