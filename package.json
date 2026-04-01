@@ -19,7 +19,8 @@
   },
   "workspaces": [
     "common/entities",
-    "common/utilities"
+    "common/utilities",
+    "server/auth"
   ],
   "devDependencies": {
     "typescript": "^6.0.2"
