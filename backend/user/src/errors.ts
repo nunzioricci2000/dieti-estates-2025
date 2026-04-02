@@ -1,5 +1,5 @@
 export {
-    AdvertisementNotExistsError,
+    AdvertisementNotExistsException,
 }
 
-class AdvertisementNotExistsError extends Error {}
+class AdvertisementNotExistsException extends Error {}
