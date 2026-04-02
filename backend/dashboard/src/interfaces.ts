@@ -6,7 +6,7 @@ export interface DetectPOIsService {
 }
 
 export interface CreateNewAdvertisementPresenter {
-    present(id: number): void;
+    present(advertisement: Advertisement): void;
     presentError(error: Error): void;
 }
 

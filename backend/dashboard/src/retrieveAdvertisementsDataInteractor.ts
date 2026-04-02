@@ -12,6 +12,7 @@ export class RetrieveAdvertisementsDataInteractor {
     }
 
     execute(): boolean {
+        // TODO figure out where to retrieve AdvertisementData and implement
         throw new Error("To be implemented");
     }
 }

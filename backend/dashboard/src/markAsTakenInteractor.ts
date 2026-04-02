@@ -10,6 +10,8 @@ class MarkAsTakenInteractor {
     }
     
     execute(advertisementId: number): void {
-        throw new Error("To be implemented");
+        // TODO verify that the advertisementId corresponds to existing advertisement,
+        // presentError if such condition is not met
+        this.repository.markAsTaken(advertisementId);
     }
 }

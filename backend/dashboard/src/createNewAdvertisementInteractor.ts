@@ -12,9 +12,11 @@ export class CreateNewAdvertisementInteractor {
         logger.info("Created!");
     }
 
-    execute(advertisement: Advertisement): number {
-        // TODO we cannot create a full instance of Advertisement before we know its id. 
-        // It may not be a good parameter
-        throw new Error("To be implemented");
+    execute(advertisement: Advertisement): Advertisement {
+        const POIs = this.detectPOIsService.detectPOIs(advertisement.location);
+        advertisement.nearbyPOIs = POIs;
+        const newAd = this.repository.createAdvertisement(advertisement);
+        this.presenter.present(newAd);
+        return newAd;
     }
 }
