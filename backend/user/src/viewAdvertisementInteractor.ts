@@ -2,7 +2,7 @@ import { Advertisement } from "@dieti-estates-2025/entities"
 import { ViewAdvertisementEvent } from "./events.js"
 import type { ViewAdvertisementPresenter } from "./interfaces.js"
 import { ValueNotFoundException, type EventPublisher, type Logger, type ReaderOf } from "../../../common/utilities/src/index.js"
-import { AdvertisementNotExistsError } from "./errors.js";
+import { AdvertisementNotExistsException } from "./errors.js";
 
 export class ViewAdvertisementInteractor {
     constructor(
@@ -22,7 +22,7 @@ export class ViewAdvertisementInteractor {
         } catch(err) {
             if(err instanceof ValueNotFoundException) {
                 this.logger.warn(`Attempted to view non existent advertisement with id: ${advertisementId}`);
-                this.presenter.presentError(new AdvertisementNotExistsError());
+                this.presenter.presentError(new AdvertisementNotExistsException());
                 return null;
             } else {
                 this.logger.error("Unexpected error occurred");

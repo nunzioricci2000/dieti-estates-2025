@@ -1,1 +1,1 @@
-class AdvertisementNotExistsError extends Error {}
+class AdvertisementNotExistsException extends Error {}
