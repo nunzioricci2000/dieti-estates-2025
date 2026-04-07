@@ -17,6 +17,7 @@ export class CreateNewAdvertisementInteractor {
         advertisement.nearbyPOIs = POIs;
         const newAd = this.repository.createAdvertisement(advertisement);
         this.presenter.present(newAd);
+        this.logger.info("Advertisement created!");
         return newAd;
     }
 }

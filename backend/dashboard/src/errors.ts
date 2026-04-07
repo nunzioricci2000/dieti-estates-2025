@@ -1,1 +1,5 @@
-class AdvertisementNotExistsError extends Error {}
+export {
+    UnavailableAdvertisementDataException,
+}
+
+class UnavailableAdvertisementDataException extends Error {}
