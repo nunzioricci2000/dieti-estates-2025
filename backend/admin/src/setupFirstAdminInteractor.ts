@@ -1,6 +1,6 @@
-import type { Admin } from "@dieti-estates-2025/entities";
-import type { AdminRepository, CreateNewAdminPresenter, FirstAdminConfig, FirstLaunchDetector } from "./interfaces.js";
-import type { Logger } from "@dieti-estates-2025/utilities";
+import { Admin, User } from "@dieti-estates-2025/entities";
+import type { CreateNewAdminPresenter, FirstAdminConfig, FirstLaunchDetector } from "./interfaces.js";
+import type { CreatorOf, Logger, RepositoryOf } from "@dieti-estates-2025/utilities";
 import { InvalidConfigurationError } from "./errors.js";
 
 class SetupFirstAdminInteractor {
@@ -8,7 +8,8 @@ class SetupFirstAdminInteractor {
         private config: FirstAdminConfig, 
         private detector: FirstLaunchDetector, 
         private presenter: CreateNewAdminPresenter, 
-        private repository: AdminRepository,
+        private adminCreator: CreatorOf<"Admin", Admin, {email: string}>,
+        private passwordRepository: RepositoryOf<"Password", string, User>,
         private logger: Logger,
     ) {
         logger.info("Created!");
@@ -19,6 +20,7 @@ class SetupFirstAdminInteractor {
             return null;
         }
 
+        const email = this.config.getEmail();
         const username = this.config.getUsername();
         const password = this.config.getPassword();
 
@@ -27,7 +29,8 @@ class SetupFirstAdminInteractor {
             return null;
         }
 
-        const admin = this.repository.createAdmin(username, password);
+        const admin = this.adminCreator.createAdmin(new Admin(email, username));
+        this.passwordRepository.createPassword(admin, password);
         this.presenter.present(admin);
         return admin;
     }

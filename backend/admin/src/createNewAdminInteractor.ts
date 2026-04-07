@@ -1,19 +1,33 @@
-import type { Admin } from "@dieti-estates-2025/entities";
-import type { AdminRepository, CreateNewAdminPresenter } from "./interfaces.js";
-import type { Logger } from "@dieti-estates-2025/utilities";
+import { Admin } from "@dieti-estates-2025/entities";
+import type { CreateNewAdminPresenter } from "./interfaces.js";
+import { ValueAlreadyExistsException, type Logger, type RepositoryOf } from "@dieti-estates-2025/utilities";
+import { AdminAlreadySignedException } from "./errors.js";
 
 class CreateNewAdminInteractor {
     constructor(
         private presenter: CreateNewAdminPresenter, 
-        private repository: AdminRepository,
+        private repository: RepositoryOf<"Admin", Admin, {username: string}>,
         private logger: Logger,
     ) {
         logger.info("Created!");
     }
 
-    execute(username: string, password: string): Admin {
-        const admin = this.repository.createAdmin(username, password);
+    execute(email: string, username: string, password: string): Admin | null {
+        let admin: Admin;
+        try {
+            admin = this.repository.createAdmin(new Admin(email, username));
+        } catch(err) {
+            if(err instanceof ValueAlreadyExistsException) {
+                this.logger.warn(`Attempted to create admin ${username} that already exists`);
+                this.presenter.presentError(new AdminAlreadySignedException());
+                return null;
+            } else {
+                this.logger.error("Unexpected error occurred");
+                throw err;
+            }
+        }
         this.presenter.present(admin);
+        this.logger.info(`Admin with username ${username} created`);
         return admin;
     }
 }

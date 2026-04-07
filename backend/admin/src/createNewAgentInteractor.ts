@@ -1,19 +1,33 @@
-import type { Agent } from "@dieti-estates-2025/entities";
-import type { AgentRepository, CreateNewAgentPresenter } from "./interfaces.js";
-import type { Logger } from "@dieti-estates-2025/utilities";
+import { Agent } from "@dieti-estates-2025/entities";
+import type { CreateNewAgentPresenter } from "./interfaces.js";
+import { ValueAlreadyExistsException, type Logger, type RepositoryOf } from "@dieti-estates-2025/utilities";
+import { AgentAlreadySignedException } from "./errors.js";
 
 class CreateNewAgentInteractor {
     constructor(
         private presenter: CreateNewAgentPresenter, 
-        private repository: AgentRepository,
+        private repository: RepositoryOf<"Agent", Agent, {username: string}>,
         private logger: Logger,
     ) {
         logger.info("Created!");
     }
 
-    execute(username: string, password: string): Agent {
-        const agent = this.repository.createAgent(username, password);
+    execute(email: string, username: string, password: string): Agent | null {
+        let agent: Agent;
+        try {
+            agent = this.repository.createAgent(new Agent(email, username));
+        } catch (err) {
+            if(err instanceof ValueAlreadyExistsException) {
+                this.logger.warn(`Attempted to create agent with existing username: ${username}`);
+                this.presenter.presentError(new AgentAlreadySignedException());
+                return null;
+            } else {
+                this.logger.error("Unexpected error occurred");
+                throw err;
+            }
+        }
         this.presenter.present(agent);
+        this.logger.info(`Agent with username ${username} created`);
         return agent;
     }
 }
