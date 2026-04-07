@@ -13,7 +13,6 @@ export interface FilterAdvertisementsPresenter {
 }
 
 export interface AdvertisementsReader extends ReaderOf<"Advertisement", Advertisement, number> {
-    readAllAdvertisements(): Advertisement[];
     filterAdvertisements(filters: SearchFilters): Advertisement[];
 }
 
