@@ -1,10 +1,10 @@
 import { Advertisement, type Coordinates } from "@dieti-estates-2025/entities";
 import type { Logger } from "../../../common/utilities/src/index.js";
-import type { AdvertisementsReader, FilterAdvertisementsPresenter } from "./interfaces.js";
+import type { AdvertisementReader, FilterAdvertisementsPresenter } from "./interfaces.js";
 
 export class FilterAdvertisementsInteractor {
     constructor(
-        private reader: AdvertisementsReader,
+        private reader: AdvertisementReader,
         private presenter: FilterAdvertisementsPresenter,
         private logger: Logger,
     ) {

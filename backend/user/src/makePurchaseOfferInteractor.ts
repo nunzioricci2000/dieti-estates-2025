@@ -8,7 +8,7 @@ class MakePurchaseOfferInteractor {
     constructor(
         private publisher: EventPublisher,
         private presenter: MakePurchaseOfferPresenter,
-        private reader: ReaderOf<"Advertisement", Advertisement, number>,
+        private reader: ReaderOf<"Advertisement", Advertisement, {id: number}>,
         private logger: Logger,
     ) {
         logger.info("Created!");
@@ -17,7 +17,7 @@ class MakePurchaseOfferInteractor {
     execute(advertisementId: number, price: Price): boolean {
         let advertisement: Advertisement
         try {
-            advertisement = this.reader.readAdvertisement(advertisementId);
+            advertisement = this.reader.readAdvertisement({id: advertisementId});
         } catch(err) {
             if(err instanceof ValueNotFoundException) {
                 this.logger.warn(`Attempted to perform purchase offer of non existend advertisement with id: ${advertisementId}`);

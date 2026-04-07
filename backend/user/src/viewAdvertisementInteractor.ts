@@ -8,7 +8,7 @@ export class ViewAdvertisementInteractor {
     constructor(
         private publisher: EventPublisher,
         private presenter: ViewAdvertisementPresenter,
-        private reader: ReaderOf<"Advertisement", Advertisement, number>,
+        private reader: ReaderOf<"Advertisement", Advertisement, {id: number}>,
         private logger: Logger,
     ) {
         logger.info("Created!");
@@ -18,7 +18,7 @@ export class ViewAdvertisementInteractor {
         this.publisher.publish(new ViewAdvertisementEvent(advertisementId))
         let advertisement: Advertisement;
         try {
-            advertisement = this.reader.readAdvertisement(advertisementId)
+            advertisement = this.reader.readAdvertisement({id: advertisementId})
         } catch(err) {
             if(err instanceof ValueNotFoundException) {
                 this.logger.warn(`Attempted to view non existent advertisement with id: ${advertisementId}`);
