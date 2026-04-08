@@ -4,7 +4,7 @@ import { UnavailableAdvertisementDataException } from "./errors.js";
 
 class CountIncomingViewInteractor {
     constructor(
-        private repository: RepositoryOf<"AdvertisementData", AdvertisementData, {id: number}>,
+        private repository: RepositoryOf<"AdvertisementData", AdvertisementData, number>,
         private logger: Logger,
     ) {
         logger.info("Created!");
@@ -13,7 +13,7 @@ class CountIncomingViewInteractor {
     execute(advertisementId: number): void {
         let data: AdvertisementData;
         try {
-            data = this.repository.readAdvertisementData({id: advertisementId});
+            data = this.repository.readAdvertisementData(advertisementId);
         } catch(err) {
             if(err instanceof ValueNotFoundException) {
                 this.logger.warn(`Attemped to increment view count of non existent ad with id: ${advertisementId}`);
@@ -25,5 +25,6 @@ class CountIncomingViewInteractor {
         }
         this.logger.debug(`Incremented view count od advertisement with id: ${advertisementId}`);
         data.views += 1;
+        this.repository.updateAdvertisementData(advertisementId, data);
     }
 }

@@ -22,15 +22,13 @@ class AdvertisementData {
     views: number;
     visits: number;
     offers: number;
-    taken: boolean;
 
     constructor(advertisement: Advertisement, visits: number = 0,
-         views: number = 0, offers: number = 0, taken: boolean = false,
+        views: number = 0, offers: number = 0,
     ) {
         this.visits = visits;
         this.views = views;
         this.advertisement = advertisement;
         this.offers = offers;
-        this.taken = taken;
     }
 }

@@ -1,19 +1,20 @@
-import { ValueNotFoundException, type Logger, type RepositoryOf } from "../../../common/utilities/src/index.js";
+import type { Advertisement } from "@dieti-estates-2025/entities";
+import { ValueNotFoundException, type Logger } from "../../../common/utilities/src/index.js";
 import { AdvertisementNotExistsError } from "../../user/src/errors.js";
-import type { AdvertisementData } from "./dataObjects.js";
+import type { AdvertisementRepository } from "./interfaces.js";
 
 class MarkAsTakenInteractor {
     constructor(
-        private repository: RepositoryOf<"AdvertisementData", AdvertisementData, {id: number}>,
+        private repository: AdvertisementRepository,
         private logger: Logger,
     ) {
         logger.info("Created!");
     }
     
     execute(advertisementId: number): void {
-        let advertisementData: AdvertisementData;
+        let advertisement: Advertisement;
         try{
-            advertisementData = this.repository.readAdvertisementData({id: advertisementId});
+            advertisement = this.repository.readAdvertisement({id: advertisementId})
         } catch(err) {
             if(err instanceof ValueNotFoundException) {
                 this.logger.warn(`Attempted to mark non existend ad as taken. Id: ${advertisementId}`);
@@ -23,7 +24,7 @@ class MarkAsTakenInteractor {
                 throw err;
             }
         }
-        advertisementData.taken = true;
-        this.repository.updateAdvertisementData({id: advertisementId}, advertisementData);
+        advertisement.available = false;
+        this.repository.updateAdvertisement(advertisement);
     }
 }
