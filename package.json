@@ -18,10 +18,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "workspaces": [
-    "common/entities",
-    "common/utilities",
-    "common/stream-logger",
-    "server/auth"
+    "backend/*",
+    "common/*",
+    "frontend/*"
   ],
   "devDependencies": {
     "@types/node": "^25.5.2",

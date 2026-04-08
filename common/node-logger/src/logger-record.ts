@@ -1,15 +1,17 @@
+type LogLevel = "error" | "warn" | "info" | "debug";
+
 class LoggerRecord {
     private constructor(
         public readonly timestamp: Date,
-        public readonly level: "error" | "warn" | "info" | "debug",
+        public readonly level: LogLevel,
         public readonly file: string,
         public readonly line: number,
         public readonly column: number,
         public readonly caller: string,
-        public readonly message: string,
+        public readonly message: unknown[],
     ) { }
 
-    static create(level: "error" | "warn" | "info" | "debug", message: string): LoggerRecord {
+    static create(level: LogLevel, message: unknown[]): LoggerRecord {
         const timestamp = new Date();
         const stack = new Error().stack;
         let file = "unknown.ts";
@@ -19,8 +21,8 @@ class LoggerRecord {
 
         if (stack) {
             const lines = stack.split("\n");
-            if (lines.length > 2) {
-                const match = lines[2]?.match(/\s+at\s+(.*)\s+\((.*):(\d+):(\d+)\)/);
+            if (lines.length > 4) {
+                const match = lines[4]?.match(/\s+at\s+(.*)\s+\((.*):(\d+):(\d+)\)/);
                 if (match) {
                     caller = match[1] ?? caller;
                     file = match[2] ?? file;
@@ -34,4 +36,4 @@ class LoggerRecord {
     }
 }
 
-export { LoggerRecord };
+export { LoggerRecord, type LogLevel };
