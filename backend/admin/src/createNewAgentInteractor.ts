@@ -1,12 +1,12 @@
 import { Agent } from "@dieti-estates-2025/entities";
 import type { CreateNewAgentPresenter } from "./interfaces.js";
-import { ValueAlreadyExistsException, type Logger, type RepositoryOf } from "@dieti-estates-2025/utilities";
+import { ValueAlreadyExistsException, type Logger, type CreatorOf } from "@dieti-estates-2025/utilities";
 import { AgentAlreadySignedException } from "./errors.js";
 
 class CreateNewAgentInteractor {
     constructor(
         private presenter: CreateNewAgentPresenter, 
-        private repository: RepositoryOf<"Agent", Agent, {username: string}>,
+        private creator: CreatorOf<"Agent", Agent, {username: string}>,
         private logger: Logger,
     ) {
         logger.info("Created!");
@@ -15,7 +15,7 @@ class CreateNewAgentInteractor {
     execute(email: string, username: string, password: string): Agent | null {
         let agent: Agent;
         try {
-            agent = this.repository.createAgent(new Agent(email, username));
+            agent = this.creator.createAgent(new Agent(email, username));
         } catch (err) {
             if(err instanceof ValueAlreadyExistsException) {
                 this.logger.warn(`Attempted to create agent with existing username: ${username}`);

@@ -24,7 +24,9 @@ class SetupFirstAdminInteractor {
         const username = this.config.getUsername();
         const password = this.config.getPassword();
 
-        if(username.length < 8 || password.length < 8) {
+        const re = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
+        if(username.length < 8 || password.length < 8 || !re.test(email)) {
             this.presenter.presentError(new InvalidConfigurationError());
             return null;
         }
