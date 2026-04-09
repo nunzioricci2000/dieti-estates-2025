@@ -1,30 +1,36 @@
 import { Advertisement, type Coordinates } from "@dieti-estates-2025/entities";
 import type { Logger } from "../../../common/utilities/src/index.js";
-import type { AdvertisementReader, FilterAdvertisementPresenter } from "./interfaces.js";
+import type { AdvertisementReader, FilterAdvertisementsPresenter } from "./interfaces.js";
 
-export class FilterAdvertisementInteractor {
+export class FilterAdvertisementsInteractor {
     constructor(
         private reader: AdvertisementReader,
-        private presenter: FilterAdvertisementPresenter,
+        private presenter: FilterAdvertisementsPresenter,
         private logger: Logger,
     ) {
         logger.info("Created!");
     }
+    
+        execute(filters: SearchFilters): boolean {
+            let results: Advertisement[];
+            try {
+                results = this.reader.filterAdvertisements(filters);
+            } catch(err) {
+                this.logger.error("UnexpectedErrorOccurred");
+                throw err;
+            }
+            this.presenter.present(results);
+            return results.length > 0;
+        }
+}
 
-    execute(filters: SearchFilters): boolean {
-        const results = this.reader.filterAdvertisements(filters);
-        this.presenter.present(results);
-        return results.length > 0;
+export interface SearchFilters {
+        area?: string;
+        location?: Coordinates;
+        distance?: number;
+        dimensionsMin?: number;
+        dimensionsMax?: number;
+        numberOfRoomsMin?: number;
+        numberOfRoomsMax?: number;
+        acceptableEnergyClasses?: string[];
     }
-}
-
-export class SearchFilters {
-    area?: string;
-    location?: Coordinates;
-    distance?: number;
-    dimensionsMin?: number;
-    dimensionsMax?: number;
-    numberOfRoomsMin?: number;
-    numberOfRoomsMax?: number;
-    acceptableEnergyClasses?: string[];
-}
