@@ -1,5 +1,5 @@
 import type { Advertisement, Coordinates } from "@dieti-estates-2025/entities";
-import { AdvertisementsMetrics } from "./dataObjects.js";
+import { AdvertisementsMetrics } from "./data-objects.js";
 import type { RepositoryOf } from "@dieti-estates-2025/utilities";
 
 export interface DetectPOIsService {

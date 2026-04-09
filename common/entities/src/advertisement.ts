@@ -1,6 +1,6 @@
 import { Coordinates } from "./coordinates.js";
 import { Price } from "./price.js";
-import { RentPrice } from "./rentPrice.js";
+import { RentPrice } from "./rent-price.js";
 import { Agent } from "./user.js";
 import { Image } from "./image.js";
 

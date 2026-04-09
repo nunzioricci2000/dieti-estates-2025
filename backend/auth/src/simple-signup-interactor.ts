@@ -1,5 +1,5 @@
 import { User } from "@dieti-estates-2025/entities";
-import type { AuthRegister } from "./authRegister.js";
+import type { AuthRegister } from "./auth-register.js";
 import type { SignupPresenter } from "./interfaces.js";
 import { UserAlreadySignedException } from "./errors.js";
 import { ValueAlreadyExistsException, type Logger } from "@dieti-estates-2025/utilities";
