@@ -1,15 +1,30 @@
-import type { Logger } from "../../../common/utilities/src/index.js";
-import type { AdvertisementMetricsRepository } from "./interfaces.js";
+import { ValueNotFoundException, type Logger, type RepositoryOf } from "../../../common/utilities/src/index.js";
+import type { AdvertisementData } from "./dataObjects.js";
+import { UnavailableAdvertisementDataException } from "./errors.js";
 
 export class CountIncomingPrenotationInteractor {
     constructor(
-        private repository: AdvertisementMetricsRepository,
+        private repository: RepositoryOf<"AdvertisementData", AdvertisementData, number>,
         private logger: Logger,
     ) {
         logger.info("Created!");
     }
     
     execute(advertisementId: number): void {
-        throw new Error("To be implemented");
+        let data: AdvertisementData;
+        try {
+            data = this.repository.readAdvertisementData(advertisementId);
+        } catch(err) {
+            if(err instanceof ValueNotFoundException) {
+                this.logger.warn(`Attemped to increment visit count of non existent ad with id: ${advertisementId}`);
+                throw new UnavailableAdvertisementDataException();
+            } else {
+                this.logger.error(`Unexpected error occurred`);
+                throw err;
+            }
+        }
+        this.logger.debug(`Incremented visit count od advertisement with id: ${advertisementId}`);
+        data.visits += 1;
+        this.repository.updateAdvertisementData(advertisementId, data);
     }
 }

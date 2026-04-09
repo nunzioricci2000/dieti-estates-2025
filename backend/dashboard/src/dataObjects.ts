@@ -21,10 +21,14 @@ class AdvertisementData {
     advertisement: Advertisement;
     views: number;
     visits: number;
+    offers: number;
 
-    constructor(visits: number, views: number, advertisement: Advertisement) {
+    constructor(advertisement: Advertisement, visits: number = 0,
+        views: number = 0, offers: number = 0,
+    ) {
         this.visits = visits;
         this.views = views;
         this.advertisement = advertisement;
+        this.offers = offers;
     }
 }
