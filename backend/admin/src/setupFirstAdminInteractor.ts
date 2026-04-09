@@ -27,6 +27,7 @@ class SetupFirstAdminInteractor {
         const re = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
         if(username.length < 8 || password.length < 8 || !re.test(email)) {
+            this.logger.error("Invalid configuration provided for first admin credentials.");
             this.presenter.presentError(new InvalidConfigurationError());
             return null;
         }
@@ -34,6 +35,7 @@ class SetupFirstAdminInteractor {
         const admin = this.adminCreator.createAdmin(new Admin(email, username));
         this.passwordRepository.createPassword(admin, password);
         this.presenter.present(admin);
+        this.logger.info("First admin created!");
         return admin;
     }
 }
