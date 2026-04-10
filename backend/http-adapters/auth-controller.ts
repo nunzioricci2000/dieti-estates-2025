@@ -3,7 +3,7 @@ import type { SimpleLoginInteractor } from "../auth/src/simple-login-interactor.
 import type { SimpleSignupInteractor } from "../auth/src/simple-signup-interactor.js";
 import type { ThirdPartyLoginInteractor } from "../auth/src/third-party-login-interactor.js";
 import type { ThirdPartySignupInteractor } from "../auth/src/third-party-signup-interactor.js";
-import { Request } from "./request.js";
+import { Request } from "../../common/http-utils/src/request.js";
 
 export class AuthController {
     constructor(

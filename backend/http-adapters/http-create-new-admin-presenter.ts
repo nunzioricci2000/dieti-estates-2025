@@ -1,7 +1,7 @@
 import type { Logger } from "@dieti-estates-2025/utilities";
 import type { ResponseManager } from "./response-manager.js";
 import type { Admin } from "@dieti-estates-2025/entities";
-import { Response } from "./response.js";
+import { Response } from "../../common/http-utils/src/response.js";
 
 export class HTTPCreateNewAdminPresenter {
     constructor(
