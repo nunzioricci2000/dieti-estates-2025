@@ -1,6 +1,6 @@
 import type { Logger } from "@dieti-estates-2025/utilities";
-import type { FilterAdvertisementsPresenter } from "../../user/src/interfaces.js";
-import type { ResponseManager } from "./responseManager.js";
+import type { FilterAdvertisementsPresenter } from "../user/src/interfaces.js";
+import type { ResponseManager } from "./response-manager.js";
 import type { Advertisement } from "@dieti-estates-2025/entities";
 
 export class HTTPFilterAdvertisementsPresenter implements FilterAdvertisementsPresenter {

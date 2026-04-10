@@ -1,11 +1,6 @@
 import type { Logger } from "@dieti-estates-2025/utilities";
-<<<<<<<< HEAD:backend/httpAdapters/src/HTTPLoginPresenter.ts
-import type { LoginPresenter } from "../../auth/src/interfaces.js";
-import type { ResponseManager } from "./responseManager.js";
-========
 import type { LoginPresenter } from "../auth/src/interfaces.js";
 import type { ResponseManager } from "./response-manager.js";
->>>>>>>> main:backend/http-adapters/http-login-presenter.ts
 import { Response } from "./response.js";
 
 export class HTTPLoginPresenter implements LoginPresenter {
