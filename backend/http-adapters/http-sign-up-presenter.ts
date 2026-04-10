@@ -1,6 +1,6 @@
 import type { Logger } from "@dieti-estates-2025/utilities";
 import type { ResponseManager } from "./response-manager.js";
-import { Response } from "./response.js";
+import { Response } from "../../common/http-utils/src/response.js";
 
 export class HTTPSignupPresenter {
     constructor(
