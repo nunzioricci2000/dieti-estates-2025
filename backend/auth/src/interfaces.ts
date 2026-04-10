@@ -15,17 +15,11 @@ export interface TokenService {
     verifyToken(user: User, password: string): boolean;
 }
 
-
 export interface ThirdPartyAuthService {
     usernameFor(authorizationCode: string): string;
 }
 
-export interface UserRepository {
-    createUser(username: string): User;
-    readUserWithUsername(username: string): User;
-    existsUserWithUsername(username: string): boolean;
-}
-export interface PasswordRepository {
-    savePassword(user: User, password: string): void;
-    verifyPassword(user: User, password: string): boolean;
+export interface HashService {
+    hashString(value: string): string;
+    verifyString(value: string, hash: string): boolean;
 }
