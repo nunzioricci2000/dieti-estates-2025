@@ -1,7 +1,7 @@
 import { Advertisement } from "@dieti-estates-2025/entities"
 import { ViewAdvertisementEvent } from "./events.js"
 import type { ViewAdvertisementPresenter } from "./interfaces.js"
-import { ValueNotFoundException, type EventPublisher, type Logger, type ReaderOf } from "../../../common/utilities/src/index.js"
+import { ValueNotFoundException, type EventPublisher, type Logger, type ReaderOf } from "@dieti-estates-2025/utilities"
 import { AdvertisementNotExistsException } from "./errors.js";
 
 export class ViewAdvertisementInteractor {

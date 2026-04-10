@@ -1,5 +1,5 @@
 import type { Logger, RepositoryOf } from "@dieti-estates-2025/utilities";
-import type { AdvertisementsMetrics } from "./dataObjects.js";
+import type { AdvertisementsMetrics } from "./data-objects.js";
 import type { RetrieveAdvertisementsMetricsPresenter } from "./interfaces.js";
 
 export class RetrieveAdvertisementsMetricsInteractor {

@@ -1,5 +1,5 @@
 import { Advertisement, Agent} from "@dieti-estates-2025/entities";
-import type { FilterAdvertisementsInteractor, SearchFilters } from "./filterAdvertisementsInteractor.js";
+import type { FilterAdvertisementsInteractor, SearchFilters } from "./filter-advertisements-interactor.js";
 import type { ReaderOf } from "@dieti-estates-2025/utilities";
 
 export interface ViewAdvertisementPresenter {

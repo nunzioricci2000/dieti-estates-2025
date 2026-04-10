@@ -1,8 +1,9 @@
 import type { Logger } from "@dieti-estates-2025/utilities";
-import type { ResponseManager } from "./responseManager.js";
+import type { LoginPresenter } from "../auth/src/interfaces.js";
+import type { ResponseManager } from "./response-manager.js";
 import { Response } from "./response.js";
 
-export class HTTPSignupPresenter {
+export class HTTPLoginPresenter implements LoginPresenter {
     constructor(
         private responseManager: ResponseManager,
         private logger: Logger,
@@ -11,14 +12,15 @@ export class HTTPSignupPresenter {
     }
 
     present(token: string): void {
-        const body = new Map<string, any>();
-        const headers = new Map<string, string>();
+        const body = new Map();
         body.set("token", token);
+        const headers = new Map<string, string>();
         const response = new Response(
-            200,
+            200, 
             body,
             headers,
         )
+        this.responseManager.sendResponse(response);
     }
 
     presentError(error: Error): void {

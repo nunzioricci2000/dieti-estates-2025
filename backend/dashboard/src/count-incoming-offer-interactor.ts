@@ -1,5 +1,5 @@
-import { ValueNotFoundException, type Logger, type RepositoryOf } from "../../../common/utilities/src/index.js";
-import type { AdvertisementData } from "./dataObjects.js";
+import { ValueNotFoundException, type Logger, type RepositoryOf } from "@dieti-estates-2025/utilities";
+import type { AdvertisementData } from "./data-objects.js";
 import { UnavailableAdvertisementDataException } from "./errors.js";
 
 export class CountIncomingOfferInteractor {
