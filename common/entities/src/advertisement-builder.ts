@@ -1,4 +1,4 @@
-import  { Advertisement, Sale, Rental } from "./advertisement.js";
+import  { Advertisement } from "./advertisement.js";
 
 export {
     type AdvertisementBuilder,
