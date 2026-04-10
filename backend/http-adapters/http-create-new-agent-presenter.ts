@@ -1,8 +1,9 @@
 import type { Logger } from "@dieti-estates-2025/utilities";
 import type { ResponseManager } from "./response-manager.js";
+import type { Agent } from "@dieti-estates-2025/entities";
 import { Response } from "./response.js";
 
-export class HTTPSignupPresenter {
+export class HTTPCreateNewAgentPresenter {
     constructor(
         private responseManager: ResponseManager,
         private logger: Logger,
@@ -10,20 +11,24 @@ export class HTTPSignupPresenter {
         logger.info("Created!");
     }
 
-    present(token: string): void {
+    present(agent: Agent): void {
         const body = new Map<string, any>();
         const headers = new Map<string, string>();
-        body.set("token", token);
-        const response = new Response(
+
+        body.set("username", agent.username);
+        body.set("email", agent.email);
+
+        const res = new Response(
             200,
-            body,
+            body, 
             headers,
         )
-        this.logger.debug("Signup performed. Response containing token was sent.");
+        this.responseManager.sendResponse(res);
+        this.logger.debug("Success response sent");
     }
 
     presentError(error: Error): void {
         this.responseManager.sendError(error);
-        this.logger.debug("Error during signup. Error response was sent.");
+        this.logger.debug("Error response sent");
     }
 }

@@ -21,9 +21,11 @@ export class HTTPLoginPresenter implements LoginPresenter {
             headers,
         )
         this.responseManager.sendResponse(response);
+        this.logger.debug("Login performed. Response containing token was sent.");
     }
 
     presentError(error: Error): void {
         this.responseManager.sendError(error);
+        this.logger.debug("Error during login. Error response was sent.");
     }
 }

@@ -3,6 +3,7 @@ import type { SimpleLoginInteractor } from "../auth/src/simple-login-interactor.
 import type { SimpleSignupInteractor } from "../auth/src/simple-signup-interactor.js";
 import type { ThirdPartyLoginInteractor } from "../auth/src/third-party-login-interactor.js";
 import type { ThirdPartySignupInteractor } from "../auth/src/third-party-signup-interactor.js";
+import { Request } from "./request.js";
 
 export class AuthController {
     constructor(
@@ -16,10 +17,21 @@ export class AuthController {
     }
 
     login(request: Request): void {
-        //TODO implement
+        const email = request.body.get("email");
+        const password = request.body.get("password");
+        if (typeof email !== 'string' || typeof password !== 'string') {
+            throw new Error("Invalid request body");
+        }
+        this.simpleLoginInteractor.execute(email, password);
     }
 
     signup(request: Request): void {
-        //TODO implement
+        const username = request.body.get("username");
+        const email = request.body.get("email");
+        const password = request.body.get("password");
+        if(typeof email !== 'string' || typeof password !== 'string' || typeof email !== 'string') {
+            throw new Error("Invalid request body");
+        }
+        this.simpleSignupInteractor.execute(username, email, password);
     }
 }

@@ -1,8 +1,9 @@
 import type { Logger } from "@dieti-estates-2025/utilities";
 import type { ResponseManager } from "./response-manager.js";
+import type { Admin } from "@dieti-estates-2025/entities";
 import { Response } from "./response.js";
 
-export class HTTPSignupPresenter {
+export class HTTPCreateNewAdminPresenter {
     constructor(
         private responseManager: ResponseManager,
         private logger: Logger,
@@ -10,20 +11,23 @@ export class HTTPSignupPresenter {
         logger.info("Created!");
     }
 
-    present(token: string): void {
+    present(admin: Admin): void {
         const body = new Map<string, any>();
         const headers = new Map<string, string>();
-        body.set("token", token);
-        const response = new Response(
+        body.set("username", admin.username);
+        body.set("email", admin.email);
+
+        const res = new Response(
             200,
             body,
             headers,
-        )
-        this.logger.debug("Signup performed. Response containing token was sent.");
+        );
+        this.responseManager.sendResponse(res);
+        this.logger.debug("Admin created, success response sent");
     }
 
     presentError(error: Error): void {
         this.responseManager.sendError(error);
-        this.logger.debug("Error during signup. Error response was sent.");
+        this.logger.debug("Failed in creating admin. Sending error response");
     }
 }
