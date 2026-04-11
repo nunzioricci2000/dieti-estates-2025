@@ -3,7 +3,7 @@ import type { CreateNewAdminPresenter, FirstAdminConfig, FirstLaunchDetector } f
 import type { CreatorOf, Logger, RepositoryOf } from "@dieti-estates-2025/utilities";
 import { InvalidConfigurationError } from "./errors.js";
 
-class SetupFirstAdminInteractor {
+export class SetupFirstAdminInteractor {
     constructor(
         private config: FirstAdminConfig, 
         private detector: FirstLaunchDetector, 

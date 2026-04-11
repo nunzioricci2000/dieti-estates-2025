@@ -3,7 +3,7 @@ import type { EditAdminPasswordPresenter } from "./interfaces.js";
 import { ValueNotFoundException, type Logger, type UpdaterOf } from "@dieti-estates-2025/utilities";
 import { AdminNotExistsException } from "./errors.js";
 
-class EditAdminPasswordInteractor {
+export class EditAdminPasswordInteractor {
     constructor(
         private presenter: EditAdminPasswordPresenter, 
         private updater: UpdaterOf<"Password", string, User>,

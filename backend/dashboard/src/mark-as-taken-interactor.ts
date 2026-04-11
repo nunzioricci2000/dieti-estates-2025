@@ -1,9 +1,9 @@
 import type { Advertisement } from "@dieti-estates-2025/entities";
 import { ValueNotFoundException, type Logger } from "../../../common/utilities/src/index.js";
-import { AdvertisementNotExistsError } from "../../user/src/errors.js";
+import { UnavailableAdvertisementDataException } from "./errors.js";
 import type { AdvertisementRepository } from "./interfaces.js";
 
-class MarkAsTakenInteractor {
+export class MarkAsTakenInteractor {
     constructor(
         private repository: AdvertisementRepository,
         private logger: Logger,
@@ -18,7 +18,7 @@ class MarkAsTakenInteractor {
         } catch(err) {
             if(err instanceof ValueNotFoundException) {
                 this.logger.warn(`Attempted to mark non existend ad as taken. Id: ${advertisementId}`);
-                throw new AdvertisementNotExistsError();
+                throw new UnavailableAdvertisementDataException();
             } else {
                 this.logger.error("Unexpected error occurred");
                 throw err;

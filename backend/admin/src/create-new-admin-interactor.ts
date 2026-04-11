@@ -3,7 +3,7 @@ import type { CreateNewAdminPresenter } from "./interfaces.js";
 import { ValueAlreadyExistsException, type Logger, type CreatorOf } from "@dieti-estates-2025/utilities";
 import { AdminAlreadySignedException } from "./errors.js";
 
-class CreateNewAdminInteractor {
+export class CreateNewAdminInteractor {
     constructor(
         private presenter: CreateNewAdminPresenter, 
         private creator: CreatorOf<"Admin", Admin, {username: string}>,

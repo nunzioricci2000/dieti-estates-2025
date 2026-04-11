@@ -4,7 +4,7 @@ import { MakePurchaseOfferEvent } from "./events.js";
 import type { MakePurchaseOfferPresenter } from "./interfaces.js";
 import { AdvertisementNotExistsException } from "./errors.js";
 
-class MakePurchaseOfferInteractor {
+export class MakePurchaseOfferInteractor {
     constructor(
         private publisher: EventPublisher,
         private presenter: MakePurchaseOfferPresenter,

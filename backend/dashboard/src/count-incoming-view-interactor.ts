@@ -2,7 +2,7 @@ import { ValueNotFoundException, type Logger, type RepositoryOf } from "../../..
 import type { AdvertisementData } from "./data-objects.js";
 import { UnavailableAdvertisementDataException } from "./errors.js";
 
-class CountIncomingViewInteractor {
+export class CountIncomingViewInteractor {
     constructor(
         private repository: RepositoryOf<"AdvertisementData", AdvertisementData, number>,
         private logger: Logger,

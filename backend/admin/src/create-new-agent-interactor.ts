@@ -3,7 +3,7 @@ import type { CreateNewAgentPresenter } from "./interfaces.js";
 import { ValueAlreadyExistsException, type Logger, type CreatorOf } from "@dieti-estates-2025/utilities";
 import { AgentAlreadySignedException } from "./errors.js";
 
-class CreateNewAgentInteractor {
+export class CreateNewAgentInteractor {
     constructor(
         private presenter: CreateNewAgentPresenter, 
         private creator: CreatorOf<"Agent", Agent, {username: string}>,
