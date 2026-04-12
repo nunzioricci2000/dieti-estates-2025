@@ -2,8 +2,7 @@ import { Event } from "../../../common/utilities/src/index.js";
 
 export {
     ViewAdvertisementEvent,
-    MakePurchaseOfferEvent,
-    MakeRentOfferEvent,
+    MakeOfferEvent,
     BookVisitEvent,
 }
 
@@ -16,16 +15,7 @@ class ViewAdvertisementEvent extends Event {
     }
 }
 
-class MakePurchaseOfferEvent extends Event {
-    advertisementId: number;
-    
-    constructor(advertisementId: number) {
-        super();
-        this.advertisementId = advertisementId;
-    }
-}
-
-class MakeRentOfferEvent extends Event {
+class MakeOfferEvent extends Event {
     advertisementId: number;
     
     constructor(advertisementId: number) {

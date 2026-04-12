@@ -1,26 +1,26 @@
 import type { Advertisement, Price } from "@dieti-estates-2025/entities";
 import { ValueNotFoundException, type EventPublisher, type Logger, type ReaderOf } from "../../../common/utilities/src/index.js";
-import { MakePurchaseOfferEvent } from "./events.js";
-import type { MakePurchaseOfferPresenter } from "./interfaces.js";
+import { MakeOfferEvent } from "./events.js";
+import type { MakeOfferPresenter } from "./interfaces.js";
 import { AdvertisementNotExistsException } from "./errors.js";
 
-export class MakePurchaseOfferInteractor {
+export class MakeOfferInteractor {
     constructor(
         private publisher: EventPublisher,
-        private presenter: MakePurchaseOfferPresenter,
+        private presenter: MakeOfferPresenter,
         private reader: ReaderOf<"Advertisement", Advertisement, {id: number}>,
         private logger: Logger,
     ) {
         logger.info("Created!");
     }
 
-    execute(advertisementId: number, price: Price): boolean {
+    execute(advertisementId: number): boolean {
         let advertisement: Advertisement
         try {
             advertisement = this.reader.readAdvertisement({id: advertisementId});
         } catch(err) {
             if(err instanceof ValueNotFoundException) {
-                this.logger.warn(`Attempted to perform purchase offer of non existend advertisement with id: ${advertisementId}`);
+                this.logger.warn(`Attempted to propose offer of non existend advertisement with id: ${advertisementId}`);
                 this.presenter.presentError(new AdvertisementNotExistsException());
                 return false;
             } else {
@@ -28,9 +28,9 @@ export class MakePurchaseOfferInteractor {
                 throw err;
             }
         }
-        this.publisher.publish(new MakePurchaseOfferEvent(advertisementId));
+        this.publisher.publish(new MakeOfferEvent(advertisementId));
         this.presenter.present(advertisement.agent);
-        this.logger.debug(`Performed offer for advertisement with id ${advertisementId}`);
+        this.logger.debug(`Added offer for advertisement with id ${advertisementId}`);
         return true;
     }
 }

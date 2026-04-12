@@ -1,5 +1,5 @@
 import { Advertisement, Agent} from "@dieti-estates-2025/entities";
-import type { FilterAdvertisementsInteractor, SearchFilters } from "./filter-advertisements-interactor.js";
+import type { SearchFilters } from "./filter-advertisements-interactor.js";
 import type { ReaderOf } from "@dieti-estates-2025/utilities";
 
 export interface ViewAdvertisementPresenter {
@@ -16,12 +16,7 @@ export interface AdvertisementReader extends ReaderOf<"Advertisement", Advertise
     filterAdvertisements(filters: SearchFilters): Advertisement[];
 }
 
-export interface MakePurchaseOfferPresenter {
-    present(agent: Agent): void;
-    presentError(error: Error): void;
-}
-
-export interface MakeRentOfferPresenter {
+export interface MakeOfferPresenter {
     present(agent: Agent): void;
     presentError(error: Error): void;
 }
