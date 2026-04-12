@@ -2,7 +2,7 @@ import type { Logger } from "@dieti-estates-2025/utilities";
 import type { Request } from "../../common/http-utils/src/request.js";
 import type { ViewAdvertisementInteractor } from "../user/src/view-advertisement-interactor.js";
 import type { FilterAdvertisementsInteractor } from "../user/src/filter-advertisements-interactor.js";
-import type { MakeOfferInteractor } from "../user/src/make-purchase-offer-interactor.js";
+import type { MakeOfferInteractor } from "../user/src/make-offer-interactor.js";
 import type { BookVisitInteractor } from "../user/src/book-visit-interactor.js";
 import type { CreateNewAdvertisementInteractor } from "../dashboard/src/create-new-advertisement-interactor.js";
 import type { RetrieveAdvertisementsMetricsInteractor } from "../dashboard/src/retrieve-advertisements-metrics-interactor.js";
@@ -10,6 +10,7 @@ import type { CountIncomingOfferInteractor } from "../dashboard/src/count-incomi
 import type { CountIncomingViewInteractor } from "../dashboard/src/count-incoming-view-interactor.js";
 import type { MarkAsTakenInteractor } from "../dashboard/src/mark-as-taken-interactor.js";
 import type { CountIncomingPrenotationInteractor } from "../dashboard/src/count-incoming-prenotation-interactor.js";
+import type { AdvertisementDTO } from "../../common/http-utils/src/dto.js";
 
 export class Advertisement {
     constructor(
@@ -39,7 +40,7 @@ export class Advertisement {
 
     getAdvertisements(request: Request): void {
         let filters: any = {};
-        if(request.body.get("include") === "metrics") {
+        if(request.body.include === "metrics") {
             // filter results
             filters.area = request.pathParams.get("area");
             filters.longitude = request.pathParams.get("longitude");
@@ -49,7 +50,7 @@ export class Advertisement {
             filters.minDimensions = request.pathParams.get("min-dimensions");
             filters.acceptableEnergyClasses = request.pathParams.get("acceptable-energy-classes");
 
-            // TODO validate input
+            // TODO Insert validation by validator object
 
         } // else return all advertisements
         this.filterAdvertisementInteractor.execute(filters);
@@ -57,39 +58,41 @@ export class Advertisement {
 
     postOffer(request: Request): void {
         const id = Number(request.pathParams.get("id"));
+        // TODO Insert validation by validator object
+
         this.makeOfferInteractor.execute(id);
         throw new Error("Not implemented");
     }
 
     postBooking(request: Request): void {
         const id = Number(request.pathParams.get("id"));
-
-        if(!Number.isInteger(id)) {
-            this.logger.warn("Invalid path params");
-            throw new Error("Invalid path params");
-        }
+        // TODO Insert validation by validator object
 
         this.bookVisitInteractor.execute(id);
     }
 
     postAdvertisement(request: Request): void {
-        const address = request.body.get("address");
-        const city = request.body.get("city");
-        const latitude = request.body.get("coordinates").latitude;
-        const longitude = request.body.get("coordinates").longitude;
-        const images = request.body.get("images");
-        const description = request.body.get("description");
-        const dimensions = request.body.get("dimensions");
-        const numberOfRooms = request.body.get("numberOfRooms");
-        const energyClass = request.body.get("energyClass");
-        const additionalServices = request.body.get("additionalServices");
-        const nearbyPOIs = request.body.get("nearbyPOIs");
-        const kind = request.body.get("kind");
-
-        let advertisement: Advertisement
-        if(kind === "sale") {
-            // TODO where should I get the concrete advertisement builder? where do I get it from?
+        const adcertisement: AdvertisementDTO = {
+            id: -1,
+            address: request.body.address,
+            city: request.body.city,
+            coordinates: {
+                latitude: request.body.coordinates.latitude,
+                longitude: request.body.coordinates.longitude,
+            },
+            images: request.body.images,
+            description: request.body.description,
+            dimensions: request.body.dimensions,
+            numberOfRooms: request.body.numberOfRooms,
+            energyClass: request.body.energyClass,
+            additionalServices: request.body.additionalServices,
+            nearbyPOIs: request.body.nearbyPOIs,
+            kind: request.body.kind,
+            price: request.body.price,
         }
+
+        // TODO Insert validation by validator object
+        // TODO build advertisement using the builder and the builder director
 
         throw new Error("Implementation incomplete");
 
@@ -97,7 +100,7 @@ export class Advertisement {
 
     patchAdvertisement(request: Request): void {
         const id = Number(request.pathParams.get("id"));
-        const taken = Boolean(request.body.get("taken"));
+        const taken = Boolean(request.body.taken);
 
         if(!Number.isInteger(id)){
             this.logger.warn("Invalid path params");

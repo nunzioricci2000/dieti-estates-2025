@@ -37,15 +37,18 @@ interface AdvertisementDTO {
     id: number;
     address: string;
     city: string;
-    latitude: number;
-    longitude: number;
+    coordinates: {
+        latitude: number;
+        longitude: number;
+    }
     images: string[];
+    dimensions: number;
     description: string;
     numberOfRooms: number;
     energyClass: string;
     additionalServices: string[];
     nearbyPOIs: string[];
-    kind: string;
+    kind: "sale" | "rent";
     price: number;
 }
 

@@ -17,8 +17,8 @@ export class AuthController {
     }
 
     login(request: Request): void {
-        const email = request.body.get("email");
-        const password = request.body.get("password");
+        const email = request.body.email;
+        const password = request.body.password;
         if (typeof email !== 'string' || typeof password !== 'string') {
             throw new Error("Invalid request body");
         }
@@ -26,9 +26,9 @@ export class AuthController {
     }
 
     signup(request: Request): void {
-        const username = request.body.get("username");
-        const email = request.body.get("email");
-        const password = request.body.get("password");
+        const username = request.body.username;
+        const email = request.body.email;
+        const password = request.body.password;
         if(typeof email !== 'string' || typeof password !== 'string' || typeof email !== 'string') {
             throw new Error("Invalid request body");
         }

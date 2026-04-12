@@ -3,6 +3,7 @@ import type { MakeOfferPresenter } from "../user/src/interfaces.js";
 import type { ResponseManager } from "./response-manager.js";
 import type { Agent } from "@dieti-estates-2025/entities";
 import { Response } from "../../common/http-utils/src/response.js";
+import type { UserDTO } from "../../common/http-utils/src/dto.js";
 
 export class HTTPMakeOfferPresenter implements MakeOfferPresenter {
     constructor(
@@ -13,11 +14,11 @@ export class HTTPMakeOfferPresenter implements MakeOfferPresenter {
     }
 
     present(agent: Agent): void {
-        const body = new Map<string, any>();
+        const body: UserDTO = {
+            username: agent.username,
+            email: agent.email,
+        };
         const headers = new Map<string, string>();
-
-        body.set("username", agent.username);
-        body.set("email", agent.email);
         
         const res = new Response(
             200,

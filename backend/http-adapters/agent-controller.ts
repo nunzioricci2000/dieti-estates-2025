@@ -11,9 +11,9 @@ export class AgentController {
     }
 
     postAgent(request: Request): void {
-        const username = request.body.get("username");
-        const email = request.body.get("email");
-        const password = request.body.get("password");
+        const username = request.body.username;
+        const email = request.body.email;
+        const password = request.body.password;
 
         if(
             typeof username !== 'string' ||
