@@ -1,10 +1,10 @@
 import type { Logger } from "@dieti-estates-2025/utilities";
-import type { MakePurchaseOfferPresenter } from "../user/src/interfaces.js";
+import type { MakeOfferPresenter } from "../user/src/interfaces.js";
 import type { ResponseManager } from "./response-manager.js";
 import type { Agent } from "@dieti-estates-2025/entities";
 import { Response } from "../../common/http-utils/src/response.js";
 
-export class HTTPMakePurchaseOfferPresenter implements MakePurchaseOfferPresenter {
+export class HTTPMakeOfferPresenter implements MakeOfferPresenter {
     constructor(
         private responseManager: ResponseManager,
         private logger: Logger,

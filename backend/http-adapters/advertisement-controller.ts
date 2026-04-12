@@ -2,8 +2,7 @@ import type { Logger } from "@dieti-estates-2025/utilities";
 import type { Request } from "../../common/http-utils/src/request.js";
 import type { ViewAdvertisementInteractor } from "../user/src/view-advertisement-interactor.js";
 import type { FilterAdvertisementsInteractor } from "../user/src/filter-advertisements-interactor.js";
-import type { MakePurchaseOfferInteractor } from "../user/src/make-purchase-offer-interactor.js";
-import type { MakeRentOfferInteractor } from "../user/src/make-rent-offer-interactor.js";
+import type { MakeOfferInteractor } from "../user/src/make-purchase-offer-interactor.js";
 import type { BookVisitInteractor } from "../user/src/book-visit-interactor.js";
 import type { CreateNewAdvertisementInteractor } from "../dashboard/src/create-new-advertisement-interactor.js";
 import type { RetrieveAdvertisementsMetricsInteractor } from "../dashboard/src/retrieve-advertisements-metrics-interactor.js";
@@ -16,8 +15,7 @@ export class Advertisement {
     constructor(
         private viewAdvertisementInteractor: ViewAdvertisementInteractor,
         private filterAdvertisementInteractor: FilterAdvertisementsInteractor,
-        private makePurchaseInteractor: MakePurchaseOfferInteractor,
-        private makeRentOfferInteractor: MakeRentOfferInteractor,
+        private makeOfferInteractor: MakeOfferInteractor,
         private bookVisitInteractor: BookVisitInteractor,
         private createNewAdvertisementInteractor: CreateNewAdvertisementInteractor,
         private retrieveAdvertisementsMetricsInteractor: RetrieveAdvertisementsMetricsInteractor,
@@ -58,7 +56,8 @@ export class Advertisement {
     }
 
     postOffer(request: Request): void {
-        // It's not possible to know wether to call purchaseOffer or rentOffer with the available data.
+        const id = Number(request.pathParams.get("id"));
+        this.makeOfferInteractor.execute(id);
         throw new Error("Not implemented");
     }
 
