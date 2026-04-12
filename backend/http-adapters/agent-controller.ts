@@ -1,6 +1,7 @@
 import type { Logger } from "@dieti-estates-2025/utilities";
 import type { CreateNewAgentInteractor } from "../admin/src/create-new-agent-interactor.js";
 import type { Request } from "../../common/http-utils/src/request.js";
+import type { SignUpRequestDTO } from "../../common/http-utils/src/dto.js";
 
 export class AgentController {
     constructor(
@@ -11,19 +12,17 @@ export class AgentController {
     }
 
     postAgent(request: Request): void {
-        const username = request.body.username;
-        const email = request.body.email;
-        const password = request.body.password;
-
-        if(
-            typeof username !== 'string' ||
-            typeof email !== 'string' ||
-            typeof password !== 'string'
-        ) {
-            this.logger.warn("Invalid request body");
-            throw new Error("Invalid request body");
+        const agent: SignUpRequestDTO = {
+            username: request.body.username,
+            email: request.body.email,
+            password: request.body.password,
         }
+        // TODO insert validation by validator object
 
-        this.createNewAgentInteractor.execute(email, username, password);
+        this.createNewAgentInteractor.execute(
+            agent.email,
+            agent.username,
+            agent.password
+        );
     }
 }

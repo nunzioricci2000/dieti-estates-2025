@@ -11,9 +11,10 @@ export class HTTPSignupPresenter {
     }
 
     present(token: string): void {
-        const body = new Map<string, any>();
+        const body = {
+            token: token,
+        }
         const headers = new Map<string, string>();
-        body.set("token", token);
         const response = new Response(
             200,
             body,

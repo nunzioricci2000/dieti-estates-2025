@@ -31,10 +31,9 @@ export class Advertisement {
 
     getAdvertisement(request: Request): void {
         const id = Number(request.pathParams.get("id"));
-        if(!Number.isInteger(id)) {
-            this.logger.warn("Invalid request path");
-            throw new Error("Invalid request path");
-        }
+
+        // TODO insert validation by validator object
+
         this.viewAdvertisementInteractor.execute(id);
     }
 
@@ -61,7 +60,6 @@ export class Advertisement {
         // TODO Insert validation by validator object
 
         this.makeOfferInteractor.execute(id);
-        throw new Error("Not implemented");
     }
 
     postBooking(request: Request): void {
@@ -102,10 +100,7 @@ export class Advertisement {
         const id = Number(request.pathParams.get("id"));
         const taken = Boolean(request.body.taken);
 
-        if(!Number.isInteger(id)){
-            this.logger.warn("Invalid path params");
-            throw new Error("Invalid path params");
-        }
+        // TODO insert validation by validators
 
         if(!taken) {
             this.logger.warn("Invalid body");

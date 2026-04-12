@@ -4,6 +4,7 @@ import type { SimpleSignupInteractor } from "../auth/src/simple-signup-interacto
 import type { ThirdPartyLoginInteractor } from "../auth/src/third-party-login-interactor.js";
 import type { ThirdPartySignupInteractor } from "../auth/src/third-party-signup-interactor.js";
 import { Request } from "../../common/http-utils/src/request.js";
+import type { LoginRequestDTO, SignUpRequestDTO } from "../../common/http-utils/src/dto.js";
 
 export class AuthController {
     constructor(
@@ -17,21 +18,32 @@ export class AuthController {
     }
 
     login(request: Request): void {
-        const email = request.body.email;
-        const password = request.body.password;
-        if (typeof email !== 'string' || typeof password !== 'string') {
-            throw new Error("Invalid request body");
+        const credentials: LoginRequestDTO = {
+            email: request.body.email,
+            password: request.body.password,
         }
-        this.simpleLoginInteractor.execute(email, password);
+
+        // TODO insert validation by validator object
+
+        this.simpleLoginInteractor.execute(
+            credentials.email, 
+            credentials.password,
+        );
     }
 
     signup(request: Request): void {
-        const username = request.body.username;
-        const email = request.body.email;
-        const password = request.body.password;
-        if(typeof email !== 'string' || typeof password !== 'string' || typeof email !== 'string') {
-            throw new Error("Invalid request body");
+        const credentials: SignUpRequestDTO = {
+            username: request.body.username,
+            email: request.body.email,
+            password: request.body.password,
         }
-        this.simpleSignupInteractor.execute(username, email, password);
+
+        // TODO insert validation by validator object
+
+        this.simpleSignupInteractor.execute(
+            credentials.username, 
+            credentials.email, 
+            credentials.password,
+        );
     }
 }

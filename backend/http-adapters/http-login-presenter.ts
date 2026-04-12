@@ -12,8 +12,9 @@ export class HTTPLoginPresenter implements LoginPresenter {
     }
 
     present(token: string): void {
-        const body = new Map();
-        body.set("token", token);
+        const body = {
+            token: token,
+        }
         const headers = new Map<string, string>();
         const response = new Response(
             200, 

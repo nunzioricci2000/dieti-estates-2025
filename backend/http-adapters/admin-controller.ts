@@ -27,6 +27,8 @@ export class AdminController {
             admin.username, 
             admin.password
         );
+
+        this.logger.info("New Admin creted!");
     }
 
     patchAdmin(request: Request): void {

@@ -21,8 +21,8 @@ interface UserDTO {
 }
 
 interface LoginRequestDTO {
-    username: string;
     email: string;
+    password: string;
 }
 
 interface AuthResponseDTO {

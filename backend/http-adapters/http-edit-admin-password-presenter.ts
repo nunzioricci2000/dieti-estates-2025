@@ -12,11 +12,12 @@ export class HTTPEditAdminPasswordPresenter {
     }
 
     present(admin: Admin): void {
-        const body = new Map<string, any>();
+        const body = {
+            username: admin.username,
+            email: admin.email,
+        }
         const headers = new Map<string, string>();
 
-        body.set("username", admin.username);
-        body.set("email", admin.email);
 
         const res = new Response(
             200,

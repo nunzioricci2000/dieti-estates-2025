@@ -12,11 +12,12 @@ export class HTTPCreateNewAgentPresenter {
     }
 
     present(agent: Agent): void {
-        const body = new Map<string, any>();
+        const body = {
+            username: agent.username,
+            email: agent.email,
+        }
         const headers = new Map<string, string>();
 
-        body.set("username", agent.username);
-        body.set("email", agent.email);
 
         const res = new Response(
             200,
