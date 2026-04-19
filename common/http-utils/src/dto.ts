@@ -1,3 +1,5 @@
+import { User, type Coordinates } from "@dieti-estates-2025/entities";
+
 export {
     SignUpRequestDTO,
     UserDTO,
@@ -81,19 +83,22 @@ class Validator {
 }
 
 class PasswordDTO {
-    password?: string;
+    password: string;
 
-    fromJSON(json: any): boolean {
+    constructor(password: string) {
+        this.password = password;
+    }
+
+    static fromJSON(json: any): PasswordDTO | undefined {
         if(!Validator.hasFields(json, "string", "password")) {
-            return false;
+            return undefined;
         }
 
         const password: string = json.password;
         if(!Validator.validatePassword(password)) {
-            return false;
+            return undefined;
         }
-        this.password = password as string;
-        return true;
+        return new PasswordDTO(password);
     }
 
     toJSON(json?: any): any {
@@ -106,21 +111,24 @@ class PasswordDTO {
 }
 
 class UserDTO {
-    username?: string;
-    email?: string;
+    username: string;
+    email: string;
 
-    fromJSON(json: any): boolean {
+    constructor(username: string, email: string) {
+        this.username = username;
+        this.email = email;
+    }
+
+    static fromJSON(json: any): UserDTO | undefined {
         if(!Validator.hasFields(json, "string", "username", "email")) {
-            return false;
+            return undefined;
         }
         const username: string = json.username;
         const email: string = json.email;
         if(!(Validator.validateUsername(username) || Validator.validateEmail(email))) {
-            return false;
+            return undefined;
         }
-        this.username = username;
-        this.email = email;
-        return true;
+        return new UserDTO(username, email);
     }
 
     toJSON(json?: any): any {
@@ -134,16 +142,19 @@ class UserDTO {
 }
 
 class AuthResponseDTO {
-    token?: string;
+    token: string;
 
-    fromJSON(json: any): boolean {
+    constructor(token: string) {
+        this.token = token;
+    }
+
+    static fromJSON(json: any): AuthResponseDTO | undefined {
         if(!Validator.hasFields(json, "string", "token")) {
-            return false;
+            return undefined;
         }
         const token: string = json.token;
 
-        this.token = token;
-        return true;
+        return new AuthResponseDTO(token);
     }
 
     toJSON(json?: any): Response {
@@ -156,24 +167,27 @@ class AuthResponseDTO {
 }
 
 class LoginRequestDTO {
-    email?: string;
-    password?: string;
+    email: string;
+    password: string;
 
-    fromJSON(json: any): boolean {
+    constructor(email: string, password: string) {
+        this.email = email;
+        this.password = password;
+    }
+
+    static fromJSON(json: any): LoginRequestDTO | undefined {
         if(!Validator.hasFields(json, "string", "email", "password")) {
-            return false;
+            return undefined;
         }
         const email: string = json.email;
         const password: string = json. password;
         
         if(!(Validator.validateEmail(email) &&
         Validator.validatePassword(password))) {
-            return false;
+            return undefined;
         }
 
-        this.email = json.email;
-        this.password = json.password;
-        return true;
+        return new LoginRequestDTO(email, password);
     }
 
     toJSON(json?: any): any {
@@ -187,13 +201,19 @@ class LoginRequestDTO {
 }
 
 class SignUpRequestDTO {
-    username?: string;
-    email?: string;
-    password?: string;
+    username: string;
+    email: string;
+    password: string;
 
-    fromJSON(json: any): boolean {
+    constructor(username: string, email: string, password: string) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    fromJSON(json: any): SignUpRequestDTO | undefined {
         if(!Validator.hasFields(json, "string", "username", "email", "password")) {
-            return false;
+            return undefined;
         }
         const username: string = json.username;
         const email: string = json.email;
@@ -203,12 +223,9 @@ class SignUpRequestDTO {
             Validator.validateEmail(email) &&
             Validator.validatePassword(password))) 
         {
-            return false;
+            return undefined;
         }
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        return true;
+        return new SignUpRequestDTO(username, email, password);
     }
 
     toJSON(json: any): any {
@@ -224,24 +241,44 @@ class SignUpRequestDTO {
 }
 
 class AdvertisementDTO {
-    private id?: number;
-    private address?: string;
-    private city?: string;
-    private coordinates?: {
+    private id: number;
+    private address: string;
+    private city: string;
+    private coordinates: {
         latitude: number;
         longitude: number;
     }
-    private images?: string[];
-    private dimensions?: number;
-    private description?: string;
-    private numberOfRooms?: number;
-    private energyClass?: string;
-    private additionalServices?: string[];
-    private nearbyPOIs?: string[];
-    private kind?: AdKinds;
-    private price?: number;
+    private images: string[];
+    private dimensions: number;
+    private description: string;
+    private numberOfRooms: number;
+    private energyClass: string;
+    private additionalServices: string[];
+    private nearbyPOIs: string[];
+    private kind: AdKinds;
+    private price: number;
 
-    fromJSON(json: any): boolean {
+    constructor(id: number, address: string, city: string, coordinates: {latitude: number, longitude: number},
+        images: string[], dimensions: number, description: string, numberOfRooms: number, energyClass: string,
+        additionalServices: string[], nearbyPOIs: string[], kind: AdKinds, price: number
+    ) {
+        this.id = id;
+        this.address = address;
+        this.city = city;
+        this.images = images;
+        this.dimensions = dimensions;
+        this.description = description;
+        this.numberOfRooms = numberOfRooms;
+        this.energyClass = energyClass;
+        this.additionalServices = additionalServices;
+        this.nearbyPOIs = nearbyPOIs;
+        this.kind = kind;
+        this.price = price;
+        this.coordinates = coordinates;
+
+    }
+
+    static fromJSON(json: any): AdvertisementDTO | undefined {
         if(!(Validator.hasFields(json, "string", "address", "city", "description", "energyClass", "kind") && 
             Validator.hasFields(json, "number", "dimensions", "numberOfRooms", "price") &&
             Validator.hasFields(json, "array", "images", "additionalServices") &&
@@ -249,7 +286,7 @@ class AdvertisementDTO {
             Validator.hasFields(json.coordinates, "number", "latitude", "longitude") &&
             Validator.checkArraysType("string", json.images, json.additionalServices)
         )) {
-            return false
+            return undefined;
         }
 
         const id: number = json.id ?? -1;
@@ -276,21 +313,11 @@ class AdvertisementDTO {
         Validator.validateIntegers(id, numberOfRooms)
         Validator.validateAdKind(kind); // TODO add more validation if necessary
 
-        this.id = id;
-        this.address = address;
-        this.city = city;
-        this.images = images;
-        this.dimensions = dimensions;
-        this.description = description;
-        this.numberOfRooms = numberOfRooms;
-        this.energyClass = energyClass;
-        this.additionalServices = additionalServices;
-        this.nearbyPOIs = nearbyPOIs;
-        this.kind = kind as AdKinds;
-        this.price = price;
-        this.coordinates = coordinates;
 
-        return isValid;
+
+        return isValid ? new AdvertisementDTO(id, address, city, coordinates, images, dimensions, 
+            description, numberOfRooms, energyClass, additionalServices, nearbyPOIs, kind as AdKinds, price,
+        ) : undefined;
     }
 
 
@@ -319,12 +346,19 @@ class AdvertisementDTO {
 }
 
 class SendEmailDTO {
-    private agent: UserDTO = new UserDTO();
-    private advertisement: AdvertisementDTO = new AdvertisementDTO;
+    private agent: UserDTO;
+    private advertisement: AdvertisementDTO;
 
-    fromJSON(json: any): boolean {
-        return this.agent.fromJSON(json) && 
-            this.advertisement.fromJSON(json);
+    constructor(agent: UserDTO, advertisement: AdvertisementDTO) {
+        this.agent = agent;
+        this.advertisement = advertisement;
+    }
+
+    static fromJSON(json: any): SendEmailDTO | undefined {
+        const agent = UserDTO.fromJSON(json)
+        const advertisement = AdvertisementDTO.fromJSON(json);
+
+        return agent && advertisement && new SendEmailDTO(agent, advertisement);
     }
 
     toJSON(json?: any): any {
@@ -336,29 +370,36 @@ class SendEmailDTO {
 }
 
 class AdvertisementMetricsDTO {
-    private totalVisitsRequested?: number;
-    private totalViews?: number;
-    private advertisements: AdvertisementDTO[] = [];
+    private totalVisitsRequested: number;
+    private totalViews: number;
+    private advertisements: AdvertisementDTO[];
 
-    fromJSON(json: any): boolean {
+    constructor(totalVisitsRequested: number, totalViews: number, advertisements: AdvertisementDTO[]) {
+        this.totalVisitsRequested = totalVisitsRequested;
+        this.totalViews = totalViews;
+        this.advertisements = advertisements;
+    }
+
+    static fromJSON(json: any): AdvertisementMetricsDTO | undefined {
         if(!(Validator.hasFields(json, "number", "totalVisitsRequested", "totalViews")) &&
             Validator.hasFields(json, "array", "advertisements")
         ) {
-            return false;
+            return undefined;
         }
         const totalVisitsRequested: number = json.totalVisitsRequested;
         const totalViews: number = json.totalViews;
         if(!(Validator.validateIntegers(totalVisitsRequested, totalViews))) {
-            return false;
+            return undefined;
         }
-        this.totalVisitsRequested = totalVisitsRequested;
-        this.totalViews = totalViews;
+        const ads: AdvertisementDTO[] = [];
         for(const adJSON of json.advertisements) {
-            const ad = new AdvertisementDTO();
-            if(!ad.fromJSON(adJSON)) {
-                return false;
+            const ad = AdvertisementDTO.fromJSON(json);
+            if(ad === undefined) {
+                return undefined;
+            } else {
+                ads.push(ad);
             }
         }
-        return true;
+        return new AdvertisementMetricsDTO(totalVisitsRequested, totalViews, ads);
     }
 }
