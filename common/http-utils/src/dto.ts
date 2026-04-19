@@ -40,8 +40,8 @@ class Validator {
 
 
     static validateEmail(email: string): boolean {
-        // TODO: insert proper validation conditions for email
-        if(!email || email.length < 4) {
+        const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+        if(!email || regex.test(email)) {
             return false;
         } 
         return true;
