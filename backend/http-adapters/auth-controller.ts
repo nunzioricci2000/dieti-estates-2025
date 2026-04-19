@@ -4,7 +4,9 @@ import type { SimpleSignupInteractor } from "../auth/src/simple-signup-interacto
 import type { ThirdPartyLoginInteractor } from "../auth/src/third-party-login-interactor.js";
 import type { ThirdPartySignupInteractor } from "../auth/src/third-party-signup-interactor.js";
 import { Request } from "../../common/http-utils/src/request.js";
-import type { LoginRequestDTO, SignUpRequestDTO } from "../../common/http-utils/src/dto.js";
+import { LoginRequestDTO, SignUpRequestDTO } from "../../common/http-utils/src/dto.js";
+import type { ResponseManager } from "./response-manager.js";
+import { Response } from "../../common/http-utils/src/response.js";
 
 export class AuthController {
     constructor(
@@ -12,18 +14,26 @@ export class AuthController {
         private simpleSignupInteractor: SimpleSignupInteractor,
         private thirdPartyLoginInteractor: ThirdPartyLoginInteractor,
         private thirdPartySignupInteractor: ThirdPartySignupInteractor,
+        private responseManager: ResponseManager,
         private logger: Logger,
     ) {
         logger.info("Created!");
     }
 
     login(request: Request): void {
-        const credentials: LoginRequestDTO = {
-            email: request.body.email,
-            password: request.body.password,
-        }
+        const credentials = LoginRequestDTO.fromJSON(request.body);
 
-        // TODO insert validation by validator object
+        if(!credentials) {
+            const res = new Response(
+                400,
+                {
+                    error: "Invalid request body"
+                },
+                new Map<string, string>(),
+            )
+            this.responseManager.sendResponse(res);
+            return;
+        }
 
         this.simpleLoginInteractor.execute(
             credentials.email, 
@@ -32,13 +42,19 @@ export class AuthController {
     }
 
     signup(request: Request): void {
-        const credentials: SignUpRequestDTO = {
-            username: request.body.username,
-            email: request.body.email,
-            password: request.body.password,
-        }
+        const credentials = SignUpRequestDTO.fromJSON(request.body);
 
-        // TODO insert validation by validator object
+        if(!credentials) {
+            const res = new Response(
+                400,
+                {
+                    error: "Invalid request body"
+                },
+                new Map<string, string>(),
+            )
+            this.responseManager.sendResponse(res);
+            return;
+        }
 
         this.simpleSignupInteractor.execute(
             credentials.username, 

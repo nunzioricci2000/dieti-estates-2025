@@ -10,7 +10,9 @@ import type { CountIncomingOfferInteractor } from "../dashboard/src/count-incomi
 import type { CountIncomingViewInteractor } from "../dashboard/src/count-incoming-view-interactor.js";
 import type { MarkAsTakenInteractor } from "../dashboard/src/mark-as-taken-interactor.js";
 import type { CountIncomingPrenotationInteractor } from "../dashboard/src/count-incoming-prenotation-interactor.js";
-import type { AdvertisementDTO } from "../../common/http-utils/src/dto.js";
+import { AdvertisementDTO } from "../../common/http-utils/src/dto.js";
+import { Response } from "../../common/http-utils/src/response.js";
+import type { ResponseManager } from "./response-manager.js";
 
 export class Advertisement {
     constructor(
@@ -24,6 +26,7 @@ export class Advertisement {
         private countIncomingViewInteractor: CountIncomingViewInteractor,
         private markAsTakenInteractor: MarkAsTakenInteractor,
         private countIncomingPrenotationInteractor: CountIncomingPrenotationInteractor,
+        private responseManager: ResponseManager,
         private logger: Logger,
     ) {
         logger.debug("Created!");
@@ -70,26 +73,19 @@ export class Advertisement {
     }
 
     postAdvertisement(request: Request): void {
-        const adcertisement: AdvertisementDTO = {
-            id: -1,
-            address: request.body.address,
-            city: request.body.city,
-            coordinates: {
-                latitude: request.body.coordinates.latitude,
-                longitude: request.body.coordinates.longitude,
-            },
-            images: request.body.images,
-            description: request.body.description,
-            dimensions: request.body.dimensions,
-            numberOfRooms: request.body.numberOfRooms,
-            energyClass: request.body.energyClass,
-            additionalServices: request.body.additionalServices,
-            nearbyPOIs: request.body.nearbyPOIs,
-            kind: request.body.kind,
-            price: request.body.price,
+        const adcertisement  = AdvertisementDTO.fromJSON(request.body)
+        if(!AdvertisementDTO) {
+            const res = new Response(
+                400,
+                {
+                    error: "Invalid request body"
+                },
+                new Map<string, string>(),
+            )
+            this.responseManager.sendResponse(res);
+            return;
         }
 
-        // TODO Insert validation by validator object
         // TODO build advertisement using the builder and the builder director
 
         throw new Error("Implementation incomplete");
@@ -103,11 +99,17 @@ export class Advertisement {
         // TODO insert validation by validators
 
         if(!taken) {
-            this.logger.warn("Invalid body");
-            throw new Error("Invalid body");
-            // TODO verify if this is the inteded behaviour (it's currently not possible to revert the taken status)
+            const res = new Response(
+                400,
+                {
+                    error: "Invalid request body"
+                },
+                new Map<string, string>(),
+            )
+            this.responseManager.sendResponse(res);
+            return;
         }
-
+        
         this.markAsTakenInteractor.execute(id)
 
     }
