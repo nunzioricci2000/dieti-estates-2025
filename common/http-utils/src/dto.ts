@@ -283,7 +283,7 @@ class AdvertisementDTO {
         this.dimensions = dimensions;
         this.description = description;
         this.numberOfRooms = numberOfRooms;
-        this. energyClass = energyClass;
+        this.energyClass = energyClass;
         this.additionalServices = additionalServices;
         this.nearbyPOIs = nearbyPOIs;
         this.kind = kind as AdKinds;
@@ -362,4 +362,3 @@ class AdvertisementMetricsDTO {
         return true;
     }
 }
-
