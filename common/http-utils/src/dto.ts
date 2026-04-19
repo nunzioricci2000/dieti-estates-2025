@@ -211,7 +211,7 @@ class SignUpRequestDTO {
         this.password = password;
     }
 
-    fromJSON(json: any): SignUpRequestDTO | undefined {
+    static fromJSON(json: any): SignUpRequestDTO | undefined {
         if(!Validator.hasFields(json, "string", "username", "email", "password")) {
             return undefined;
         }
