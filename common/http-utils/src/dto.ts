@@ -9,25 +9,35 @@ export {
     SendEmailDTO,
 }
 
+type BaseTypes = "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function";
+type AdKinds = "sale" | "rent";
+
 class Validator {
 
-    static hasStringFields(obj: any, ...fields: string[]): boolean {
-        for(const field in fields) {
-            if(obj[field] === undefined || !(typeof obj[field] === "string")) {
+    static hasFields(
+        obj: any, 
+        type: BaseTypes | "array",
+        ...fields: string[]): boolean 
+    {
+        const condition = type === "array" ? (param: any) => Array.isArray(param)
+            : (param: any) => typeof param !== type;
+        for(const field of fields) {
+            if(obj[field] === undefined || condition(obj[field]) ) {
                 return false;
+            }
+        }
+            return true;
+    }
+
+    static checkArraysType(type: BaseTypes, ...arrays: any[]) {
+        for(const array in arrays) {
+            for(const el of array) {
+                if(typeof el !== type) return false;
             }
         }
         return true;
     }
 
-    static hasNumberFields(obj: any, ...fields: string[]): boolean {
-        for(const field in fields) {
-            if(obj[field] === undefined || !(typeof obj[field] !== "number")) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     static validateEmail(email: string): boolean {
         // TODO: insert proper validation conditions for email
@@ -51,14 +61,6 @@ class Validator {
         return true;
     }
 
-    static validateToken(token: string): boolean {
-        // TODO: insert proper validation conditions for token
-        if(!token) {
-            return false;
-        }
-        return true;
-    }
-
     static validateIntegers(...params: number[]): boolean {
         for(const num in params) {
             if(!Number.isInteger(num)) {
@@ -67,13 +69,22 @@ class Validator {
         }
         return true;
     }
+
+    static validateCoordinates(coord: {latitude: number, longitude: number}): boolean {
+        return coord.latitude >= -90 && coord.latitude <= 90 &&
+            coord.longitude >= -180 && coord.longitude <= 180;
+    }
+
+    static validateAdKind(kind: string) {
+        return kind === "sale" || kind === "rent";
+    }
 }
 
 class PasswordDTO {
     password?: string;
 
     fromJSON(json: any): boolean {
-        if(!Validator.hasStringFields(json, "password")) {
+        if(!Validator.hasFields(json, "string", "password")) {
             return false;
         }
 
@@ -99,7 +110,7 @@ class UserDTO {
     email?: string;
 
     fromJSON(json: any): boolean {
-        if(!Validator.hasStringFields(json, "username", "email")) {
+        if(!Validator.hasFields(json, "string", "username", "email")) {
             return false;
         }
         const username: string = json.username;
@@ -126,13 +137,11 @@ class AuthResponseDTO {
     token?: string;
 
     fromJSON(json: any): boolean {
-        if(!Validator.hasStringFields(json, "token")) {
+        if(!Validator.hasFields(json, "string", "token")) {
             return false;
         }
         const token: string = json.token;
-        if(!Validator.validateToken(token)) {
-            return false;
-        }
+
         this.token = token;
         return true;
     }
@@ -151,7 +160,7 @@ class LoginRequestDTO {
     password?: string;
 
     fromJSON(json: any): boolean {
-        if(!Validator.hasStringFields(json, "email", "password")) {
+        if(!Validator.hasFields(json, "string", "email", "password")) {
             return false;
         }
         const email: string = json.email;
@@ -183,7 +192,7 @@ class SignUpRequestDTO {
     password?: string;
 
     fromJSON(json: any): boolean {
-        if(!Validator.hasStringFields(json, "username", "email", "password")) {
+        if(!Validator.hasFields(json, "string", "username", "email", "password")) {
             return false;
         }
         const username: string = json.username;
@@ -229,37 +238,59 @@ class AdvertisementDTO {
     private energyClass?: string;
     private additionalServices?: string[];
     private nearbyPOIs?: string[];
-    private kind?: "sale" | "rent";
+    private kind?: AdKinds;
     private price?: number;
 
     fromJSON(json: any): boolean {
-        if(!(Validator.hasStringFields(json, "address", "city", "description", "energyClass", "kind") && 
-            Validator.hasNumberFields(json, "dimensions", "numberOfRooms", "price"))
-            //TODO complete check with array fields
-        ) {
+        if(!(Validator.hasFields(json, "string", "address", "city", "description", "energyClass", "kind") && 
+            Validator.hasFields(json, "number", "dimensions", "numberOfRooms", "price") &&
+            Validator.hasFields(json, "array", "images", "additionalServices") &&
+            Validator.hasFields(json, "object", "coordinates") &&
+            Validator.hasFields(json.coordinates, "number", "latitude", "longitude") &&
+            Validator.checkArraysType("string", json.images, json.additionalServices)
+        )) {
             return false
         }
 
-        this.id = json.id ?? -1;
-        this.address = json.address;
-        this.city = json.city;
-        this.images = json.images;
-        this.dimensions = json.dimensions;
-        this.description = json.description;
-        this.numberOfRooms = json.numberOfRooms;
-        this.energyClass = json.energyClass;
-        this.additionalServices = json.additionalServices;
-        this.nearbyPOIs = json.nearbyPOIs;
-        this.kind = json.kind;
-        this.price = json.price;
-        this.coordinates = {
-            latitude: json.coordinates?.latitude,
-            longitude: json.coordinates?.longitude,
+        const id: number = json.id ?? -1;
+        const address: string = json.address;
+        const city: string = json.city;
+        const images: string[] = json.images;
+        const dimensions: number = json.dimensions;
+        const description: string = json.description;
+        const numberOfRooms: number = json.numberOfRooms;
+        const energyClass: string = json.energyClass;
+        const additionalServices: string[] = json.additionalServices;
+        const kind: string = json.kind;
+        const price: number = json.price;
+        const coordinates = {
+            latitude: json.coordinates.latitude,
+            longitude: json.coordinates.longitude,
         }
 
-        let isValid = true;
-        return true;
-        //TODO insert validation
+        const nearbyPOIs: string[] = 
+            Validator.hasFields(json, "array", "nearbyPOIs") && Validator.checkArraysType("string", json.nearbyPOIs) 
+            ? json.nearbyPOIs : []
+
+        let isValid = Validator.validateCoordinates(coordinates) &&
+        Validator.validateIntegers(id, numberOfRooms)
+        Validator.validateAdKind(kind); // TODO add more validation if necessary
+
+        this.id = id;
+        this.address = address;
+        this.city = city;
+        this.images = images;
+        this.dimensions = dimensions;
+        this.description = description;
+        this.numberOfRooms = numberOfRooms;
+        this. energyClass = energyClass;
+        this.additionalServices = additionalServices;
+        this.nearbyPOIs = nearbyPOIs;
+        this.kind = kind as AdKinds;
+        this.price = price;
+        this.coordinates = coordinates;
+
+        return isValid;
     }
 
 
@@ -310,8 +341,9 @@ class AdvertisementMetricsDTO {
     private advertisements: AdvertisementDTO[] = [];
 
     fromJSON(json: any): boolean {
-        if(!(Validator.hasNumberFields(json, "totalVisitsRequested", "totalViews"))) {
-            //TODO ccomplete check with array field
+        if(!(Validator.hasFields(json, "number", "totalVisitsRequested", "totalViews")) &&
+            Validator.hasFields(json, "array", "advertisements")
+        ) {
             return false;
         }
         const totalVisitsRequested: number = json.totalVisitsRequested;
