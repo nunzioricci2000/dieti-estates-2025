@@ -18,14 +18,12 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "workspaces": [
-    "common/entities",
-    "common/utilities",
-    "server/auth",
-    "common/dep-inj"
+    "backend",
+    "common",
+    "frontend"
   ],
   "devDependencies": {
-    "@types/node": "^25.5.0",
-    "tsx": "^4.21.0",
+    "@types/node": "^25.5.2",
     "typescript": "^6.0.2"
   }
 }
