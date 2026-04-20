@@ -18,9 +18,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "workspaces": [
-    "backend/*",
-    "common/*",
-    "frontend/*"
+    "backend",
+    "common",
+    "frontend"
   ],
   "devDependencies": {
     "@types/node": "^25.5.2",
