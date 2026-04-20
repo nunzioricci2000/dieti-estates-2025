@@ -1,5 +1,0 @@
-export * from "./advertisement.js"
-export * from "./coordinates.js"
-export * from "./price.js"
-export * from "./rent-price.js"
-export * from "./user.js"

@@ -1,0 +1,17 @@
+import type { User, Logger } from "@dieti-estates-2025/common";
+import type { AuthRegister } from "./auth-register.js";
+import type { SignupPresenter } from "./interfaces.js";
+
+export class ThirdPartySignupInteractor {
+    constructor(
+        private authRegister: AuthRegister,
+        private presenter: SignupPresenter,
+        private logger: Logger,
+    ) {
+        logger.info("Created!");
+    }
+
+    execute(authorizationCode: string): User {
+        throw new Error("To be implemented");
+    }
+}
