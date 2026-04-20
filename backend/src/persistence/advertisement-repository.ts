@@ -16,7 +16,7 @@ import {
 import type { AdvertisementRepository } from "../dashboard/interfaces.js";
 import {
     AdvertisementsMetrics,
-    type AdvertisementData,
+    AdvertisementData,
 } from "../dashboard/data-objects.js";
 import type { SearchFilters } from "../user/filter-advertisements-interactor.js";
 import {
@@ -37,13 +37,10 @@ export class PrismaAdvertisementRepository
     ReaderOf<"AdvertisementData", AdvertisementData, { id: number }>,
     UpdaterOf<"AdvertisementData", AdvertisementData, { id: number }>,
     ReaderOf<"AdvertisementMetrics", AdvertisementsMetrics, null> {
-    private readonly dataByAdvertisementId: Map<number, AdvertisementData>;
-
     constructor(
         private prisma: PrismaClient,
         private logger: Logger,
     ) {
-        this.dataByAdvertisementId = new Map<number, AdvertisementData>();
         this.logger.info("PrismaAdvertisementRepository created");
     }
 
@@ -255,23 +252,13 @@ export class PrismaAdvertisementRepository
         id: number;
     }): Promise<AdvertisementData> {
         const advertisementId = advertisementRef.id;
-        const existing = this.dataByAdvertisementId.get(advertisementId);
-        if (existing) {
-            return existing;
+        const persisted =
+            await this.findPersistedWithAuthorByDomainId(advertisementId);
+        if (!persisted) {
+            throw new ValueNotFoundException({ id: advertisementId });
         }
 
-        const advertisement = await this.readAdvertisement({
-            id: advertisementId,
-        });
-        const bootstrap = {
-            advertisement,
-            views: 0,
-            visits: 0,
-            offers: 0,
-        } as AdvertisementData;
-
-        this.dataByAdvertisementId.set(advertisementId, bootstrap);
-        return bootstrap;
+        return this.toAdvertisementData(persisted);
     }
 
     async updateAdvertisementData(
@@ -279,24 +266,39 @@ export class PrismaAdvertisementRepository
         value: AdvertisementData,
     ): Promise<AdvertisementData> {
         const advertisementId = advertisementRef.id;
-        if (!this.dataByAdvertisementId.has(advertisementId)) {
+        const existing = await this.findPersistedByDomainId(advertisementId);
+        if (!existing) {
             throw new ValueNotFoundException({ advertisementId });
         }
 
-        await this.readAdvertisement({ id: advertisementId });
-        this.dataByAdvertisementId.set(advertisementId, value);
-        return value;
+        const updated = await this.prisma.advertisement.update({
+            where: { id: existing.id },
+            data: {
+                views: value.views,
+                visits: value.visits,
+                offers: value.offers,
+            },
+            include: { author: true },
+        });
+
+        return this.toAdvertisementData(updated);
     }
 
     async readAllAdvertisementData(): Promise<AdvertisementData[]> {
-        return Array.from(this.dataByAdvertisementId.values());
+        const advertisements: PersistedAdvertisementWithAuthor[] =
+            await this.prisma.advertisement.findMany({
+                include: { author: true },
+                orderBy: { id: "asc" },
+            });
+
+        return advertisements.map((advertisement) =>
+            this.toAdvertisementData(advertisement),
+        );
     }
 
     async readAdvertisementMetrics(): Promise<AdvertisementsMetrics> {
-        const [ads, data] = await Promise.all([
-            this.readAllAdvertisements(),
-            this.readAllAdvertisementData(),
-        ]);
+        const data = await this.readAllAdvertisementData();
+        const ads = data.map((item) => item.advertisement);
 
         const totals = data.reduce(
             (acc, current) => {
@@ -309,6 +311,18 @@ export class PrismaAdvertisementRepository
         );
 
         return new AdvertisementsMetrics(totals.visits, totals.views, ads);
+    }
+
+    private toAdvertisementData(
+        persisted: PersistedAdvertisementWithAuthor,
+    ): AdvertisementData {
+        const advertisement = this.toDomainAdvertisement(persisted);
+        return new AdvertisementData(
+            advertisement,
+            persisted.visits,
+            persisted.views,
+            persisted.offers,
+        );
     }
 
     private async findPersistedByDomainId(

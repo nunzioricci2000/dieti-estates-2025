@@ -48,6 +48,9 @@ model Advertisement {
   images             String[]
   additionalServices String[]
   nearbyPOIs         String[]
+  views              Int               @default(0)
+  visits             Int               @default(0)
+  offers             Int               @default(0)
   type               AdvertisementType
   authorId           String
   author             User              @relation(fields: [authorId], references: [id])
