@@ -14,11 +14,11 @@ export class ViewAdvertisementInteractor {
         logger.info("Created!");
     }
 
-    execute(advertisementId: number): Advertisement | null {
+    async execute(advertisementId: number): Promise<Advertisement | null> {
         this.publisher.publish(new ViewAdvertisementEvent(advertisementId))
         let advertisement: Advertisement;
         try {
-            advertisement = this.reader.readAdvertisement({ id: advertisementId })
+            advertisement = await this.reader.readAdvertisement({ id: advertisementId })
         } catch (err) {
             if (err instanceof ValueNotFoundException) {
                 this.logger.warn(`Attempted to view non existent advertisement with id: ${advertisementId}`);

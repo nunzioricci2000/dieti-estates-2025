@@ -13,7 +13,7 @@ export interface FilterAdvertisementsPresenter {
 }
 
 export interface AdvertisementReader extends ReaderOf<"Advertisement", Advertisement, { id: number }> {
-    filterAdvertisements(filters: SearchFilters): Advertisement[];
+    filterAdvertisements(filters: SearchFilters): Promise<Advertisement[]>;
 }
 
 export interface MakeOfferPresenter {

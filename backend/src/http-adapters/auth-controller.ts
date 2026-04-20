@@ -1,8 +1,8 @@
 import type { Logger } from "@dieti-estates-2025/common";
-import type { SimpleLoginInteractor } from "../auth/src/simple-login-interactor.js";
-import type { SimpleSignupInteractor } from "../auth/src/simple-signup-interactor.js";
-import type { ThirdPartyLoginInteractor } from "../auth/src/third-party-login-interactor.js";
-import type { ThirdPartySignupInteractor } from "../auth/src/third-party-signup-interactor.js";
+import type { SimpleLoginInteractor } from "../auth/simple-login-interactor.js";
+import type { SimpleSignupInteractor } from "../auth/simple-signup-interactor.js";
+import type { ThirdPartyLoginInteractor } from "../auth/third-party-login-interactor.js";
+import type { ThirdPartySignupInteractor } from "../auth/third-party-signup-interactor.js";
 
 export class AuthController {
     constructor(

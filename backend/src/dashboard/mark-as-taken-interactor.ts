@@ -25,6 +25,6 @@ class MarkAsTakenInteractor {
             }
         }
         advertisement.available = false;
-        this.repository.updateAdvertisement(advertisement);
+        await this.repository.updateAdvertisement(advertisement);
     }
 }

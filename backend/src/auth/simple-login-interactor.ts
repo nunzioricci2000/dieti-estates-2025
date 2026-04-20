@@ -13,10 +13,10 @@ export class SimpleLoginInteractor {
         logger.info("Created!");
     }
 
-    execute(email: string, password: string): User | null {
+    async execute(email: string, password: string): Promise<User | null> {
         let user;
         try {
-            user = this.authRegister.userRepository.readUser({ email });
+            user = await this.authRegister.userRepository.readUser({ email });
         } catch (err) {
             if (err instanceof UserNotExistsException) {
                 this.logger.warn(`Attempted login with email ${email} which does not exist`);
@@ -27,7 +27,7 @@ export class SimpleLoginInteractor {
                 throw err;
             }
         }
-        const storedPassword = this.authRegister.passwordRepository.readPassword(user);
+        const storedPassword = await this.authRegister.passwordRepository.readPassword(user);
         if (!this.authRegister.hashService.verifyString(password, storedPassword)) {
             this.logger.warn(`Attempted login as user ${email} with incorrect password`)
             this.presenter.presentError(new WrongPasswordException());

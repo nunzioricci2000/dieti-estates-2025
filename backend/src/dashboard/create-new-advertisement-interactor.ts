@@ -12,10 +12,10 @@ export class CreateNewAdvertisementInteractor {
         logger.info("Created!");
     }
 
-    execute(advertisement: Advertisement): Advertisement {
+    async execute(advertisement: Advertisement): Promise<Advertisement> {
         const POIs = this.detectPOIsService.detectPOIs(advertisement.location);
         advertisement.nearbyPOIs = POIs;
-        const newAd = this.repository.createAdvertisement(advertisement);
+        const newAd = await this.repository.createAdvertisement(advertisement);
         this.presenter.present(newAd);
         this.logger.info("Advertisement created!");
         return newAd;

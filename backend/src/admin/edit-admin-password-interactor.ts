@@ -12,9 +12,9 @@ class EditAdminPasswordInteractor {
         logger.info("Created!");
     }
 
-    execute(admin: Admin, password: string): boolean {
+    async execute(admin: Admin, password: string): Promise<boolean> {
         try {
-            this.updater.updatePassword(admin, password);
+            await this.updater.updatePassword(admin, password);
         } catch (err) {
             if (err instanceof ValueNotFoundException) {
                 this.logger.warn(`Attempted to edit password of non existent admin ${admin.username}`);
