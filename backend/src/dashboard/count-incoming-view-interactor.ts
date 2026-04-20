@@ -1,4 +1,4 @@
-import { ValueNotFoundException, type Logger, type RepositoryOf } from "@dieti-estates-2025/common/src/utilities/index.js";
+import { ValueNotFoundException, type Logger, type RepositoryOf } from "@dieti-estates-2025/common";
 import type { AdvertisementData } from "./data-objects.js";
 import { UnavailableAdvertisementDataException } from "./errors.js";
 

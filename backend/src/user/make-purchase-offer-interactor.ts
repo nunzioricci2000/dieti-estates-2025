@@ -1,5 +1,5 @@
 import type { Advertisement, Price } from "@dieti-estates-2025/common";
-import { ValueNotFoundException, type EventPublisher, type Logger, type ReaderOf } from "@dieti-estates-2025/common/src/utilities/index.js";
+import { ValueNotFoundException, type EventPublisher, type Logger, type ReaderOf } from "@dieti-estates-2025/common";
 import { MakeOfferEvent } from "./events.js";
 import type { MakeOfferPresenter } from "./interfaces.js";
 import { AdvertisementNotExistsException } from "./errors.js";

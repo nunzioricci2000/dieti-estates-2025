@@ -1,5 +1,5 @@
 import type { Advertisement } from "@dieti-estates-2025/common";
-import { ValueNotFoundException, type Logger } from "@dieti-estates-2025/common/src/utilities/index.js";
+import { ValueNotFoundException, type Logger } from "@dieti-estates-2025/common";
 import type { AdvertisementRepository } from "./interfaces.js";
 import { UnavailableAdvertisementDataException } from "./errors.js";
 

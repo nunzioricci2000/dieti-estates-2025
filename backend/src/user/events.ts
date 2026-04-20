@@ -1,4 +1,4 @@
-import { Event } from "@dieti-estates-2025/common/src/utilities/index.js";
+import { Event } from "@dieti-estates-2025/common";
 
 export {
     ViewAdvertisementEvent,
