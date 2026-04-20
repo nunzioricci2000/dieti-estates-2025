@@ -1,4 +1,4 @@
-import { Request } from "./src/request.js";
+import { Request } from "./request.js";
 
 export interface RequestBuilder {
     setMethod(): void;
