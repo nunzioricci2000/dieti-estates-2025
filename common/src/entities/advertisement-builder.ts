@@ -1,9 +1,6 @@
 import { Advertisement } from "./advertisement.js";
 
-export {
-    type AdvertisementBuilder,
-    AdvertisementBuilderDirector,
-}
+export { type AdvertisementBuilder, AdvertisementBuilderDirector };
 
 interface AdvertisementBuilder<T extends Advertisement> {
     setId(): void;

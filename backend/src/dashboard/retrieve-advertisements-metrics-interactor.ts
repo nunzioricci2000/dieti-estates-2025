@@ -5,7 +5,11 @@ import type { RetrieveAdvertisementsMetricsPresenter } from "./interfaces.js";
 export class RetrieveAdvertisementsMetricsInteractor {
     constructor(
         private presenter: RetrieveAdvertisementsMetricsPresenter,
-        private metricsRepository: RepositoryOf<"AdvertisementMetrics", AdvertisementsMetrics, null>,
+        private metricsRepository: RepositoryOf<
+            "AdvertisementMetrics",
+            AdvertisementsMetrics,
+            null
+        >,
         private logger: Logger,
     ) {
         logger.info("Created");
@@ -14,7 +18,8 @@ export class RetrieveAdvertisementsMetricsInteractor {
     async execute(): Promise<void> {
         let metrics: AdvertisementsMetrics;
         try {
-            metrics = await this.metricsRepository.readAdvertisementMetrics(null);
+            metrics =
+                await this.metricsRepository.readAdvertisementMetrics(null);
         } catch (err) {
             this.logger.error("Unexpected error occurred");
             throw err;

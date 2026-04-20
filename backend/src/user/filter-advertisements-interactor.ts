@@ -1,6 +1,9 @@
 import { Advertisement, type Coordinates } from "@dieti-estates-2025/common";
 import type { Logger } from "@dieti-estates-2025/common";
-import type { AdvertisementReader, FilterAdvertisementsPresenter } from "./interfaces.js";
+import type {
+    AdvertisementReader,
+    FilterAdvertisementsPresenter,
+} from "./interfaces.js";
 
 export class FilterAdvertisementsInteractor {
     constructor(

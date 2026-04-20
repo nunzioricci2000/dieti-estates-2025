@@ -1,8 +1,4 @@
-export {
-    User,
-    Agent,
-    Admin
-}
+export { User, Agent, Admin };
 
 class User {
     email: string;
@@ -14,6 +10,6 @@ class User {
     }
 }
 
-class Agent extends User { }
+class Agent extends User {}
 
-class Admin extends User { }
+class Admin extends User {}

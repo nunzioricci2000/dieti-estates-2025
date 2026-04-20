@@ -6,8 +6,13 @@ export class Request {
     pathParams: Map<string, string>;
     queryParams: Map<string, string>;
 
-    constructor(method: Method, path: string, body: Map<string, any>, headers: Map<string, string>,
-        pathParams: Map<string, string>, queryParams: Map<string, string>
+    constructor(
+        method: Method,
+        path: string,
+        body: Map<string, any>,
+        headers: Map<string, string>,
+        pathParams: Map<string, string>,
+        queryParams: Map<string, string>,
     ) {
         this.method = method;
         this.path = path;
@@ -19,7 +24,7 @@ export class Request {
 }
 
 enum Method {
-    GET, 
+    GET,
     HEAD,
     POST,
     PUT,

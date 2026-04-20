@@ -4,7 +4,7 @@ export {
     InvalidConfigurationError,
     AdminNotExistsException,
     AgentNotExistsException,
-}
+};
 
 class AdminAlreadySignedException extends Error {}
 class AgentAlreadySignedException extends Error {}

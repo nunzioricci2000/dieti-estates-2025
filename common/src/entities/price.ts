@@ -1,6 +1,4 @@
-export {
-    Price,
-}
+export { Price };
 
 class Price {
     value: number;

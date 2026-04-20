@@ -1,6 +1,4 @@
-export {
-    Image,
-}
+export { Image };
 
 class Image {
     url: string;
