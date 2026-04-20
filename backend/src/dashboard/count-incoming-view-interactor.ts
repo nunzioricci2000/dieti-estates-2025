@@ -1,18 +1,20 @@
 import {
     ValueNotFoundException,
     type Logger,
-    type RepositoryOf,
+    type ReaderOf,
+    type UpdaterOf,
 } from "@dieti-estates-2025/common";
 import type { AdvertisementData } from "./data-objects.js";
 import { UnavailableAdvertisementDataException } from "./errors.js";
 
-class CountIncomingViewInteractor {
+export class CountIncomingViewInteractor {
     constructor(
-        private repository: RepositoryOf<
+        private repository: ReaderOf<
             "AdvertisementData",
             AdvertisementData,
-            number
-        >,
+            { id: number }
+        > &
+            UpdaterOf<"AdvertisementData", AdvertisementData, { id: number }>,
         private logger: Logger,
     ) {
         logger.info("Created!");
@@ -21,7 +23,9 @@ class CountIncomingViewInteractor {
     async execute(advertisementId: number): Promise<void> {
         let data: AdvertisementData;
         try {
-            data = await this.repository.readAdvertisementData(advertisementId);
+            data = await this.repository.readAdvertisementData({
+                id: advertisementId,
+            });
         } catch (err) {
             if (err instanceof ValueNotFoundException) {
                 this.logger.warn(
@@ -37,6 +41,9 @@ class CountIncomingViewInteractor {
             `Incremented view count od advertisement with id: ${advertisementId}`,
         );
         data.views += 1;
-        await this.repository.updateAdvertisementData(advertisementId, data);
+        await this.repository.updateAdvertisementData(
+            { id: advertisementId },
+            data,
+        );
     }
 }

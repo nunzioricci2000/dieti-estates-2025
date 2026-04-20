@@ -1,50 +1,70 @@
 export type CreatorOf<
     ValueName extends string,
     Value,
-    Ref = string | number | symbol,
-> = Value extends Ref
+    Ref = null,
+> = null extends Ref
     ? {
-          [K in `create${Capitalize<ValueName>}`]: (
-              ...args: [Value]
-          ) => Promise<Value>;
-      }
+        [K in `create${Capitalize<ValueName>}`]: (
+            ...args: [Value]
+        ) => Promise<Value>;
+    }
+    : Value extends Ref
+    ? {
+        [K in `create${Capitalize<ValueName>}`]: (
+            ...args: [Value]
+        ) => Promise<Value>;
+    }
     : {
-          [K in `create${Capitalize<ValueName>}`]: (
-              ...args: [Ref, Value]
-          ) => Promise<Ref>;
-      };
+        [K in `create${Capitalize<ValueName>}`]: (
+            ...args: [Ref, Value]
+        ) => Promise<Ref>;
+    };
 
 export type ReaderOf<
     ValueName extends string,
     Value,
-    Ref = string | number | symbol,
-> = {
-    [K in `read${Capitalize<ValueName>}`]: (ref: Ref) => Promise<Value>;
-};
+    Ref = null,
+> = null extends Ref
+    ? {
+        [K in `read${Capitalize<ValueName>}`]: () => Promise<Value>;
+    }
+    : {
+        [K in `read${Capitalize<ValueName>}`]: (ref: Ref) => Promise<Value>;
+    };
 
 export type UpdaterOf<
     ValueName extends string,
     Value,
-    Ref = string | number | symbol,
-> = Value extends Ref
+    Ref = null,
+> = null extends Ref
     ? {
-          [K in `update${Capitalize<ValueName>}`]: (
-              ...args: [Value]
-          ) => Promise<Value>;
-      }
+        [K in `update${Capitalize<ValueName>}`]: (
+            ...args: [Value]
+        ) => Promise<Value>;
+    }
+    : Value extends Ref
+    ? {
+        [K in `update${Capitalize<ValueName>}`]: (
+            ...args: [Value]
+        ) => Promise<Value>;
+    }
     : {
-          [K in `update${Capitalize<ValueName>}`]: (
-              ...args: [Ref, Value]
-          ) => Promise<Value>;
-      };
+        [K in `update${Capitalize<ValueName>}`]: (
+            ...args: [Ref, Value]
+        ) => Promise<Value>;
+    };
 
 export type DeleterOf<
     ValueName extends string,
     Value,
-    Ref = string | number | symbol,
-> = {
-    [K in `delete${Capitalize<ValueName>}`]: (ref: Ref) => Promise<Value>;
-};
+    Ref = null,
+> = null extends Ref
+    ? {
+        [K in `delete${Capitalize<ValueName>}`]: () => Promise<Value>;
+    }
+    : {
+        [K in `delete${Capitalize<ValueName>}`]: (ref: Ref) => Promise<Value>;
+    };
 
 /**
  * Defines types for a generic repository pattern, allowing for the creation,
@@ -138,7 +158,7 @@ export type DeleterOf<
 export type RepositoryOf<
     ValueName extends string,
     Value,
-    Ref = string | number | symbol,
+    Ref = null,
 > = CreatorOf<ValueName, Value, Ref> &
     ReaderOf<ValueName, Value, Ref> &
     UpdaterOf<ValueName, Value, Ref> &
