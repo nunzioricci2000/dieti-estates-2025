@@ -12,10 +12,10 @@ class CreateNewAdminInteractor {
         logger.info("Created!");
     }
 
-    execute(email: string, username: string, password: string): Admin | null {
+    async execute(email: string, username: string, password: string): Promise<Admin | null> {
         let admin: Admin;
         try {
-            admin = this.creator.createAdmin(new Admin(email, username));
+            admin = await this.creator.createAdmin(new Admin(email, username));
         } catch (err) {
             if (err instanceof ValueAlreadyExistsException) {
                 this.logger.warn(`Attempted to create admin ${username} that already exists`);

@@ -1,22 +1,22 @@
 
 export type CreatorOf<ValueName extends string, Value, Ref = string | number | symbol> = Value extends Ref ? {
-    [K in `create${Capitalize<ValueName>}`]: (...args: [Value]) => Value;
+    [K in `create${Capitalize<ValueName>}`]: (...args: [Value]) => Promise<Value>;
 } : {
-        [K in `create${Capitalize<ValueName>}`]: (...args: [Ref, Value]) => Ref;
+        [K in `create${Capitalize<ValueName>}`]: (...args: [Ref, Value]) => Promise<Ref>;
     };
 
 export type ReaderOf<ValueName extends string, Value, Ref = string | number | symbol> = {
-    [K in `read${Capitalize<ValueName>}`]: (ref: Ref) => Value;
+    [K in `read${Capitalize<ValueName>}`]: (ref: Ref) => Promise<Value>;
 };
 
 export type UpdaterOf<ValueName extends string, Value, Ref = string | number | symbol> = Value extends Ref ? {
-    [K in `update${Capitalize<ValueName>}`]: (...args: [Value]) => Value;
+    [K in `update${Capitalize<ValueName>}`]: (...args: [Value]) => Promise<Value>;
 } : {
-        [K in `update${Capitalize<ValueName>}`]: (...args: [Ref, Value]) => Value;
+        [K in `update${Capitalize<ValueName>}`]: (...args: [Ref, Value]) => Promise<Value>;
     };
 
 export type DeleterOf<ValueName extends string, Value, Ref = string | number | symbol> = {
-    [K in `delete${Capitalize<ValueName>}`]: (ref: Ref) => Value;
+    [K in `delete${Capitalize<ValueName>}`]: (ref: Ref) => Promise<Value>;
 };
 
 /**

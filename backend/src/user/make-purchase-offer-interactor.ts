@@ -1,5 +1,5 @@
 import type { Advertisement, Price } from "@dieti-estates-2025/common";
-import { ValueNotFoundException, type EventPublisher, type Logger, type ReaderOf } from "../../../common/src/utilities/index.js";
+import { ValueNotFoundException, type EventPublisher, type Logger, type ReaderOf } from "@dieti-estates-2025/common";
 import { MakeOfferEvent } from "./events.js";
 import type { MakeOfferPresenter } from "./interfaces.js";
 import { AdvertisementNotExistsException } from "./errors.js";
@@ -14,10 +14,10 @@ class MakeOfferInteractor {
         logger.info("Created!");
     }
 
-    execute(advertisementId: number): boolean {
+    async execute(advertisementId: number): Promise<boolean> {
         let advertisement: Advertisement
         try {
-            advertisement = this.reader.readAdvertisement({ id: advertisementId });
+            advertisement = await this.reader.readAdvertisement({ id: advertisementId });
         } catch (err) {
             if (err instanceof ValueNotFoundException) {
                 this.logger.warn(`Attempted to propose offer of non existend advertisement with id: ${advertisementId}`);

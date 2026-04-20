@@ -12,10 +12,10 @@ class CreateNewAgentInteractor {
         logger.info("Created!");
     }
 
-    execute(email: string, username: string, password: string): Agent | null {
+    async execute(email: string, username: string, password: string): Promise<Agent | null> {
         let agent: Agent;
         try {
-            agent = this.creator.createAgent(new Agent(email, username));
+            agent = await this.creator.createAgent(new Agent(email, username));
         } catch (err) {
             if (err instanceof ValueAlreadyExistsException) {
                 this.logger.warn(`Attempted to create agent with existing username: ${username}`);

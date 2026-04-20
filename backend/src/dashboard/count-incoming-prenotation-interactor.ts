@@ -10,10 +10,10 @@ export class CountIncomingPrenotationInteractor {
         logger.info("Created!");
     }
 
-    execute(advertisementId: number): void {
+    async execute(advertisementId: number): Promise<void> {
         let data: AdvertisementData;
         try {
-            data = this.repository.readAdvertisementData(advertisementId);
+            data = await this.repository.readAdvertisementData(advertisementId);
         } catch (err) {
             if (err instanceof ValueNotFoundException) {
                 this.logger.warn(`Attemped to increment visit count of non existent ad with id: ${advertisementId}`);
@@ -25,6 +25,6 @@ export class CountIncomingPrenotationInteractor {
         }
         this.logger.debug(`Incremented visit count od advertisement with id: ${advertisementId}`);
         data.visits += 1;
-        this.repository.updateAdvertisementData(advertisementId, data);
+        await this.repository.updateAdvertisementData(advertisementId, data);
     }
 }
