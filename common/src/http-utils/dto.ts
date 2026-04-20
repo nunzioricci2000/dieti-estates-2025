@@ -239,22 +239,22 @@ class SignUpRequestDTO {
 }
 
 class AdvertisementDTO {
-    private id: number;
-    private address: string;
-    private city: string;
-    private coordinates: {
+    id: number;
+    address: string;
+    city: string;
+    coordinates: {
         latitude: number;
         longitude: number;
     }
-    private images: string[];
-    private dimensions: number;
-    private description: string;
-    private numberOfRooms: number;
-    private energyClass: string;
-    private additionalServices: string[];
-    private nearbyPOIs: string[];
-    private kind: AdKinds;
-    private price: number;
+    images: string[];
+    dimensions: number;
+    description: string;
+    numberOfRooms: number;
+    energyClass: string;
+    additionalServices: string[];
+    nearbyPOIs: string[];
+    kind: AdKinds;
+    price: number;
 
     constructor(id: number, address: string, city: string, coordinates: {latitude: number, longitude: number},
         images: string[], dimensions: number, description: string, numberOfRooms: number, energyClass: string,

@@ -1,4 +1,4 @@
-import { type Logger, Rental, Sale, Advertisement, AdvertisementDTO, Response } from "@dieti-estates-2025/common";
+import { type Logger, Rental, Sale, Advertisement, AdvertisementDTO, Response, AdvertisementAssembler } from "@dieti-estates-2025/common";
 import type { FilterAdvertisementsPresenter } from "../user/interfaces.js";
 import type { ResponseManager } from "./response-manager.js";
 
@@ -13,26 +13,7 @@ export class HTTPFilterAdvertisementsPresenter implements FilterAdvertisementsPr
     present(advertisements: Advertisement[]): void {
         const body: AdvertisementDTO[] = [];
         for (const ad of advertisements) {
-            body.push({
-                id: ad.id,
-                address: ad.address,
-                city: ad.city,
-                coordinates: {
-                    latitude: ad.location.latitude,
-                    longitude: ad.location.longitude,
-                },
-                images: ad.images.map(image => image.url),
-                dimensions: ad.dimensions,
-                description: ad.description,
-                numberOfRooms: ad.numberOfRooms,
-                energyClass: ad.energyClass,
-                additionalServices: ad.additionalServices,
-                nearbyPOIs: ad.nearbyPOIs,
-                kind: ad instanceof Sale ? "sale" :
-                    "rent",
-                price: ad instanceof Sale ? ad.price.value :
-                    (ad as Rental).rentPrice.price.value,
-            })
+            body.push(AdvertisementAssembler.createDTO(ad));
         }
 
         const headers = new Map<string, string>();
