@@ -15,7 +15,7 @@ export class SetupFirstAdminInteractor {
         logger.info("Created!");
     }
 
-    execute(): Admin | null {
+    async execute(): Promise<Admin | null> {
         if (!this.detector.isFirstLaunch()) {
             return null;
         }
@@ -32,8 +32,8 @@ export class SetupFirstAdminInteractor {
             return null;
         }
 
-        const admin = this.adminCreator.createAdmin(new Admin(email, username));
-        this.passwordRepository.createPassword(admin, password);
+        const admin = await this.adminCreator.createAdmin(new Admin(email, username));
+        await this.passwordRepository.createPassword(admin, password);
         this.presenter.present(admin);
         this.logger.info("First admin created!");
         return admin;

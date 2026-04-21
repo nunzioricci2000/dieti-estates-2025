@@ -11,10 +11,10 @@ export class RetrieveAdvertisementsMetricsInteractor {
         logger.info("Created");
     }
 
-    execute(): void {
+    async execute(): Promise<void> {
         let metrics: AdvertisementsMetrics;
         try {
-            metrics = this.metricsRepository.readAdvertisementMetrics(null);
+            metrics = await this.metricsRepository.readAdvertisementMetrics(null);
         } catch (err) {
             this.logger.error("Unexpected error occurred");
             throw err;

@@ -1,5 +1,5 @@
 import { Advertisement, type Coordinates } from "@dieti-estates-2025/common";
-import type { Logger } from "../../../common/src/utilities/index.js";
+import type { Logger } from "@dieti-estates-2025/common";
 import type { AdvertisementReader, FilterAdvertisementsPresenter } from "./interfaces.js";
 
 export class FilterAdvertisementsInteractor {
@@ -11,10 +11,10 @@ export class FilterAdvertisementsInteractor {
         logger.info("Created!");
     }
 
-    execute(filters: SearchFilters): boolean {
+    async execute(filters: SearchFilters): Promise<boolean> {
         let results: Advertisement[];
         try {
-            results = this.reader.filterAdvertisements(filters);
+            results = await this.reader.filterAdvertisements(filters);
         } catch (err) {
             this.logger.error("UnexpectedErrorOccurred");
             throw err;

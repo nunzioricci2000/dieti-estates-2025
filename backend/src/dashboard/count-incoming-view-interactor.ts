@@ -1,4 +1,4 @@
-import { ValueNotFoundException, type Logger, type RepositoryOf } from "@dieti-estates-2025/common/src/utilities/index.js";
+import { ValueNotFoundException, type Logger, type RepositoryOf } from "@dieti-estates-2025/common";
 import type { AdvertisementData } from "./data-objects.js";
 import { UnavailableAdvertisementDataException } from "./errors.js";
 
@@ -10,10 +10,10 @@ export class CountIncomingViewInteractor {
         logger.info("Created!");
     }
 
-    execute(advertisementId: number): void {
+    async execute(advertisementId: number): Promise<void> {
         let data: AdvertisementData;
         try {
-            data = this.repository.readAdvertisementData(advertisementId);
+            data = await this.repository.readAdvertisementData(advertisementId);
         } catch (err) {
             if (err instanceof ValueNotFoundException) {
                 this.logger.warn(`Attemped to increment view count of non existent ad with id: ${advertisementId}`);
@@ -25,6 +25,6 @@ export class CountIncomingViewInteractor {
         }
         this.logger.debug(`Incremented view count od advertisement with id: ${advertisementId}`);
         data.views += 1;
-        this.repository.updateAdvertisementData(advertisementId, data);
+        await this.repository.updateAdvertisementData(advertisementId, data);
     }
 }

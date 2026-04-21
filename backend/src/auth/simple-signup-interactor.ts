@@ -13,10 +13,10 @@ export class SimpleSignupInteractor {
         logger.info("Created!");
     }
 
-    execute(username: string, email: string, password: string): User | null {
+    async execute(username: string, email: string, password: string): Promise<User | null> {
         let user: User
         try {
-            user = this.authRegister.userRepository.createUser(new User(email, username));
+            user = await this.authRegister.userRepository.createUser(new User(email, username));
         } catch (err) {
             if (err instanceof ValueAlreadyExistsException) {
                 this.logger.warn("Attempted creation of an existing user");
@@ -27,7 +27,7 @@ export class SimpleSignupInteractor {
                 throw err;
             }
         }
-        this.authRegister.passwordRepository.createPassword(user, password);
+        await this.authRegister.passwordRepository.createPassword(user, password);
         return user;
     }
 }

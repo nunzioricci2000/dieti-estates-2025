@@ -14,10 +14,10 @@ export class BookVisitInteractor {
         logger.info("Created!");
     }
 
-    execute(advertisementId: number): boolean {
+    async execute(advertisementId: number): Promise<boolean> {
         let advertisement: Advertisement;
         try {
-            advertisement = this.reader.readAdvertisement(advertisementId);
+            advertisement = await this.reader.readAdvertisement(advertisementId);
         } catch (err) {
             if (err instanceof ValueNotFoundException) {
                 this.logger.warn(`Attempted to book visit for non existent advertisement with id: ${advertisementId}`);

@@ -14,10 +14,10 @@ export class MakeOfferInteractor {
         logger.info("Created!");
     }
 
-    execute(advertisementId: number): boolean {
+    async execute(advertisementId: number): Promise<boolean> {
         let advertisement: Advertisement
         try {
-            advertisement = this.reader.readAdvertisement({ id: advertisementId });
+            advertisement = await this.reader.readAdvertisement({ id: advertisementId });
         } catch (err) {
             if (err instanceof ValueNotFoundException) {
                 this.logger.warn(`Attempted to propose offer of non existend advertisement with id: ${advertisementId}`);

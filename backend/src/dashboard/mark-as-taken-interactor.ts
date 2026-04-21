@@ -1,7 +1,7 @@
-import { Advertisement, ValueNotFoundException } from "@dieti-estates-2025/common";
-import type { Logger } from "@dieti-estates-2025/common";
-import { UnavailableAdvertisementDataException } from "./errors.js";
+import type { Advertisement } from "@dieti-estates-2025/common";
+import { ValueNotFoundException, type Logger } from "@dieti-estates-2025/common";
 import type { AdvertisementRepository } from "./interfaces.js";
+import { UnavailableAdvertisementDataException } from "./errors.js";
 
 export class MarkAsTakenInteractor {
     constructor(
@@ -11,10 +11,10 @@ export class MarkAsTakenInteractor {
         logger.info("Created!");
     }
 
-    execute(advertisementId: number): void {
+    async execute(advertisementId: number): Promise<void> {
         let advertisement: Advertisement;
         try {
-            advertisement = this.repository.readAdvertisement({ id: advertisementId })
+            advertisement = await this.repository.readAdvertisement({ id: advertisementId })
         } catch (err) {
             if (err instanceof ValueNotFoundException) {
                 this.logger.warn(`Attempted to mark non existend ad as taken. Id: ${advertisementId}`);
@@ -25,6 +25,6 @@ export class MarkAsTakenInteractor {
             }
         }
         advertisement.available = false;
-        this.repository.updateAdvertisement(advertisement);
+        await this.repository.updateAdvertisement(advertisement);
     }
 }

@@ -2,4 +2,4 @@ export {
     UnavailableAdvertisementDataException,
 }
 
-class UnavailableAdvertisementDataException extends Error {}
+class UnavailableAdvertisementDataException extends Error { }
