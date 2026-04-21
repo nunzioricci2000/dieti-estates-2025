@@ -1,7 +1,6 @@
-import { type Logger, Agent, Response } from "@dieti-estates-2025/common";
+import { type Logger, Advertisement, AdvertisementAssembler, Agent, Response, UserAssembler } from "@dieti-estates-2025/common";
 import type { BookVisitPresenter } from "../user/interfaces.js";
 import type { ResponseManager } from "./response-manager.js";
-import { UnavailableAdvertisementDataException } from "../dashboard/errors.js";
 import { AdvertisementNotExistsException } from "../user/errors.js";
 
 export class HTTPBookVisitPresenter implements BookVisitPresenter {
@@ -12,11 +11,13 @@ export class HTTPBookVisitPresenter implements BookVisitPresenter {
         logger.info("Created!");
     }
 
-    present(agent: Agent): void {
+    present(advertisement: Advertisement): void {
+        const adDTO = AdvertisementAssembler.createDTO(advertisement);
+        const agentDTO = UserAssembler.createDTO(advertisement.agent);
         const body = {
-            username: agent.username,
-            email: agent.email,
-        };
+            agent: agentDTO.toJSON(),
+            advertisement: adDTO.toJSON(),
+        }
         const headers = new Map<string, string>();
 
         const res = new Response(

@@ -1,4 +1,4 @@
-import { type Logger, Rental, Sale, Advertisement, AdvertisementDTO, Response, AdvertisementAssembler } from "@dieti-estates-2025/common";
+import { type Logger, Advertisement, AdvertisementDTO, Response, AdvertisementAssembler } from "@dieti-estates-2025/common";
 import type { FilterAdvertisementsPresenter } from "../user/interfaces.js";
 import type { ResponseManager } from "./response-manager.js";
 
