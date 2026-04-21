@@ -1,5 +1,6 @@
 import { type Logger, Response } from "@dieti-estates-2025/common";
 import type { ResponseManager } from "./response-manager.js";
+import { UserAlreadySignedException } from "../auth/errors.js";
 
 export class HTTPSignupPresenter {
     constructor(
@@ -19,7 +20,13 @@ export class HTTPSignupPresenter {
     }
 
     presentError(error: Error): void {
-        this.responseManager.sendError(error);
+        let res: Response;
+        if(error instanceof UserAlreadySignedException) {
+            res = Response.CONFLICT;
+        } else {
+            res = Response.SERVER_ERROR;
+        }
+        this.responseManager.sendResponse(res);
         this.logger.debug("Error during signup. Error response was sent.");
     }
 }

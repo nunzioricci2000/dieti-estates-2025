@@ -1,5 +1,6 @@
 import { type Logger, Admin, Response } from "@dieti-estates-2025/common";
 import type { ResponseManager } from "./response-manager.js";
+import { AdminAlreadySignedException } from "../admin/errors.js";
 
 export class HTTPCreateNewAdminPresenter {
     constructor(
@@ -26,7 +27,11 @@ export class HTTPCreateNewAdminPresenter {
     }
 
     presentError(error: Error): void {
-        this.responseManager.sendError(error);
         this.logger.debug("Failed in creating admin. Sending error response");
+        if(error instanceof AdminAlreadySignedException) {
+            this.responseManager.sendResponse(Response.CONFLICT);
+            return;
+        }
+        this.responseManager.sendResponse(Response.SERVER_ERROR);
     }
 }

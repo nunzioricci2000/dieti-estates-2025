@@ -1,5 +1,6 @@
 import { type Logger, Admin, Response } from "@dieti-estates-2025/common";
 import type { ResponseManager } from "./response-manager.js";
+import { AdminNotExistsException } from "../admin/errors.js";
 
 export class HTTPEditAdminPasswordPresenter {
     constructor(
@@ -28,7 +29,13 @@ export class HTTPEditAdminPasswordPresenter {
     }
 
     presentError(error: Error): void {
-        this.responseManager.sendError(error);
+        let res: Response;
+        if(error instanceof AdminNotExistsException) {
+            res = Response.NOT_FOUND;
+        } else {
+            res = Response.SERVER_ERROR;
+        }
+        this.responseManager.sendResponse(res)
         this.logger.debug("Failed editing admin password. Error response sent");
     }
 }

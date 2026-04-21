@@ -1,6 +1,7 @@
 import { type Logger, Rental, Sale, Advertisement, Response } from "@dieti-estates-2025/common";
 import type { ViewAdvertisementPresenter } from "../user/interfaces.js";
 import type { ResponseManager } from "./response-manager.js";
+import { AdvertisementNotExistsException } from "../user/errors.js";
 
 export class HTTPViewAdvertisementPresenter implements ViewAdvertisementPresenter {
     constructor(
@@ -44,7 +45,13 @@ export class HTTPViewAdvertisementPresenter implements ViewAdvertisementPresente
     }
 
     presentError(error: Error): void {
-        this.responseManager.sendError(error);
+        let res: Response;
+        if(error instanceof AdvertisementNotExistsException) {
+            res = Response.NOT_FOUND;
+        } else {
+            res = Response.SERVER_ERROR;
+        }
+        this.responseManager.sendResponse(res);
         this.logger.debug("Error response sent");
     }
 }

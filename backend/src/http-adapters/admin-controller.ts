@@ -1,4 +1,4 @@
-import { type Logger, Request, Response, PasswordDTO, SignUpRequestDTO, UserAssembler } from "@dieti-estates-2025/common";
+import { type Logger, Request, Response, PasswordDTO, SignUpRequestDTO, UserAssembler, Admin } from "@dieti-estates-2025/common";
 import type { CreateNewAdminInteractor } from "../admin/create-new-admin-interactor.js";
 import type { EditAdminPasswordInteractor } from "../admin/edit-admin-password-interactor.js";
 import type { ResponseManager } from "./response-manager.js";
@@ -33,13 +33,18 @@ export class AdminController {
 
     patchAdmin(request: Request): void {
         const newPassword = PasswordDTO.fromJSON(request.body);
-        if(!newPassword) {
+        const jwt = request.headers.get("Authorization");
+        if(!newPassword || !jwt) {
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
 
-        // TODO complete when the class will be able to retrieve the user who performed the request
+        const user = this.tokenService.verifyToken(jwt);
+        if(!(user instanceof Admin)) {
+            this.responseManager.sendResponse(Response.INVALID_REQUEST);
+            return;
+        }
 
-        throw new Error("Not yet implemented");
+        this.editAdminPassword.execute(user, newPassword.password);
     }
 }

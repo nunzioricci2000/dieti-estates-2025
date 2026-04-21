@@ -28,7 +28,7 @@ export class HTTPFilterAdvertisementsPresenter implements FilterAdvertisementsPr
     }
 
     presentError(error: Error): void {
-        this.responseManager.sendError(error);
+        this.responseManager.sendResponse(Response.SERVER_ERROR);
         this.logger.error("Error!");
     }
 }

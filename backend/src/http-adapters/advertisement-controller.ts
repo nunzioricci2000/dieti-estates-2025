@@ -1,6 +1,6 @@
-import { type Logger, Request, Response, AdvertisementDTO, Validator, AdvertisementAssembler } from "@dieti-estates-2025/common";
+import { type Logger, Request, Response, AdvertisementDTO, Validator, AdvertisementAssembler, Coordinates } from "@dieti-estates-2025/common";
 import type { ViewAdvertisementInteractor } from "../user/view-advertisement-interactor.js";
-import type { FilterAdvertisementsInteractor } from "../user/filter-advertisements-interactor.js";
+import type { FilterAdvertisementsInteractor, SearchFilters } from "../user/filter-advertisements-interactor.js";
 import type { MakeOfferInteractor } from "../user/make-offer-interactor.js";
 import type { BookVisitInteractor } from "../user/book-visit-interactor.js";
 import type { CreateNewAdvertisementInteractor } from "../dashboard/create-new-advertisement-interactor.js";
@@ -35,23 +35,33 @@ export class Advertisement {
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
+        this.countIncomingViewInteractor.execute(id);
         this.viewAdvertisementInteractor.execute(id);
     }
 
     getAdvertisements(request: Request): void {
-        let filters: any = {};
         if(request.body.include === "metrics") {
+            // retrieve advertisement metrics
+            this.retrieveAdvertisementsMetricsInteractor.execute();
+        }
+        let filters: SearchFilters = {};
+        if(request.queryParams.size > 0) {
             // filter results
-            filters.area = request.pathParams.get("area");
-            filters.longitude = request.pathParams.get("longitude");
-            filters.latitude = request.pathParams.get("latitude");
-            filters.distance = request.pathParams.get("distance");
-            filters.maxDimensions = request.pathParams.get("max-dimensions");
-            filters.minDimensions = request.pathParams.get("min-dimensions");
-            filters.acceptableEnergyClasses = request.pathParams.get("acceptable-energy-classes");
+            const area = request.pathParams.get("area");
+            const longitude = Number(request.pathParams.get("longitude"));
+            const latitude = Number(request.pathParams.get("latitude"));
+            const distance = Number(request.pathParams.get("distance"));
+            const maxDimensions = Number(request.pathParams.get("max-dimensions"));
+            const minDimensions = Number(request.pathParams.get("min-dimensions"));
+            const acceptableEnergyClasses = request.pathParams.get("acceptable-energy-classes");
 
-            // TODO Insert validation by validator object
-
+            area ? filters.area = area : {};
+            Validator.validateCoordinates({latitude: latitude, longitude: longitude}) ? 
+                filters.location = new Coordinates(latitude, longitude) : {};
+            distance ? filters.distance = distance: {};
+            maxDimensions ? filters.dimensionsMax = maxDimensions: {};
+            minDimensions ? filters.dimensionsMin = minDimensions: {};
+            acceptableEnergyClasses ? filters.acceptableEnergyClasses = acceptableEnergyClasses.split(","): {};
         } // else return all advertisements
         this.filterAdvertisementInteractor.execute(filters);
     }
@@ -59,16 +69,10 @@ export class Advertisement {
     postOffer(request: Request): void {
         const id = Number(request.pathParams.get("id"));
         if(!Validator.validateIntegers(id)) {
-            this.responseManager.sendResponse(new Response(
-                400,
-                {
-                    "error": "Invalid request",
-                },
-                new Map<string, string>,
-            ));
+            this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
-
+        this.countIncomingOfferInteractor.execute(id);
         this.makeOfferInteractor.execute(id);
     }
 
@@ -78,20 +82,14 @@ export class Advertisement {
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
+        this.countIncomingPrenotationInteractor.execute(id);
         this.bookVisitInteractor.execute(id);
     }
 
     postAdvertisement(request: Request): void {
         const adDTO  = AdvertisementDTO.fromJSON(request.body)
         if(!adDTO) {
-            const res = new Response(
-                400,
-                {
-                    error: "Invalid request body"
-                },
-                new Map<string, string>(),
-            )
-            this.responseManager.sendResponse(res);
+            this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
         

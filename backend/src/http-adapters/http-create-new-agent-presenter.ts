@@ -1,5 +1,6 @@
 import { type Logger, Agent, Response } from "@dieti-estates-2025/common";
 import type { ResponseManager } from "./response-manager.js";
+import { AgentAlreadySignedException } from "../admin/errors.js";
 
 export class HTTPCreateNewAgentPresenter {
     constructor(
@@ -27,7 +28,13 @@ export class HTTPCreateNewAgentPresenter {
     }
 
     presentError(error: Error): void {
-        this.responseManager.sendError(error);
-        this.logger.debug("Error response sent");
+        this.logger.debug("Sending error response");
+        let res: Response;
+        if(error instanceof AgentAlreadySignedException) {
+            res = Response.CONFLICT;
+        } else {
+            res = Response.SERVER_ERROR;
+        }
+        this.responseManager.sendResponse(res);
     }
 }

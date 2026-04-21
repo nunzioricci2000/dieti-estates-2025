@@ -1,6 +1,7 @@
 import { type Logger, Agent, Response, UserAssembler, UserDTO } from "@dieti-estates-2025/common";
 import type { MakeOfferPresenter } from "../user/interfaces.js";
 import type { ResponseManager } from "./response-manager.js";
+import { AdvertisementNotExistsException } from "../user/errors.js";
 
 export class HTTPMakeOfferPresenter implements MakeOfferPresenter {
     constructor(
@@ -25,7 +26,13 @@ export class HTTPMakeOfferPresenter implements MakeOfferPresenter {
     }
 
     presentError(error: Error): void {
-        this.responseManager.sendError(error);
+        let res: Response;
+        if(error instanceof AdvertisementNotExistsException) {
+            res = Response.NOT_FOUND;
+        } else {
+            res = Response.SERVER_ERROR;
+        }
+        this.responseManager.sendResponse(res);
         this.logger.debug("Error response sent");
     }
 }

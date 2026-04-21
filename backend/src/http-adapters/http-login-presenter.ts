@@ -1,6 +1,7 @@
 import { type Logger, Response } from "@dieti-estates-2025/common";
 import type { LoginPresenter } from "../auth/interfaces.js";
 import type { ResponseManager } from "./response-manager.js";
+import { UserNotExistsException, WrongPasswordException } from "../auth/errors.js";
 
 export class HTTPLoginPresenter implements LoginPresenter {
     constructor(
@@ -21,7 +22,13 @@ export class HTTPLoginPresenter implements LoginPresenter {
     }
 
     presentError(error: Error): void {
-        this.responseManager.sendError(error);
+        let res: Response;
+        if(error instanceof UserNotExistsException || error instanceof WrongPasswordException) {
+            res = Response.UNAUTHORIZED;
+        } else {
+            res = Response.SERVER_ERROR;
+        }
+        this.responseManager.sendResponse(res);
         this.logger.debug("Error during login. Error response was sent.");
     }
 }
