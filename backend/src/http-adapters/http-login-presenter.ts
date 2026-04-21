@@ -1,4 +1,4 @@
-import type { Logger } from "@dieti-estates-2025/common";
+import { type Logger, Response } from "@dieti-estates-2025/common";
 import type { LoginPresenter } from "../auth/interfaces.js";
 import type { ResponseManager } from "./response-manager.js";
 
