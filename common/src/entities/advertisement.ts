@@ -4,11 +4,7 @@ import { RentPrice } from "./rent-price.js";
 import { Agent } from "./user.js";
 import { Image } from "./image.js";
 
-export {
-    Advertisement, 
-    Sale, 
-    Rental,
-}
+export { Advertisement, Sale, Rental };
 
 abstract class Advertisement {
     id: number;
@@ -25,10 +21,20 @@ abstract class Advertisement {
     available: boolean;
     agent: Agent;
 
-    constructor(id: number, address: string, city: string, location: Coordinates,
-        images: Image[], description: string, dimensions: number, 
-        numberOfRooms: number, energyClass: string, additionalServices: string[],
-        nearbyPOIs: string[], available: boolean, agent: Agent
+    constructor(
+        id: number,
+        address: string,
+        city: string,
+        location: Coordinates,
+        images: Image[],
+        description: string,
+        dimensions: number,
+        numberOfRooms: number,
+        energyClass: string,
+        additionalServices: string[],
+        nearbyPOIs: string[],
+        available: boolean,
+        agent: Agent,
     ) {
         this.id = id;
         this.address = address;
@@ -49,31 +55,75 @@ abstract class Advertisement {
 class Sale extends Advertisement {
     price: Price;
 
-    constructor(id: number, address: string, city: string, location: Coordinates,
-        images: Image[], description: string, dimensions: number, 
-        numberOfRooms: number, energyClass: string, additionalServices: string[],
-        nearbyPOIs: string[], available: boolean, agent: Agent, price: Price
+    constructor(
+        id: number,
+        address: string,
+        city: string,
+        location: Coordinates,
+        images: Image[],
+        description: string,
+        dimensions: number,
+        numberOfRooms: number,
+        energyClass: string,
+        additionalServices: string[],
+        nearbyPOIs: string[],
+        available: boolean,
+        agent: Agent,
+        price: Price,
     ) {
-        super(id, address, city, location, images, description, dimensions, 
-            numberOfRooms, energyClass, additionalServices, nearbyPOIs, available,
-            agent
-        )
-        this.price = price
+        super(
+            id,
+            address,
+            city,
+            location,
+            images,
+            description,
+            dimensions,
+            numberOfRooms,
+            energyClass,
+            additionalServices,
+            nearbyPOIs,
+            available,
+            agent,
+        );
+        this.price = price;
     }
 }
 
 class Rental extends Advertisement {
     rentPrice: RentPrice;
 
-    constructor(id: number, address: string, city: string, location: Coordinates,
-        images: Image[], description: string, dimensions: number, 
-        numberOfRooms: number, energyClass: string, additionalServices: string[],
-        nearbyPOIs: string[], available: boolean, agent: Agent, rentPrice: RentPrice
+    constructor(
+        id: number,
+        address: string,
+        city: string,
+        location: Coordinates,
+        images: Image[],
+        description: string,
+        dimensions: number,
+        numberOfRooms: number,
+        energyClass: string,
+        additionalServices: string[],
+        nearbyPOIs: string[],
+        available: boolean,
+        agent: Agent,
+        rentPrice: RentPrice,
     ) {
-        super(id, address, city, location, images, description, dimensions, 
-            numberOfRooms, energyClass, additionalServices, nearbyPOIs, available,
-            agent
-        )
-        this.rentPrice = rentPrice
+        super(
+            id,
+            address,
+            city,
+            location,
+            images,
+            description,
+            dimensions,
+            numberOfRooms,
+            energyClass,
+            additionalServices,
+            nearbyPOIs,
+            available,
+            agent,
+        );
+        this.rentPrice = rentPrice;
     }
 }

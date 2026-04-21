@@ -1,6 +1,10 @@
 import type { Admin, User } from "@dieti-estates-2025/common";
 import type { EditAdminPasswordPresenter } from "./interfaces.js";
-import { ValueNotFoundException, type Logger, type UpdaterOf } from "@dieti-estates-2025/common";
+import {
+    ValueNotFoundException,
+    type Logger,
+    type UpdaterOf,
+} from "@dieti-estates-2025/common";
 import { AdminNotExistsException } from "./errors.js";
 
 class EditAdminPasswordInteractor {
@@ -17,7 +21,9 @@ class EditAdminPasswordInteractor {
             await this.updater.updatePassword(admin, password);
         } catch (err) {
             if (err instanceof ValueNotFoundException) {
-                this.logger.warn(`Attempted to edit password of non existent admin ${admin.username}`);
+                this.logger.warn(
+                    `Attempted to edit password of non existent admin ${admin.username}`,
+                );
                 this.presenter.presentError(new AdminNotExistsException());
                 return false;
             } else {

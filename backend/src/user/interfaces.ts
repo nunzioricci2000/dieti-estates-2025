@@ -12,7 +12,11 @@ export interface FilterAdvertisementsPresenter {
     presentError(error: Error): void;
 }
 
-export interface AdvertisementReader extends ReaderOf<"Advertisement", Advertisement, { id: number }> {
+export interface AdvertisementReader extends ReaderOf<
+    "Advertisement",
+    Advertisement,
+    { id: number }
+> {
     filterAdvertisements(filters: SearchFilters): Promise<Advertisement[]>;
 }
 

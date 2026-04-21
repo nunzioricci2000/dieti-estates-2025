@@ -8,8 +8,14 @@ export class Request {
     body: Map<string, any>;
     user?: User;
 
-    constructor(method: string, path: string, query: Map<string, any>,
-        headers: Map<string, string>, body: Map<string, any>, user?: User) {
+    constructor(
+        method: string,
+        path: string,
+        query: Map<string, any>,
+        headers: Map<string, string>,
+        body: Map<string, any>,
+        user?: User,
+    ) {
         this.method = method;
         this.path = path;
         this.query = query;

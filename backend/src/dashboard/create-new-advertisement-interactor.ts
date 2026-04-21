@@ -1,6 +1,10 @@
 import type { Advertisement } from "@dieti-estates-2025/common";
 import type { Logger } from "@dieti-estates-2025/common";
-import type { AdvertisementRepository, CreateNewAdvertisementPresenter, DetectPOIsService } from "./interfaces.js";
+import type {
+    AdvertisementRepository,
+    CreateNewAdvertisementPresenter,
+    DetectPOIsService,
+} from "./interfaces.js";
 
 export class CreateNewAdvertisementInteractor {
     constructor(

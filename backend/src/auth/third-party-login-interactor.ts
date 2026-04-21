@@ -15,5 +15,4 @@ export class ThirdPartyLoginInteractor {
     execute(authorizationCode: string): User {
         throw new Error("To be implemented");
     }
-
 }
