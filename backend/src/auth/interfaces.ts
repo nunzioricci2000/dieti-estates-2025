@@ -12,7 +12,7 @@ export interface SignupPresenter {
 
 export interface TokenService {
     generateToken(user: User): string;
-    verifyToken(user: User, password: string): boolean;
+    verifyToken(token: string): User;
 }
 
 export interface ThirdPartyAuthService {

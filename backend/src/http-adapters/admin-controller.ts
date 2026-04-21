@@ -2,12 +2,14 @@ import { type Logger, Request, Response, PasswordDTO, SignUpRequestDTO, UserAsse
 import type { CreateNewAdminInteractor } from "../admin/create-new-admin-interactor.js";
 import type { EditAdminPasswordInteractor } from "../admin/edit-admin-password-interactor.js";
 import type { ResponseManager } from "./response-manager.js";
+import type { TokenService } from "../auth/interfaces.js";
 
 export class AdminController {
     constructor(
         private createNewAdminInteractor: CreateNewAdminInteractor,
         private editAdminPassword: EditAdminPasswordInteractor,
         private responseManager: ResponseManager,
+        private tokenService: TokenService,
         private logger: Logger,
     ) {
         logger.debug("Created!");

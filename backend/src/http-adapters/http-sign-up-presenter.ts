@@ -14,8 +14,8 @@ export class HTTPSignupPresenter {
             token: token,
         }
         const headers = new Map<string, string>();
-        body.set("token", token);
         const response = new Response(200, body, headers);
+        this.responseManager.sendResponse(response);
     }
 
     presentError(error: Error): void {
