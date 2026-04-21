@@ -9,7 +9,7 @@ class LoggerRecord {
         public readonly column: number,
         public readonly caller: string,
         public readonly message: unknown[],
-    ) { }
+    ) {}
 
     static create(level: LogLevel, message: unknown[]): LoggerRecord {
         const timestamp = new Date();
@@ -22,7 +22,9 @@ class LoggerRecord {
         if (stack) {
             const lines = stack.split("\n");
             if (lines.length > 4) {
-                const match = lines[4]?.match(/\s+at\s+(.*)\s+\((.*):(\d+):(\d+)\)/);
+                const match = lines[4]?.match(
+                    /\s+at\s+(.*)\s+\((.*):(\d+):(\d+)\)/,
+                );
                 if (match) {
                     caller = match[1] ?? caller;
                     file = match[2] ?? file;
@@ -32,7 +34,15 @@ class LoggerRecord {
             }
         }
 
-        return new LoggerRecord(timestamp, level, file, line, column, caller, message);
+        return new LoggerRecord(
+            timestamp,
+            level,
+            file,
+            line,
+            column,
+            caller,
+            message,
+        );
     }
 }
 

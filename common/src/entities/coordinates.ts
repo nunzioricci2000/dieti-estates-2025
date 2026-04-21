@@ -1,6 +1,4 @@
-export {
-    Coordinates
-}
+export { Coordinates };
 
 class Coordinates {
     latitude: number;
@@ -14,7 +12,7 @@ class Coordinates {
             throw new RangeError("Latitude must be within -90 and 90");
         }
 
-        if(!Number.isFinite(longitude)) {
+        if (!Number.isFinite(longitude)) {
             throw new TypeError("Longitude must be a finite number");
         }
         if (longitude < -180 || longitude > 180) {

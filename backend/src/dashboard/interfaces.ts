@@ -15,6 +15,10 @@ export interface RetrieveAdvertisementsMetricsPresenter {
     presentError(error: Error): void;
 }
 
-export interface AdvertisementRepository extends RepositoryOf<"Advertisement", Advertisement, { id: number }> {
+export interface AdvertisementRepository extends RepositoryOf<
+    "Advertisement",
+    Advertisement,
+    { id: number }
+> {
     readAllAdvertisements(): Promise<Advertisement[]>;
 }

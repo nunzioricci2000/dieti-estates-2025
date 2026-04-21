@@ -1,4 +1,9 @@
-import { Admin, ValueAlreadyExistsException, type Logger, type CreatorOf} from "@dieti-estates-2025/common";
+import { 
+    Admin, 
+    ValueAlreadyExistsException, 
+    type Logger, 
+    type CreatorOf
+} from "@dieti-estates-2025/common";
 import type { CreateNewAdminPresenter } from "./interfaces.js";
 import { AdminAlreadySignedException } from "./errors.js";
 
@@ -11,13 +16,19 @@ export class CreateNewAdminInteractor {
         logger.info("Created!");
     }
 
-    async execute(email: string, username: string, password: string): Promise<Admin | null> {
+    async execute(
+        email: string,
+        username: string,
+        password: string,
+    ): Promise<Admin | null> {
         let admin: Admin;
         try {
             admin = await this.creator.createAdmin(new Admin(email, username));
         } catch (err) {
             if (err instanceof ValueAlreadyExistsException) {
-                this.logger.warn(`Attempted to create admin ${username} that already exists`);
+                this.logger.warn(
+                    `Attempted to create admin ${username} that already exists`,
+                );
                 this.presenter.presentError(new AdminAlreadySignedException());
                 return null;
             } else {

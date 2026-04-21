@@ -2,7 +2,10 @@ import { type Logger } from "@dieti-estates-2025/common";
 import { LoggerRecord, type LogLevel } from "./logger-record.js";
 import { EventEmitter } from "node:events";
 
-class NodeLogger extends EventEmitter<{ [key in LogLevel]: [LoggerRecord] }> implements Logger {
+class NodeLogger
+    extends EventEmitter<{ [key in LogLevel]: [LoggerRecord] }>
+    implements Logger
+{
     constructor() {
         super();
     }

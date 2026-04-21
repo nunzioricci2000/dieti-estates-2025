@@ -19,7 +19,9 @@ export class SimpleLoginInteractor {
             user = await this.authRegister.userRepository.readUser({ email });
         } catch (err) {
             if (err instanceof UserNotExistsException) {
-                this.logger.warn(`Attempted login with email ${email} which does not exist`);
+                this.logger.warn(
+                    `Attempted login with email ${email} which does not exist`,
+                );
                 this.presenter.presentError(new UserNotExistsException());
                 return null;
             } else {
@@ -27,14 +29,22 @@ export class SimpleLoginInteractor {
                 throw err;
             }
         }
-        const storedPassword = await this.authRegister.passwordRepository.readPassword(user);
-        if (!this.authRegister.hashService.verifyString(password, storedPassword)) {
-            this.logger.warn(`Attempted login as user ${email} with incorrect password`)
+        const storedPassword =
+            await this.authRegister.passwordRepository.readPassword(user);
+        if (
+            !this.authRegister.hashService.verifyString(
+                password,
+                storedPassword,
+            )
+        ) {
+            this.logger.warn(
+                `Attempted login as user ${email} with incorrect password`,
+            );
             this.presenter.presentError(new WrongPasswordException());
             return null;
         }
         const token = this.authRegister.tokenService.generateToken(user);
-        this.presenter.present(token)
+        this.presenter.present(token);
         this.logger.debug(`User ${email} performed login`);
         return user;
     }

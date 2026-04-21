@@ -7,7 +7,7 @@ function logToConsole(record: LoggerRecord) {
     if (consoleSupportsColor()) {
         const color = colors[level] || "";
         const reset = colors.reset;
-        logMessage = logMessage.map(part => `${color}${part}${reset}`);
+        logMessage = logMessage.map((part) => `${color}${part}${reset}`);
     }
     console[level](...logMessage);
 }
@@ -21,14 +21,16 @@ function formatRecord(record: LoggerRecord): any[] {
         `${relativeFile}:${line}:${column}`,
         `(${caller})`,
         `-`,
-        ...message
+        ...message,
     ];
 }
 
 function consoleSupportsColor(): boolean {
-    return process.stdout.isTTY &&
-        process.env.TERM !== 'dumb' &&
-        !process.env.NO_COLOR;
+    return (
+        process.stdout.isTTY &&
+        process.env.TERM !== "dumb" &&
+        !process.env.NO_COLOR
+    );
 }
 
 function relativePath(filePath: string): string {
@@ -40,10 +42,10 @@ function relativePath(filePath: string): string {
 
 const colors: { [key: string]: string } = {
     error: "\x1b[31m", // Red
-    warn: "\x1b[33m",  // Yellow
-    info: "",  // Default color
+    warn: "\x1b[33m", // Yellow
+    info: "", // Default color
     debug: "\x1b[34m", // Blue
-    reset: "\x1b[0m"   // Reset
+    reset: "\x1b[0m", // Reset
 };
 
 export { logToConsole };

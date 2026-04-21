@@ -1,9 +1,6 @@
-import { Price } from "./price.js"
+import { Price } from "./price.js";
 
-export {
-    RentPrice,
-    Period,
-}
+export { RentPrice, Period };
 
 class RentPrice {
     price: Price;

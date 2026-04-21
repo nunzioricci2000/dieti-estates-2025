@@ -3,7 +3,7 @@ export {
     UserAlreadySignedException,
     WrongPasswordException,
     InvalidSignUpProviderException,
-}
+};
 
 class UserNotExistsException extends Error {}
 class UserAlreadySignedException extends Error {}

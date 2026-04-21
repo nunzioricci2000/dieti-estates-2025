@@ -14,12 +14,8 @@ export class HTTPSignupPresenter {
             token: token,
         }
         const headers = new Map<string, string>();
-        const response = new Response(
-            200,
-            body,
-            headers,
-        )
-        this.logger.debug("Signup performed. Response containing token was sent.");
+        body.set("token", token);
+        const response = new Response(200, body, headers);
     }
 
     presentError(error: Error): void {
