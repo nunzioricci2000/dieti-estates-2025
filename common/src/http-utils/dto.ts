@@ -12,7 +12,7 @@ export {
 type BaseTypes = "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function";
 type AdKinds = "sale" | "rent";
 
-class Validator {
+export class Validator {
 
     static hasFields(
         obj: any, 

@@ -1,4 +1,4 @@
-import { type Logger, Request, Response, AdvertisementDTO } from "@dieti-estates-2025/common";
+import { type Logger, Request, Response, AdvertisementDTO, Validator, AdvertisementAssembler } from "@dieti-estates-2025/common";
 import type { ViewAdvertisementInteractor } from "../user/view-advertisement-interactor.js";
 import type { FilterAdvertisementsInteractor } from "../user/filter-advertisements-interactor.js";
 import type { MakeOfferInteractor } from "../user/make-offer-interactor.js";
@@ -31,9 +31,10 @@ export class Advertisement {
 
     getAdvertisement(request: Request): void {
         const id = Number(request.pathParams.get("id"));
-
-        // TODO insert validation by validator object
-
+        if(!Validator.validateIntegers(id)) {
+            this.responseManager.sendResponse(Response.INVALID_REQUEST);
+            return;
+        }
         this.viewAdvertisementInteractor.execute(id);
     }
 
@@ -57,45 +58,32 @@ export class Advertisement {
 
     postOffer(request: Request): void {
         const id = Number(request.pathParams.get("id"));
-        // TODO Insert validation by validator object
+        if(!Validator.validateIntegers(id)) {
+            this.responseManager.sendResponse(new Response(
+                400,
+                {
+                    "error": "Invalid request",
+                },
+                new Map<string, string>,
+            ));
+            return;
+        }
 
         this.makeOfferInteractor.execute(id);
     }
 
     postBooking(request: Request): void {
         const id = Number(request.pathParams.get("id"));
-        // TODO Insert validation by validator object
-
+        if(!Validator.validateIntegers(id)) {
+            this.responseManager.sendResponse(Response.INVALID_REQUEST);
+            return;
+        }
         this.bookVisitInteractor.execute(id);
     }
 
     postAdvertisement(request: Request): void {
-        const adcertisement  = AdvertisementDTO.fromJSON(request.body)
-        if(!AdvertisementDTO) {
-            const res = new Response(
-                400,
-                {
-                    error: "Invalid request body"
-                },
-                new Map<string, string>(),
-            )
-            this.responseManager.sendResponse(res);
-            return;
-        }
-
-        // TODO build advertisement using the builder and the builder director
-
-        throw new Error("Implementation incomplete");
-
-    }
-
-    patchAdvertisement(request: Request): void {
-        const id = Number(request.pathParams.get("id"));
-        const taken = Boolean(request.body.taken);
-
-        // TODO insert validation by validators
-
-        if(!taken) {
+        const adDTO  = AdvertisementDTO.fromJSON(request.body)
+        if(!adDTO) {
             const res = new Response(
                 400,
                 {
@@ -107,7 +95,19 @@ export class Advertisement {
             return;
         }
         
-        this.markAsTakenInteractor.execute(id)
+        const ad = AdvertisementAssembler.createDomainObject(adDTO);
+        this.createNewAdvertisementInteractor.execute(ad);
+    }
 
+    patchAdvertisement(request: Request): void {
+        const id = Number(request.pathParams.get("id"));
+        const taken = Boolean(request.body.taken);
+
+        if(!Validator.validateIntegers(id) || taken != true) {
+            this.responseManager.sendResponse(Response.INVALID_REQUEST);
+            return;
+        }
+        
+        this.markAsTakenInteractor.execute(id);
     }
 }

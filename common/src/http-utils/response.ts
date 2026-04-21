@@ -12,4 +12,6 @@ export class Response {
     setHeader(key: string, value: string): void {
         this.headers.set(key, value);
     }
+
+    static readonly INVALID_REQUEST = new Response(400, {"error": "Invalid request"}, new Map<string, string>());
 }

@@ -14,14 +14,7 @@ export class AgentController {
     postAgent(request: Request): void {
         const agent =  SignUpRequestDTO.fromJSON(request.body);
         if(!agent) {
-            const res = new Response(
-                400,
-                {
-                    error: "Invalid request body"
-                },
-                new Map<string, string>(),
-            )
-            this.responseManager.sendResponse(res);
+            this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
 

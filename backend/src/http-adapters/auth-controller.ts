@@ -21,14 +21,7 @@ export class AuthController {
         const credentials = LoginRequestDTO.fromJSON(request.body);
 
         if(!credentials) {
-            const res = new Response(
-                400,
-                {
-                    error: "Invalid request body"
-                },
-                new Map<string, string>(),
-            )
-            this.responseManager.sendResponse(res);
+            this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
 
@@ -42,14 +35,7 @@ export class AuthController {
         const credentials = SignUpRequestDTO.fromJSON(request.body);
 
         if(!credentials) {
-            const res = new Response(
-                400,
-                {
-                    error: "Invalid request body"
-                },
-                new Map<string, string>(),
-            )
-            this.responseManager.sendResponse(res);
+            this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
 
