@@ -26,6 +26,6 @@ export interface MakeOfferPresenter {
 }
 
 export interface BookVisitPresenter {
-    present(agent: Agent): void;
+    present(advertisement: Advertisement): void;
     presentError(error: Error): void;
 }
