@@ -24,6 +24,19 @@ type ComputeResolved<
     : never
     : never;
 
+type Equals<X, Y> =
+    (<T>() => T extends X ? 1 : 2) extends
+    (<T>() => T extends Y ? 1 : 2) ? true : false;
+
+type SameLength<T extends readonly any[], U extends readonly any[]> =
+    Equals<T["length"], U["length"]>;
+
+type InferTypeFromReg<Reg extends Registry, Name extends string> =
+    Name extends keyof Reg ? Reg[Name]["result"] : never;
+
+type CheckDeps<Deps extends readonly string[], Args extends any[], Reg extends Registry> =
+    SameLength<Deps, Args> extends true ? Deps : never;
+
 // Runtime representation of a registered component, used internally in the Container class.
 type InternalResolver = {
     name: string;
@@ -48,7 +61,7 @@ export class Container<Reg extends Registry = {}> {
         Result
     >(
         name: Name,
-        dependencies: Deps,
+        dependencies: CheckDeps<Deps, Args, Reg>,
         resolver: (...args: Args) => Result,
     ): Container<Reg & Record<Name, { deps: Deps; result: Result }>> {
 
@@ -95,4 +108,20 @@ export class Container<Reg extends Registry = {}> {
         }
         throw new Error(`Component: ${name} is registered but its dependencies are not satisfied.`);
     }
+}
+
+export type AssumeSatisfied<
+    C extends Container<any>,
+    DepName extends string,
+    DepType = any
+> = C extends Container<infer Reg>
+    ? Container<Reg & Record<DepName, { deps: []; result: DepType }>>
+    : never;
+
+type ClassResolver<C> = C extends new (...args: infer Args) => infer Instance
+    ? (...args: Args) => Instance
+    : never;
+
+export function classResolver<C>(cls: C): ClassResolver<C> {
+    return ((...args: any[]) => new (cls as any)(...args)) as any;
 }
