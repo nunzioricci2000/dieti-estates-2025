@@ -5,13 +5,16 @@ type Resolver = {
 };
 
 class Container {
-    private constructor(private resolvers: Record<string, Resolver>) {
+    private constructor(
+        private resolvers: Record<string, Resolver>,
+        private resolvedComponents: Record<string, unknown>,
+    ) {
         console.log("Container created with resolvers:", resolvers);
     }
 
     static create(): Container {
         console.log("Creating a new container...");
-        return new Container({});
+        return new Container({}, {});
     }
 
     register(
@@ -19,94 +22,54 @@ class Container {
         dependencies: string[],
         resolver: (...args: any[]) => any,
     ): Container {
-        console.log(
-            `Registering component: ${name} with dependencies: ${dependencies}`,
-        );
-        const resolvable = dependencies.every((dep) => dep in this.resolvers);
-        if (!resolvable) {
-            console.warn(
-                `Cannot resolve dependencies for component: ${name}. Missing dependencies: ${dependencies.filter((dep) => !(dep in this.resolvers))}`,
-            );
-            return new Container({
-                ...this.resolvers,
-                [name]: {
-                    name,
-                    dependencies,
-                    execute: resolver,
+        console.log(`Registering component: ${name} with dependencies: ${dependencies.join(", ")}`);
+        if (dependencies.some((dep) => this.resolvedComponents[dep] === undefined)) {
+            return new Container(
+                {
+                    ...this.resolvers,
+                    [name]: { name, dependencies, execute: resolver },
                 },
-            });
+                { ...this.resolvedComponents },
+            );
         }
-        console.log(
-            `All dependencies for component: ${name} are resolvable. Resolving...`,
+        const resolvedDependencies = dependencies.map((dep) => this.resolvedComponents[dep]);
+        const resolvedValue = resolver(...resolvedDependencies);
+        console.log(`Component: ${name} resolved with value:`, resolvedValue);
+        const newResolvers = { ...this.resolvers };
+        if (name in newResolvers) delete newResolvers[name];
+        var result = new Container(
+            { ...newResolvers },
+            { ...this.resolvedComponents, [name]: resolvedValue },
         );
-        const resolvedDependencies = dependencies.map((dep) => this.get(dep));
-        const resolvedComponent = resolver(...resolvedDependencies);
-        var result = new Container({
-            ...this.resolvers,
-            [name]: {
-                name,
-                dependencies: [],
-                execute: () => resolvedComponent,
-            },
-        });
-        console.log(
-            `Component ${name} registered successfully. Updating dependent resolvers...`,
-        );
-        for (const res in this.resolvers) {
-            const deps = this.resolvers[res]!.dependencies;
-            if (
-                deps.includes(name) &&
-                deps.every((dep) => dep in this.resolvers || dep === name)
-            ) {
-                console.log(`Updating resolver: ${res} which depends on: ${name}`);
-                const resovedDependencies = deps.map((dep) =>
-                    dep === name ? resolvedComponent : this.get(dep),
+        for (const [_, resolver] of Object.entries(this.resolvers)) {
+            if (resolver.dependencies.every((dep) => dep in this.resolvedComponents || dep === name)) {
+                const deps = resolver.dependencies.map((dep) =>
+                    dep === name ? resolvedValue : this.resolvedComponents[dep],
                 );
-                const rc = this.resolvers[res]!.execute(...resovedDependencies);
-                result = result.register(res, [], () => rc);
+                const value = resolver.execute(...deps);
+                console.log(`Resolving dependent component: ${resolver.name} with value:`, value);
+                result = result.register(resolver.name, [], () => value);
             }
         }
         return result;
     }
 
     get(name: string): any {
-        console.log(`Resolving component: ${name}`);
-        const resolver = this.resolvers[name];
-        if (!resolver) {
-            throw new Error(`Component ${name} not found`);
+        console.log(`Resolving component: ${name} `);
+        if (name in this.resolvedComponents) {
+            console.log(`Component: ${name} found in resolved components. Returning cached value.`);
+            return this.resolvedComponents[name];
         }
-        if (resolver.dependencies.length !== 0) {
-            throw new Error(
-                `Component ${name} has unresolved dependencies: ${resolver.dependencies.filter((dep) => !(dep in this.resolvers))}`,
-            );
+        if (name in this.resolvers) {
+            throw new Error(`Component: ${name} is registered but not resolved yet. Please ensure all dependencies are registered and resolvable.`);
         }
-        return resolver.execute();
-    }
-
-    private updateResolvers(resolver: Resolver): Record<string, Resolver> {
-        console.log(`Resolving with resolver: ${resolver.name}`);
-        var resolvedDependencies: Record<string, Resolver> = { ...this.resolvers };
-        resolver.dependencies.forEach((dep) => {
-            if (!(dep in resolvedDependencies)) {
-                const depResolver = this.resolvers[dep];
-                if (!depResolver) {
-                    return {
-                        ...resolvedDependencies,
-                        resolver,
-                    };
-                }
-                resolvedDependencies = {
-                    ...resolvedDependencies,
-                    ...this.updateResolvers(depResolver),
-                };
-            }
-        });
-        return {
-            ...resolvedDependencies,
-            [resolver.name]: resolver,
-        };
+        throw new Error(`Component: ${name} is not registered in the container.`);
     }
 }
+
+/// =======================================================================
+/// TEST AREA THIS IS NOT PART OF THE FINAL CODE, JUST FOR TESTING PURPOSES
+/// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 const container = Container.create()
     .register("risultato", ["somma"], (somma) => {
@@ -126,4 +89,4 @@ const container = Container.create()
         return 10;
     });
 
-console.log(container.get("risultato")); // Output: 15
+console.log(container.get("risultato")); // Output: 225
