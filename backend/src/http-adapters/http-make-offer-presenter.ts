@@ -31,6 +31,7 @@ export class HTTPMakeOfferPresenter implements MakeOfferPresenter {
             res = Response.NOT_FOUND;
         } else {
             res = Response.SERVER_ERROR;
+            this.logger.error("Uknown error");
         }
         this.responseManager.sendResponse(res);
         this.logger.debug("Error response sent");

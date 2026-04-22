@@ -25,6 +25,7 @@ export class HTTPSignupPresenter {
             res = Response.CONFLICT;
         } else {
             res = Response.SERVER_ERROR;
+            this.logger.error("Uknown error");
         }
         this.responseManager.sendResponse(res);
         this.logger.debug("Error during signup. Error response was sent.");

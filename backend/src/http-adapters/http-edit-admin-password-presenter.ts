@@ -34,6 +34,7 @@ export class HTTPEditAdminPasswordPresenter {
             res = Response.NOT_FOUND;
         } else {
             res = Response.SERVER_ERROR;
+            this.logger.error("Uknown error");
         }
         this.responseManager.sendResponse(res)
         this.logger.debug("Failed editing admin password. Error response sent");

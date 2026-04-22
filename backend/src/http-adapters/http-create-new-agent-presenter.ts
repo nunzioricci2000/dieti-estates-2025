@@ -34,6 +34,7 @@ export class HTTPCreateNewAgentPresenter {
             res = Response.CONFLICT;
         } else {
             res = Response.SERVER_ERROR;
+            this.logger.error("Uknown error");
         }
         this.responseManager.sendResponse(res);
     }

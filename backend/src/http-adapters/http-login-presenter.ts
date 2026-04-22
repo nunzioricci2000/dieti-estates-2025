@@ -27,6 +27,7 @@ export class HTTPLoginPresenter implements LoginPresenter {
             res = Response.UNAUTHORIZED;
         } else {
             res = Response.SERVER_ERROR;
+            this.logger.error("Uknown error");
         }
         this.responseManager.sendResponse(res);
         this.logger.debug("Error during login. Error response was sent.");

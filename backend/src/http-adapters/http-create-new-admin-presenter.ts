@@ -27,11 +27,15 @@ export class HTTPCreateNewAdminPresenter {
     }
 
     presentError(error: Error): void {
+        let res: Response;
         this.logger.debug("Failed in creating admin. Sending error response");
         if(error instanceof AdminAlreadySignedException) {
-            this.responseManager.sendResponse(Response.CONFLICT);
+            res = Response.CONFLICT;
             return;
+        } else {
+            res = Response.SERVER_ERROR;
+            this.logger.error("Uknown error");
         }
-        this.responseManager.sendResponse(Response.SERVER_ERROR);
+        this.responseManager.sendResponse(res);
     }
 }

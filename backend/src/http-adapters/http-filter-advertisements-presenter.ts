@@ -29,6 +29,6 @@ export class HTTPFilterAdvertisementsPresenter implements FilterAdvertisementsPr
 
     presentError(error: Error): void {
         this.responseManager.sendResponse(Response.SERVER_ERROR);
-        this.logger.error("Error!");
+        this.logger.error("Uknown error");
     }
 }

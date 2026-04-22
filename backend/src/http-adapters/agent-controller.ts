@@ -14,10 +14,11 @@ export class AgentController {
     postAgent(request: Request): void {
         const agent =  SignUpRequestDTO.fromJSON(request.body);
         if(!agent) {
+            this.logger.warn("Invalid request");
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
-
+        this.logger.debug("Calling interactor");
         this.createNewAgentInteractor.execute(
             agent.email,
             agent.username,

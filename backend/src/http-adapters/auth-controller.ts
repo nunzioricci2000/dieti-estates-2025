@@ -21,10 +21,12 @@ export class AuthController {
         const credentials = LoginRequestDTO.fromJSON(request.body);
 
         if(!credentials) {
+            this.logger.warn("Invalid request");
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
 
+        this.logger.debug("Calling interactor");
         this.simpleLoginInteractor.execute(
             credentials.email, 
             credentials.password,
@@ -35,10 +37,12 @@ export class AuthController {
         const credentials = SignUpRequestDTO.fromJSON(request.body);
 
         if(!credentials) {
+            this.logger.warn("Invalid request");
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
 
+        this.logger.debug("Calling interactor");
         this.simpleSignupInteractor.execute(
             credentials.username, 
             credentials.email, 

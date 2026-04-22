@@ -32,21 +32,23 @@ export class Advertisement {
     getAdvertisement(request: Request): void {
         const id = Number(request.pathParams.get("id"));
         if(!Validator.validateIntegers(id)) {
+            this.logger.warn("Invalid request");
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
+        this.logger.debug("Calling interactors");
         this.countIncomingViewInteractor.execute(id);
         this.viewAdvertisementInteractor.execute(id);
     }
 
     getAdvertisements(request: Request): void {
         if(request.body.include === "metrics") {
-            // retrieve advertisement metrics
+            this.logger.debug("Executing retrieve advertisement metrics");
             this.retrieveAdvertisementsMetricsInteractor.execute();
         }
         let filters: SearchFilters = {};
         if(request.queryParams.size > 0) {
-            // filter results
+            this.logger.debug("Filtering advertisements");
             const area = request.pathParams.get("area");
             const longitude = Number(request.pathParams.get("longitude"));
             const latitude = Number(request.pathParams.get("latitude"));
@@ -62,50 +64,56 @@ export class Advertisement {
             maxDimensions ? filters.dimensionsMax = maxDimensions: {};
             minDimensions ? filters.dimensionsMin = minDimensions: {};
             acceptableEnergyClasses ? filters.acceptableEnergyClasses = acceptableEnergyClasses.split(","): {};
-        } // else return all advertisements
+        }
+        this.logger.debug("Retrieving advertisements");
         this.filterAdvertisementInteractor.execute(filters);
     }
 
     postOffer(request: Request): void {
         const id = Number(request.pathParams.get("id"));
         if(!Validator.validateIntegers(id)) {
+            this.logger.warn("Invalid request");
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
+        this.logger.debug("Calling interactors");
         this.countIncomingOfferInteractor.execute(id);
         this.makeOfferInteractor.execute(id);
     }
-
+    
     postBooking(request: Request): void {
         const id = Number(request.pathParams.get("id"));
         if(!Validator.validateIntegers(id)) {
+            this.logger.warn("Invalid request");
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
+        this.logger.debug("Calling interactors");
         this.countIncomingPrenotationInteractor.execute(id);
         this.bookVisitInteractor.execute(id);
     }
-
+    
     postAdvertisement(request: Request): void {
         const adDTO  = AdvertisementDTO.fromJSON(request.body)
         if(!adDTO) {
+            this.logger.warn("Invalid request");
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
-        
+        this.logger.debug("Calling interactors");
         const ad = AdvertisementAssembler.createDomainObject(adDTO);
         this.createNewAdvertisementInteractor.execute(ad);
     }
-
+    
     patchAdvertisement(request: Request): void {
         const id = Number(request.pathParams.get("id"));
         const taken = Boolean(request.body.taken);
-
         if(!Validator.validateIntegers(id) || taken != true) {
+            this.logger.warn("Invalid request");
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
-        
+        this.logger.debug("Calling interactors");
         this.markAsTakenInteractor.execute(id);
     }
 }

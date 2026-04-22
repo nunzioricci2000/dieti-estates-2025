@@ -31,11 +31,14 @@ export class HTTPBookVisitPresenter implements BookVisitPresenter {
     }
 
     presentError(error: Error): void {
+        let res: Response;
         this.logger.debug("Sending error response");
         if(error instanceof AdvertisementNotExistsException) {
-            this.responseManager.sendResponse(Response.NOT_FOUND);
-            return;
-        } else 
-        this.responseManager.sendResponse(Response.SERVER_ERROR);
+            res = Response.NOT_FOUND;
+        } else {
+            res = Response.SERVER_ERROR;
+            this.logger.error("Uknown error");
+        }
+        this.responseManager.sendResponse(res);
     }
 }

@@ -34,17 +34,21 @@ export class AdminController {
     patchAdmin(request: Request): void {
         const newPassword = PasswordDTO.fromJSON(request.body);
         const jwt = request.headers.get("Authorization");
+        // NOTE: I am currently not removing the initial part of the string ("Bearer ").
         if(!newPassword || !jwt) {
+            this.logger.warn("Invalid request");
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
-
+        
         const user = this.tokenService.verifyToken(jwt);
         if(!(user instanceof Admin)) {
+            this.logger.warn("Invalid request");
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
-
+        
+        this.logger.debug("Sending response");
         this.editAdminPassword.execute(user, newPassword.password);
     }
 }
