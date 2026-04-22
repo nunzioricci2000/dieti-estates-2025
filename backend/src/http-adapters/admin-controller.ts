@@ -1,4 +1,4 @@
-import { type Logger, Request, Response, PasswordDTO, SignUpRequestDTO, UserAssembler, Admin } from "@dieti-estates-2025/common";
+import { type Logger, Request, Response, PasswordDTO, SignUpRequestDTO, Admin } from "@dieti-estates-2025/common";
 import type { CreateNewAdminInteractor } from "../admin/create-new-admin-interactor.js";
 import type { EditAdminPasswordInteractor } from "../admin/edit-admin-password-interactor.js";
 import type { ResponseManager } from "./response-manager.js";

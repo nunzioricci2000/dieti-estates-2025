@@ -1,4 +1,4 @@
-import { type Logger, Advertisement, AdvertisementAssembler, Agent, Response, UserAssembler } from "@dieti-estates-2025/common";
+import { type Logger, Advertisement, AdvertisementAssembler, Response, UserAssembler } from "@dieti-estates-2025/common";
 import type { BookVisitPresenter } from "../user/interfaces.js";
 import type { ResponseManager } from "./response-manager.js";
 import { AdvertisementNotExistsException } from "../user/errors.js";
