@@ -1,29 +1,41 @@
 {
-  "name": "dieti-estates-2025",
-  "version": "1.0.0",
-  "description": "This is the result of the project developed by Nunzio Ricci (me) and Chiara Giorgia Ricci for the Software Engineering course at the University of Naples “Federico II” during our Computer Science studies. The project requirements were assigned by the course professors and it was implemented using a technology stack of our choice.",
-  "homepage": "https://github.com/nunzioricci2000/dieti-estates-2025#readme",
-  "bugs": {
-    "url": "https://github.com/nunzioricci2000/dieti-estates-2025/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nunzioricci2000/dieti-estates-2025.git"
-  },
-  "license": "ISC",
-  "author": "",
-  "type": "module",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "workspaces": [
-    "backend",
-    "common",
-    "frontend"
-  ],
-  "devDependencies": {
-    "@types/node": "^25.5.2",
-    "typescript": "^6.0.2"
-  }
+    "name": "dieti-estates-2025",
+    "version": "1.0.0",
+    "description": "This is the result of the project developed by Nunzio Ricci (me) and Chiara Giorgia Ricci for the Software Engineering course at the University of Naples “Federico II” during our Computer Science studies. The project requirements were assigned by the course professors and it was implemented using a technology stack of our choice.",
+    "homepage": "https://github.com/nunzioricci2000/dieti-estates-2025#readme",
+    "bugs": {
+        "url": "https://github.com/nunzioricci2000/dieti-estates-2025/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/nunzioricci2000/dieti-estates-2025.git"
+    },
+    "license": "ISC",
+    "author": "",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "lint": "eslint .",
+        "prettier": "prettier --check .",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "workspaces": [
+        "backend",
+        "common",
+        "frontend"
+    ],
+    "devDependencies": {
+        "@eslint/css": "^1.1.0",
+        "@eslint/js": "^10.0.1",
+        "@eslint/json": "^1.2.0",
+        "@eslint/markdown": "^8.0.1",
+        "@types/node": "^25.5.2",
+        "eslint": "^10.2.1",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-prettier": "^5.5.5",
+        "globals": "^17.5.0",
+        "prettier": "3.8.3",
+        "typescript": "^6.0.2",
+        "typescript-eslint": "^8.58.2"
+    }
 }

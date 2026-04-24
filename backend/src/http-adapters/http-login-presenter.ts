@@ -15,11 +15,7 @@ export class HTTPLoginPresenter implements LoginPresenter {
         const body = new Map();
         body.set("token", token);
         const headers = new Map<string, string>();
-        const response = new Response(
-            200,
-            body,
-            headers,
-        )
+        const response = new Response(200, body, headers);
         this.responseManager.sendResponse(response);
     }
 

@@ -2,7 +2,10 @@ import { User } from "@dieti-estates-2025/common";
 import type { AuthRegister } from "./auth-register.js";
 import type { SignupPresenter } from "./interfaces.js";
 import { UserAlreadySignedException } from "./errors.js";
-import { ValueAlreadyExistsException, type Logger } from "@dieti-estates-2025/common";
+import {
+    ValueAlreadyExistsException,
+    type Logger,
+} from "@dieti-estates-2025/common";
 
 export class SimpleSignupInteractor {
     constructor(
@@ -13,10 +16,16 @@ export class SimpleSignupInteractor {
         logger.info("Created!");
     }
 
-    async execute(username: string, email: string, password: string): Promise<User | null> {
-        let user: User
+    async execute(
+        username: string,
+        email: string,
+        password: string,
+    ): Promise<User | null> {
+        let user: User;
         try {
-            user = await this.authRegister.userRepository.createUser(new User(email, username));
+            user = await this.authRegister.userRepository.createUser(
+                new User(email, username),
+            );
         } catch (err) {
             if (err instanceof ValueAlreadyExistsException) {
                 this.logger.warn("Attempted creation of an existing user");
@@ -27,7 +36,10 @@ export class SimpleSignupInteractor {
                 throw err;
             }
         }
-        await this.authRegister.passwordRepository.createPassword(user, password);
+        await this.authRegister.passwordRepository.createPassword(
+            user,
+            password,
+        );
         return user;
     }
 }

@@ -14,11 +14,7 @@ export class HTTPSignupPresenter {
         const body = new Map<string, any>();
         const headers = new Map<string, string>();
         body.set("token", token);
-        const response = new Response(
-            200,
-            body,
-            headers,
-        )
+        const response = new Response(200, body, headers);
     }
 
     presentError(error: Error): void {

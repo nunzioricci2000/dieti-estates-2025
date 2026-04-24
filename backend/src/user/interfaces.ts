@@ -12,7 +12,11 @@ export interface FilterAdvertisementsPresenter {
     presentError(error: Error): void;
 }
 
-export interface AdvertisementReader extends ReaderOf<"Advertisement", Advertisement, { id: number }> {
+export interface AdvertisementReader extends ReaderOf<
+    "Advertisement",
+    Advertisement,
+    { id: number }
+> {
     filterAdvertisements(filters: SearchFilters): Promise<Advertisement[]>;
 }
 
@@ -22,6 +26,6 @@ export interface MakeOfferPresenter {
 }
 
 export interface BookVisitPresenter {
-    present(agent: Agent): void;
+    present(advertisement: Advertisement): void;
     presentError(error: Error): void;
 }

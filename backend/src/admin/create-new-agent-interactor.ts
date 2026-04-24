@@ -1,6 +1,10 @@
 import { Agent } from "@dieti-estates-2025/common";
 import type { CreateNewAgentPresenter } from "./interfaces.js";
-import { ValueAlreadyExistsException, type Logger, type CreatorOf } from "@dieti-estates-2025/common";
+import {
+    ValueAlreadyExistsException,
+    type Logger,
+    type CreatorOf,
+} from "@dieti-estates-2025/common";
 import { AgentAlreadySignedException } from "./errors.js";
 
 class CreateNewAgentInteractor {
@@ -12,13 +16,19 @@ class CreateNewAgentInteractor {
         logger.info("Created!");
     }
 
-    async execute(email: string, username: string, password: string): Promise<Agent | null> {
+    async execute(
+        email: string,
+        username: string,
+        password: string,
+    ): Promise<Agent | null> {
         let agent: Agent;
         try {
             agent = await this.creator.createAgent(new Agent(email, username));
         } catch (err) {
             if (err instanceof ValueAlreadyExistsException) {
-                this.logger.warn(`Attempted to create agent with existing username: ${username}`);
+                this.logger.warn(
+                    `Attempted to create agent with existing username: ${username}`,
+                );
                 this.presenter.presentError(new AgentAlreadySignedException());
                 return null;
             } else {

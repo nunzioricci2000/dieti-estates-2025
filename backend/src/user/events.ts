@@ -1,10 +1,6 @@
 import { Event } from "@dieti-estates-2025/common";
 
-export {
-    ViewAdvertisementEvent,
-    MakeOfferEvent,
-    BookVisitEvent,
-}
+export { ViewAdvertisementEvent, MakeOfferEvent, BookVisitEvent };
 
 class ViewAdvertisementEvent extends Event {
     advertisementId: number;
