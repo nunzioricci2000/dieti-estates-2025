@@ -11,7 +11,7 @@ import type { MarkAsTakenInteractor } from "../dashboard/mark-as-taken-interacto
 import type { CountIncomingPrenotationInteractor } from "../dashboard/count-incoming-prenotation-interactor.js";
 import type { ResponseManager } from "./response-manager.js";
 
-export class Advertisement {
+export class AdvertisementController {
     constructor(
         private viewAdvertisementInteractor: ViewAdvertisementInteractor,
         private filterAdvertisementInteractor: FilterAdvertisementsInteractor,
@@ -49,13 +49,13 @@ export class Advertisement {
         let filters: SearchFilters = {};
         if(request.queryParams.size > 0) {
             this.logger.debug("Filtering advertisements");
-            const area = request.pathParams.get("area");
-            const longitude = Number(request.pathParams.get("longitude"));
-            const latitude = Number(request.pathParams.get("latitude"));
-            const distance = Number(request.pathParams.get("distance"));
-            const maxDimensions = Number(request.pathParams.get("max-dimensions"));
-            const minDimensions = Number(request.pathParams.get("min-dimensions"));
-            const acceptableEnergyClasses = request.pathParams.get("acceptable-energy-classes");
+            const area = request.queryParams.get("area");
+            const longitude = Number(request.queryParams.get("longitude"));
+            const latitude = Number(request.queryParams.get("latitude"));
+            const distance = Number(request.queryParams.get("distance"));
+            const maxDimensions = Number(request.queryParams.get("max-dimensions"));
+            const minDimensions = Number(request.queryParams.get("min-dimensions"));
+            const acceptableEnergyClasses = request.queryParams.get("acceptable-energy-classes");
 
             area ? filters.area = area : {};
             Validator.validateCoordinates({latitude: latitude, longitude: longitude}) ? 
