@@ -2,7 +2,7 @@ import { Advertisement } from "./advertisement.js";
 
 export { type AdvertisementBuilder, AdvertisementBuilderDirector };
 
-interface AdvertisementBuilder<T extends Advertisement> {
+interface AdvertisementBuilder {
     setId(): void;
     setAddress(): void;
     setCity(): void;
@@ -16,11 +16,11 @@ interface AdvertisementBuilder<T extends Advertisement> {
     setAvailable(): void;
     setImages(): void;
     setPrice(): void;
-    getResult(): T;
+    getResult(): Advertisement;
 }
 
 class AdvertisementBuilderDirector {
-    make<T extends Advertisement>(builder: AdvertisementBuilder<T>): T {
+    make(builder: AdvertisementBuilder): Advertisement {
         builder.setId();
         builder.setAddress();
         builder.setCity();

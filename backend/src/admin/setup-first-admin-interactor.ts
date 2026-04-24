@@ -1,4 +1,7 @@
-import { Admin, User } from "@dieti-estates-2025/common";
+import { 
+    Admin, 
+    User 
+} from "@dieti-estates-2025/common";
 import type {
     CreateNewAdminPresenter,
     FirstAdminConfig,
@@ -11,7 +14,7 @@ import type {
 } from "@dieti-estates-2025/common";
 import { InvalidConfigurationError } from "./errors.js";
 
-class SetupFirstAdminInteractor {
+export class SetupFirstAdminInteractor {
     constructor(
         private config: FirstAdminConfig,
         private detector: FirstLaunchDetector,

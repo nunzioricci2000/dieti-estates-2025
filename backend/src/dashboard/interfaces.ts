@@ -1,6 +1,5 @@
-import type { Advertisement, Coordinates } from "@dieti-estates-2025/common";
+import type { Advertisement, Coordinates, RepositoryOf } from "@dieti-estates-2025/common";
 import { AdvertisementsMetrics } from "./data-objects.js";
-import type { RepositoryOf } from "@dieti-estates-2025/common";
 
 export interface DetectPOIsService {
     detectPOIs(location: Coordinates): string[];

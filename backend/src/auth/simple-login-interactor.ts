@@ -1,8 +1,8 @@
 import type { User } from "@dieti-estates-2025/common";
+import type { Logger } from "@dieti-estates-2025/common";
 import type { AuthRegister } from "./auth-register.js";
 import type { LoginPresenter } from "./interfaces.js";
 import { UserNotExistsException, WrongPasswordException } from "./errors.js";
-import type { Logger } from "@dieti-estates-2025/common";
 
 export class SimpleLoginInteractor {
     constructor(

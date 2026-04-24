@@ -1,6 +1,6 @@
-import type { Logger } from "@dieti-estates-2025/common";
+import { type Logger, Response } from "@dieti-estates-2025/common";
 import type { ResponseManager } from "./response-manager.js";
-import { Response } from "./response.js";
+import { UserAlreadySignedException } from "../auth/errors.js";
 
 export class HTTPSignupPresenter {
     constructor(
@@ -11,13 +11,23 @@ export class HTTPSignupPresenter {
     }
 
     present(token: string): void {
-        const body = new Map<string, any>();
+        const body = {
+            token: token,
+        }
         const headers = new Map<string, string>();
-        body.set("token", token);
         const response = new Response(200, body, headers);
+        this.responseManager.sendResponse(response);
     }
 
     presentError(error: Error): void {
-        this.responseManager.sendError(error);
+        let res: Response;
+        if(error instanceof UserAlreadySignedException) {
+            res = Response.CONFLICT;
+        } else {
+            res = Response.SERVER_ERROR;
+            this.logger.error("Uknown error");
+        }
+        this.responseManager.sendResponse(res);
+        this.logger.debug("Error during signup. Error response was sent.");
     }
 }

@@ -6,7 +6,7 @@ import {
 import type { AdvertisementRepository } from "./interfaces.js";
 import { UnavailableAdvertisementDataException } from "./errors.js";
 
-class MarkAsTakenInteractor {
+export class MarkAsTakenInteractor {
     constructor(
         private repository: AdvertisementRepository,
         private logger: Logger,

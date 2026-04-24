@@ -1,4 +1,4 @@
-import type { Advertisement, Price } from "@dieti-estates-2025/common";
+import type { Advertisement } from "@dieti-estates-2025/common";
 import {
     ValueNotFoundException,
     type EventPublisher,
@@ -9,7 +9,7 @@ import { MakeOfferEvent } from "./events.js";
 import type { MakeOfferPresenter } from "./interfaces.js";
 import { AdvertisementNotExistsException } from "./errors.js";
 
-class MakeOfferInteractor {
+export class MakeOfferInteractor {
     constructor(
         private publisher: EventPublisher,
         private presenter: MakeOfferPresenter,
