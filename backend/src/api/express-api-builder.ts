@@ -21,69 +21,80 @@ export class ExpressAPIBuilder implements APIBuilder<ExpressAPI> {
 
 
     buildAuthRouter(): void {
-        this.app.post('/auth/signup', (eReq, eRes) => {
+        this.app.post('/auth/signup', (eReq, eRes, next) => {
             const req = this.buildRequest(eReq);
             const controller = this.config.createAuthController(req);
             controller.signup(req);
+            next();
         });
-        this.app.post('/auth/login', (eReq, eRes) => {
+        this.app.post('/auth/login', (eReq, eRes, next) => {
             const req = this.buildRequest(eReq);
             const controller = this.config.createAuthController(req);
             controller.login(req);
+            next();
         });
-        this.app.post('/auth/re-authenticate', (eReq, eRes)=> {
+        this.app.post('/auth/re-authenticate', (eReq, eRes, next)=> {
             const req = this.buildRequest(eReq);
             const controller = this.config.createAuthController(req);
             controller.signup(req);
+            next();
         });
     }
 
     buildAdvertisementRouter(): void {
-        this.app.get('/advertisements', (eReq, eRes) => {
+        this.app.get('/advertisements', (eReq, eRes, next) => {
             const req = this.buildRequest(eReq);
             const controller = this.config.createAdvertisementController(req);
             controller.getAdvertisements(req);
+            next();
         });
-        this.app.get('/advertisements/:id', (eReq, eRes) => {
+        this.app.get('/advertisements/:id', (eReq, eRes, next) => {
             const req = this.buildRequest(eReq);
             const controller = this.config.createAdvertisementController(req);
             controller.getAdvertisement(req);
+            next();
         });
-        this.app.post('/advertisements/:id/offers', (eReq, eRes) => {
+        this.app.post('/advertisements/:id/offers', (eReq, eRes, next) => {
             const req = this.buildRequest(eReq);
             const controller = this.config.createAdvertisementController(req);
             controller.postOffer(req);
+            next();
         });
-        this.app.post('/advertisements', (eReq, eRes) => {
+        this.app.post('/advertisements', (eReq, eRes, next) => {
             const req = this.buildRequest(eReq);
             const controller = this.config.createAdvertisementController(req);
             controller.postAdvertisement(req);
+            next();
         });
-        this.app.patch('/advertisements/:id', (eReq, eRes) => {
+        this.app.patch('/advertisements/:id', (eReq, eRes, next) => {
             const req = this.buildRequest(eReq);
             const controller = this.config.createAdvertisementController(req);
             controller.patchAdvertisement(req);
+            next();
         });
     }
 
     buildAdminRouter(): void {
-        this.app.post('/admins', (eReq, eRes) => {
+        this.app.post('/admins', (eReq, eRes, next) => {
             const req = this.buildRequest(eReq);
             const controller = this.config.createAdminController(req);
             controller.postAdmin(req);
+            next();
         })
-        this.app.patch('/admins', (eReq, eRes) => {
+        this.app.patch('/admins', (eReq, eRes, next) => {
             const req = this.buildRequest(eReq);
             const controller = this.config.createAdminController(req);
             controller.patchAdmin(req);
+            next();
         })
     }
     
     buildAgentRouter(): void {
-        this.app.post('/agents', (eReq, eRes) => {
+        this.app.post('/agents', (eReq, eRes, next) => {
             const req = this.buildRequest(eReq);
             const controller = this.config.createAgentController(req);
             controller.postAgent(req);
+            next();
         })
     }
 
