@@ -1,83 +1,96 @@
-import type { AdminController } from "../http-adapters/admin-controller.js";
-import type { AdvertisementController } from "../http-adapters/advertisement-controller.js";
-import type { AgentController } from "../http-adapters/agent-controller.js";
-import type { AuthController } from "../http-adapters/auth-controller.js";
 import type { APIBuilder } from "./api-builder.js";
 import type { ExpressApiConfig } from "./express-api-config.js";
 import { ExpressAPI } from "./express-api.js";
 import express from "express";
+import { type Request as ExpressRequest } from "express";
 import { ExpressRequestBuilder } from "./express-request-builder.js";
-import type { RequestBuilderDirector } from "@dieti-estates-2025/common";
+import type { Request, RequestBuilderDirector } from "@dieti-estates-2025/common";
 
 export class ExpressAPIBuilder implements APIBuilder<ExpressAPI> {
-    private authController?: AuthController;
-    private advertisementController?: AdvertisementController;
-    private adminController?: AdminController;
-    private agentController?: AgentController;
     private app = express();
 
     constructor(
-        private expressAPIConfig: ExpressApiConfig, 
-        private builderDirector: RequestBuilderDirector,
+        private config: ExpressApiConfig, 
+        private requestBuilderDirector: RequestBuilderDirector,
     ) {}
+
+    private buildRequest(eReq: ExpressRequest): Request {
+        const requestBuilder = new ExpressRequestBuilder(eReq);
+        return this.requestBuilderDirector.makeRequest(requestBuilder);
+    }
+
 
     buildAuthRouter(): void {
         this.app.post('/auth/signup', (eReq, eRes) => {
-            //signup
+            const req = this.buildRequest(eReq);
+            const controller = this.config.createAuthController(req);
+            controller.signup(req);
         });
         this.app.post('/auth/login', (eReq, eRes) => {
-            //login
+            const req = this.buildRequest(eReq);
+            const controller = this.config.createAuthController(req);
+            controller.login(req);
         });
         this.app.post('/auth/re-authenticate', (eReq, eRes)=> {
-            //reauthenticate
+            const req = this.buildRequest(eReq);
+            const controller = this.config.createAuthController(req);
+            controller.signup(req);
         });
     }
 
     buildAdvertisementRouter(): void {
         this.app.get('/advertisements', (eReq, eRes) => {
-            //retrieve advertisements (all or filtered)
-            //advertisement metrics (query parameter 'iclude=metrics')
+            const req = this.buildRequest(eReq);
+            const controller = this.config.createAdvertisementController(req);
+            controller.getAdvertisements(req);
         });
         this.app.get('/advertisements/:id', (eReq, eRes) => {
-            //retrieve specific advertisement
+            const req = this.buildRequest(eReq);
+            const controller = this.config.createAdvertisementController(req);
+            controller.getAdvertisement(req);
         });
         this.app.post('/advertisements/:id/offers', (eReq, eRes) => {
-            //new offer
+            const req = this.buildRequest(eReq);
+            const controller = this.config.createAdvertisementController(req);
+            controller.postOffer(req);
         });
         this.app.post('/advertisements', (eReq, eRes) => {
-            //new advertisement
+            const req = this.buildRequest(eReq);
+            const controller = this.config.createAdvertisementController(req);
+            controller.postAdvertisement(req);
         });
         this.app.patch('/advertisements/:id', (eReq, eRes) => {
-            //mark as taken
+            const req = this.buildRequest(eReq);
+            const controller = this.config.createAdvertisementController(req);
+            controller.patchAdvertisement(req);
         });
     }
 
     buildAdminRouter(): void {
         this.app.post('/admins', (eReq, eRes) => {
-            //new admin
+            const req = this.buildRequest(eReq);
+            const controller = this.config.createAdminController(req);
+            controller.postAdmin(req);
         })
         this.app.patch('/admins', (eReq, eRes) => {
-            //change admin password
+            const req = this.buildRequest(eReq);
+            const controller = this.config.createAdminController(req);
+            controller.patchAdmin(req);
         })
     }
-
+    
     buildAgentRouter(): void {
         this.app.post('/agents', (eReq, eRes) => {
-            //new agent
+            const req = this.buildRequest(eReq);
+            const controller = this.config.createAgentController(req);
+            controller.postAgent(req);
         })
     }
 
     getResult(): ExpressAPI {
-        if(!(this.authController && this.advertisementController && 
-            this.adminController && this.agentController
-        )) {
-            throw new Error("Insufficient data");
-        }
         return new ExpressAPI(
-            this.authController,
-            this.advertisementController,
-            this.agentController,
-            this.adminController,
+            this.app,
+            this.config.port,
         );
     }
 
