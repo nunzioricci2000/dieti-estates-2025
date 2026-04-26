@@ -17,7 +17,7 @@ export class AuthController {
         logger.info("Created!");
     }
 
-    login(request: Request): void {
+    async login(request: Request) {
         const credentials = LoginRequestDTO.fromJSON(request.body);
 
         if(!credentials) {
@@ -33,7 +33,7 @@ export class AuthController {
         );
     }
 
-    signup(request: Request): void {
+    async signup(request: Request) {
         const credentials = SignUpRequestDTO.fromJSON(request.body);
 
         if(!credentials) {

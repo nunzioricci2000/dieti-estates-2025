@@ -29,7 +29,7 @@ export class AdvertisementController {
         logger.debug("Created!");
     }
 
-    getAdvertisement(request: Request): void {
+    async getAdvertisement(request: Request) {
         const id = Number(request.pathParams.get("id"));
         if(!Validator.validateIntegers(id)) {
             this.logger.warn("Invalid request");
@@ -41,7 +41,7 @@ export class AdvertisementController {
         this.viewAdvertisementInteractor.execute(id);
     }
 
-    getAdvertisements(request: Request): void {
+    async getAdvertisements(request: Request) {
         if(request.body.include === "metrics") {
             this.logger.debug("Executing retrieve advertisement metrics");
             this.retrieveAdvertisementsMetricsInteractor.execute();
@@ -69,7 +69,7 @@ export class AdvertisementController {
         this.filterAdvertisementInteractor.execute(filters);
     }
 
-    postOffer(request: Request): void {
+    async postOffer(request: Request) {
         const id = Number(request.pathParams.get("id"));
         if(!Validator.validateIntegers(id)) {
             this.logger.warn("Invalid request");
@@ -81,7 +81,7 @@ export class AdvertisementController {
         this.makeOfferInteractor.execute(id);
     }
     
-    postBooking(request: Request): void {
+    async postBooking(request: Request) {
         const id = Number(request.pathParams.get("id"));
         if(!Validator.validateIntegers(id)) {
             this.logger.warn("Invalid request");
@@ -93,7 +93,7 @@ export class AdvertisementController {
         this.bookVisitInteractor.execute(id);
     }
     
-    postAdvertisement(request: Request): void {
+    async postAdvertisement(request: Request) {
         const adDTO  = AdvertisementDTO.fromJSON(request.body)
         if(!adDTO) {
             this.logger.warn("Invalid request");
@@ -105,7 +105,7 @@ export class AdvertisementController {
         this.createNewAdvertisementInteractor.execute(ad);
     }
     
-    patchAdvertisement(request: Request): void {
+    async patchAdvertisement(request: Request) {
         const id = Number(request.pathParams.get("id"));
         const taken = Boolean(request.body.taken);
         if(!Validator.validateIntegers(id) || taken != true) {
