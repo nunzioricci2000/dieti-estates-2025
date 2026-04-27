@@ -1,3 +1,11 @@
+export const methods = ["GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH"] as const;
+
+export type Method = typeof methods[number];
+
+export function isMethod(value: string): value is Method {
+    return (methods as readonly string[]).includes(value);
+}
+
 export class Request {
     method: Method;
     path: string;
@@ -21,16 +29,4 @@ export class Request {
         this.pathParams = pathParams;
         this.queryParams = queryParams;
     }
-}
-
-enum Method {
-    GET,
-    HEAD,
-    POST,
-    PUT,
-    DELETE,
-    CONNECT,
-    OPTIONS,
-    TRACE,
-    PATCH,
 }
