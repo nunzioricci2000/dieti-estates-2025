@@ -118,7 +118,6 @@ class AdvertisementAssembler {
 
 class UserAssembler {
     static createDomainObject(userDTO: UserDTO): User {
-        // TODO we need to account for all different types of User (Admin and Agent too)
         return new User(userDTO.email, userDTO.username)
     }
 

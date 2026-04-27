@@ -11,7 +11,7 @@ import type { MarkAsTakenInteractor } from "../dashboard/mark-as-taken-interacto
 import type { CountIncomingPrenotationInteractor } from "../dashboard/count-incoming-prenotation-interactor.js";
 import type { ResponseManager } from "./response-manager.js";
 
-export class Advertisement {
+export class AdvertisementController {
     constructor(
         private viewAdvertisementInteractor: ViewAdvertisementInteractor,
         private filterAdvertisementInteractor: FilterAdvertisementsInteractor,
@@ -29,7 +29,7 @@ export class Advertisement {
         logger.debug("Created!");
     }
 
-    getAdvertisement(request: Request): void {
+    async getAdvertisement(request: Request) {
         const id = Number(request.pathParams.get("id"));
         if(!Validator.validateIntegers(id)) {
             this.logger.warn("Invalid request");
@@ -41,7 +41,7 @@ export class Advertisement {
         this.viewAdvertisementInteractor.execute(id);
     }
 
-    getAdvertisements(request: Request): void {
+    async getAdvertisements(request: Request) {
         if(request.body.include === "metrics") {
             this.logger.debug("Executing retrieve advertisement metrics");
             this.retrieveAdvertisementsMetricsInteractor.execute();
@@ -49,13 +49,13 @@ export class Advertisement {
         let filters: SearchFilters = {};
         if(request.queryParams.size > 0) {
             this.logger.debug("Filtering advertisements");
-            const area = request.pathParams.get("area");
-            const longitude = Number(request.pathParams.get("longitude"));
-            const latitude = Number(request.pathParams.get("latitude"));
-            const distance = Number(request.pathParams.get("distance"));
-            const maxDimensions = Number(request.pathParams.get("max-dimensions"));
-            const minDimensions = Number(request.pathParams.get("min-dimensions"));
-            const acceptableEnergyClasses = request.pathParams.get("acceptable-energy-classes");
+            const area = request.queryParams.get("area");
+            const longitude = Number(request.queryParams.get("longitude"));
+            const latitude = Number(request.queryParams.get("latitude"));
+            const distance = Number(request.queryParams.get("distance"));
+            const maxDimensions = Number(request.queryParams.get("max-dimensions"));
+            const minDimensions = Number(request.queryParams.get("min-dimensions"));
+            const acceptableEnergyClasses = request.queryParams.get("acceptable-energy-classes");
 
             area ? filters.area = area : {};
             Validator.validateCoordinates({latitude: latitude, longitude: longitude}) ? 
@@ -69,7 +69,7 @@ export class Advertisement {
         this.filterAdvertisementInteractor.execute(filters);
     }
 
-    postOffer(request: Request): void {
+    async postOffer(request: Request) {
         const id = Number(request.pathParams.get("id"));
         if(!Validator.validateIntegers(id)) {
             this.logger.warn("Invalid request");
@@ -81,7 +81,7 @@ export class Advertisement {
         this.makeOfferInteractor.execute(id);
     }
     
-    postBooking(request: Request): void {
+    async postBooking(request: Request) {
         const id = Number(request.pathParams.get("id"));
         if(!Validator.validateIntegers(id)) {
             this.logger.warn("Invalid request");
@@ -93,7 +93,7 @@ export class Advertisement {
         this.bookVisitInteractor.execute(id);
     }
     
-    postAdvertisement(request: Request): void {
+    async postAdvertisement(request: Request) {
         const adDTO  = AdvertisementDTO.fromJSON(request.body)
         if(!adDTO) {
             this.logger.warn("Invalid request");
@@ -105,7 +105,7 @@ export class Advertisement {
         this.createNewAdvertisementInteractor.execute(ad);
     }
     
-    patchAdvertisement(request: Request): void {
+    async patchAdvertisement(request: Request) {
         const id = Number(request.pathParams.get("id"));
         const taken = Boolean(request.body.taken);
         if(!Validator.validateIntegers(id) || taken != true) {
