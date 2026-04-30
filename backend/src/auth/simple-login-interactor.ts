@@ -1,4 +1,4 @@
-import type { User } from "@dieti-estates-2025/common";
+import { ValueNotFoundException, type User } from "@dieti-estates-2025/common";
 import type { Logger } from "@dieti-estates-2025/common";
 import type { AuthRegister } from "./auth-register.js";
 import type { LoginPresenter } from "./interfaces.js";
@@ -18,7 +18,7 @@ export class SimpleLoginInteractor {
         try {
             user = await this.authRegister.userRepository.readUser({ email });
         } catch (err) {
-            if (err instanceof UserNotExistsException) {
+            if (err instanceof ValueNotFoundException) {
                 this.logger.warn(
                     `Attempted login with email ${email} which does not exist`,
                 );
