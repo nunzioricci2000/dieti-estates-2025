@@ -2,7 +2,7 @@ import type { Advertisement, Coordinates, RepositoryOf } from "@dieti-estates-20
 import { AdvertisementsMetrics } from "./data-objects.js";
 
 export interface DetectPOIsService {
-    detectPOIs(location: Coordinates): string[];
+    detectPOIs(location: Coordinates): Promise<string[]>;
 }
 
 export interface CreateNewAdvertisementPresenter {
