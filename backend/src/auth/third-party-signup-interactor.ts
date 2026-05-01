@@ -13,7 +13,7 @@ export class ThirdPartySignupInteractor {
     }
 
     async execute(authorizationCode: string): Promise<User | null> {
-        const data = this.authRegister.thirdPartyAuthService.authenticateUser(authorizationCode);
+        const data = await this.authRegister.thirdPartyAuthService.authenticateUser(authorizationCode);
         const user = data.user;
         const provider = data.provider;
         const sub = data.sub;

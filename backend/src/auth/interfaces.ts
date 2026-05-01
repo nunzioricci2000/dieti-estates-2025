@@ -17,7 +17,7 @@ export interface TokenService {
 }
 
 export interface ThirdPartyAuthService {
-    authenticateUser(authorizationCode: string): ThirdPartyIdentity;
+    authenticateUser(authorizationCode: string): Promise<ThirdPartyIdentity>;
 }
 
 export interface HashService {

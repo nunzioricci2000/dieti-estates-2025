@@ -14,7 +14,7 @@ export class ThirdPartyLoginInteractor {
     }
 
     async execute(authorizationCode: string): Promise<User | null> {
-        const data = this.authRegister.thirdPartyAuthService.authenticateUser(authorizationCode);
+        const data = await this.authRegister.thirdPartyAuthService.authenticateUser(authorizationCode);
         const sub = data.sub;
         const provider = data.provider;
         let user: User | null = null;

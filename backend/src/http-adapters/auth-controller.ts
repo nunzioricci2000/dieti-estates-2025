@@ -49,4 +49,24 @@ export class AuthController {
             credentials.password,
         );
     }
+
+    async thirdPartyLogin(request: Request) {
+        const code = request.queryParams.get("code")
+        if(!code) {
+            this.logger.warn("Missing query parameter 'code'");
+            this.responseManager.sendResponse(Response.INVALID_REQUEST);
+            return;
+        }
+        this.thirdPartyLoginInteractor.execute(code);
+    }
+    
+    async thirdPartySignup(request: Request) {
+        const code = request.queryParams.get("code")
+        if(!code) {
+            this.logger.warn("Missing query parameter 'code'");
+            this.responseManager.sendResponse(Response.INVALID_REQUEST);
+            return;
+        }
+        this.thirdPartySignupInteractor.execute(code);
+    }
 }
