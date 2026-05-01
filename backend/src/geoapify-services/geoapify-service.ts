@@ -67,8 +67,8 @@ export class GeoapifyService implements DetectPOIsService {
         const response = await fetch(
             `https://api.geoapify.com/v2/places?categories=` +
             `${this.filters.join(",")}`+ 
-            `service,natural,pet&filter=circle:${location.latitude},${location.longitude},${this.radius}` + `
-            &bias=proximity:${location.latitude},${location.longitude}&limit=${this.limit}&apiKey=${this.apiKey}`,
+            `service,natural,pet&filter=circle:${location.latitude},${location.longitude},${this.radius}` + 
+            `&bias=proximity:${location.latitude},${location.longitude}&limit=${this.limit}&apiKey=${this.apiKey}`,
             requestOptions
         ).then((response: Response) => response.json());
         // response is expected to have the array features
