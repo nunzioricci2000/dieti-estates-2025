@@ -78,10 +78,6 @@ export class GeoapifyService implements DetectPOIsService {
             const categories = categoryString.split(".");
             set.add(categories[1]!);
         }
-        const result: string[] = []
-        for(const value of set) {
-            result.push(value);
-        }
-        return result;
+        return [...set];
     }
 }
