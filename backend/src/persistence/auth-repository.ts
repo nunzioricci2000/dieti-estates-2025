@@ -18,9 +18,12 @@ export class PrismaAuthRepository
     implements
     RepositoryOf<"User", User, Pick<User, "email">>,
     RepositoryOf<"Password", string, User>,
+    RepositoryOf<"Sub", User, { sub: string; provider: string }>,
     RepositoryOf<"Agent", Agent, Pick<Agent, "email">>,
     RepositoryOf<"Admin", Admin, Pick<Admin, "email">>,
     AdminCounter {
+    private thirdPartySubjects = new Map<string, User>();
+
     constructor(
         private prisma: PrismaClient,
         private logger: Logger,
@@ -119,6 +122,52 @@ export class PrismaAuthRepository
 
         this.logger.info(`Password deleted for user ${user.email}`);
         return passwordHash;
+    }
+
+    async createSub(
+        ref: { sub: string; provider: string },
+        user: User,
+    ): Promise<{ sub: string; provider: string }> {
+        const key = this.keyFromSubRef(ref);
+        if (this.thirdPartySubjects.has(key)) {
+            throw new ValueAlreadyExistsException(ref);
+        }
+
+        this.thirdPartySubjects.set(key, user);
+        return ref;
+    }
+
+    async readSub(ref: { sub: string; provider: string }): Promise<User> {
+        const key = this.keyFromSubRef(ref);
+        const user = this.thirdPartySubjects.get(key);
+        if (!user) {
+            throw new ValueNotFoundException(ref);
+        }
+        return user;
+    }
+
+    async updateSub(
+        ref: { sub: string; provider: string },
+        user: User,
+    ): Promise<User> {
+        const key = this.keyFromSubRef(ref);
+        if (!this.thirdPartySubjects.has(key)) {
+            throw new ValueNotFoundException(ref);
+        }
+
+        this.thirdPartySubjects.set(key, user);
+        return user;
+    }
+
+    async deleteSub(ref: { sub: string; provider: string }): Promise<User> {
+        const key = this.keyFromSubRef(ref);
+        const user = this.thirdPartySubjects.get(key);
+        if (!user) {
+            throw new ValueNotFoundException(ref);
+        }
+
+        this.thirdPartySubjects.delete(key);
+        return user;
     }
 
     async createAgent(agent: Agent): Promise<Agent> {
@@ -309,6 +358,10 @@ export class PrismaAuthRepository
 
     private capitalize(value: string): string {
         return value.charAt(0).toUpperCase() + value.slice(1);
+    }
+
+    private keyFromSubRef(ref: { sub: string; provider: string }): string {
+        return `${ref.provider}:${ref.sub}`;
     }
 
     private toDomainUser(user: PersistedUser): User {

@@ -1,5 +1,4 @@
 import type {
-    Coordinates,
     Event,
     EventListener,
     EventPublisher,
@@ -11,16 +10,12 @@ import type {
     TokenService,
 } from "../auth/interfaces.js";
 import type {
-    FirstAdminConfig,
-    FirstLaunchDetector,
-} from "../admin/interfaces.js";
-import type {
     CreateNewAdvertisementPresenter,
-    DetectPOIsService,
     RetrieveAdvertisementsMetricsPresenter,
 } from "../dashboard/interfaces.js";
 import type { AdvertisementsMetrics } from "../dashboard/data-objects.js";
 import type { Advertisement } from "@dieti-estates-2025/common";
+import type { ThirdPartyIdentity } from "../auth/data-objects.js";
 
 const notImplemented = (name: string): never => {
     throw new Error(`${name} is a stub — provide a real implementation`);
@@ -51,20 +46,14 @@ export class StubHashService implements HashService {
     }
 }
 
-export class StubThirdPartyAuthService implements ThirdPartyAuthService {
-    usernameFor(_authorizationCode: string): string {
-        return notImplemented("StubThirdPartyAuthService.usernameFor");
-    }
-}
-
 export class StubEventPublisher implements EventPublisher {
     publish(_event: Event): void { }
     addListener(_listener: EventListener): void { }
 }
 
-export class StubDetectPOIsService implements DetectPOIsService {
-    detectPOIs(_location: Coordinates): string[] {
-        return [];
+export class StubThirdPartyAuthService implements ThirdPartyAuthService {
+    authenticateUser(_authorizationCode: string): ThirdPartyIdentity {
+        return notImplemented("StubThirdPartyAuthService.authenticateUser");
     }
 }
 

@@ -104,7 +104,6 @@ import { createPrismaClient } from "../persistence/create-prisma-client.js";
 
 import {
     StubCreateNewAdvertisementPresenter,
-    StubDetectPOIsService,
     StubEventPublisher,
     StubHashService,
     StubRetrieveAdvertisementsMetricsPresenter,
@@ -117,6 +116,7 @@ import {
     type AdminCounter,
 } from "../persistence/first-launch-detector.js";
 import { Config } from "./config.js";
+import { GeoapifyService } from "../geoapify-services/geoapify-service.js";
 
 const prismaClient = await createPrismaClient(databaseConfigFromEnv());
 
@@ -194,6 +194,7 @@ export const container = Container.create()
             "third-party-auth-service",
             "password-repository",
             "user-repository",
+            "sub-repository",
             "hash-service",
         ],
         (
@@ -201,6 +202,11 @@ export const container = Container.create()
             thirdPartyAuthService: ThirdPartyAuthService,
             passwordRepository: RepositoryOf<"Password", string, User>,
             userRepository: RepositoryOf<"User", User, { email: string }>,
+            subRepository: RepositoryOf<
+                "Sub",
+                User,
+                { sub: string; provider: string }
+            >,
             hashService: HashService,
         ) =>
             new AuthRegister(
@@ -208,6 +214,7 @@ export const container = Container.create()
                 thirdPartyAuthService,
                 passwordRepository,
                 userRepository,
+                subRepository,
                 hashService,
             ),
     )
@@ -695,6 +702,11 @@ export const container = Container.create()
         (repo: PrismaAuthRepository) => repo,
     )
     .register(
+        "sub-repository",
+        ["auth-repository"],
+        (repo: PrismaAuthRepository) => repo,
+    )
+    .register(
         "admin-creator",
         ["auth-repository"],
         (repo: PrismaAuthRepository) => repo,
@@ -754,7 +766,7 @@ export const container = Container.create()
         () => new StubThirdPartyAuthService(),
     )
     .register("event-publisher", [], () => new StubEventPublisher())
-    .register("detect-pois-service", [], () => new StubDetectPOIsService())
+    .register("detect-pois-service", [], () => new GeoapifyService())
     .register(
         "create-new-advertisement-presenter",
         [],
