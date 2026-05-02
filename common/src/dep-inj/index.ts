@@ -3,20 +3,28 @@ type ComponentDef = { deps: readonly string[]; result: any };
 type Registry = Record<string, ComponentDef>;
 
 // Checks if all dependencies in Deps are included in ResolvedKeys. If yes, returns true; otherwise, false.
-type AreDepsSatisfied<Deps extends readonly string[], ResolvedKeys extends string> =
-    Exclude<Deps[number], ResolvedKeys> extends never ? true : false;
+type AreDepsSatisfied<
+    Deps extends readonly string[],
+    ResolvedKeys extends string,
+> = Exclude<Deps[number], ResolvedKeys> extends never ? true : false;
 
 // Returns a new type with only the components from Reg whose dependencies are satisfied by ResolvedKeys.
 type ResolvePass<Reg extends Registry, ResolvedKeys extends string> = {
-    [K in keyof Reg as AreDepsSatisfied<Reg[K]["deps"], ResolvedKeys> extends true ? K : never]: Reg[K]["result"];
+    [K in keyof Reg as AreDepsSatisfied<
+        Reg[K]["deps"],
+        ResolvedKeys
+    > extends true
+    ? K
+    : never]: Reg[K]["result"];
 };
 
 // Recursively computes the fully resolved map of components.
 // Every iteration adds new components whose dependencies are satisfied by the currently resolved keys, until no new components can be added.
 type ComputeResolved<
     Reg extends Registry,
-    ResolvedMap extends Record<string, any> = {}
-> = ResolvePass<Reg, keyof ResolvedMap & string> extends infer NextMap
+    ResolvedMap extends Record<string, any> = {},
+> =
+    ResolvePass<Reg, keyof ResolvedMap & string> extends infer NextMap
     ? NextMap extends Record<string, any>
     ? [Exclude<keyof NextMap, keyof ResolvedMap>] extends [never]
     ? ResolvedMap // No new keys found: we have resolved everything we can, return the current map
@@ -25,17 +33,25 @@ type ComputeResolved<
     : never;
 
 type Equals<X, Y> =
-    (<T>() => T extends X ? 1 : 2) extends
-    (<T>() => T extends Y ? 1 : 2) ? true : false;
+    (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2
+    ? true
+    : false;
 
-type SameLength<T extends readonly any[], U extends readonly any[]> =
-    Equals<T["length"], U["length"]>;
+type SameLength<T extends readonly any[], U extends readonly any[]> = Equals<
+    T["length"],
+    U["length"]
+>;
 
-type InferTypeFromReg<Reg extends Registry, Name extends string> =
-    Name extends keyof Reg ? Reg[Name]["result"] : never;
+type InferTypeFromReg<
+    Reg extends Registry,
+    Name extends string,
+> = Name extends keyof Reg ? Reg[Name]["result"] : never;
 
-type CheckDeps<Deps extends readonly string[], Args extends any[], Reg extends Registry> =
-    SameLength<Deps, Args> extends true ? Deps : never;
+type CheckDeps<
+    Deps extends readonly string[],
+    Args extends any[],
+    Reg extends Registry,
+> = SameLength<Deps, Args> extends true ? Deps : never;
 
 // Runtime representation of a registered component, used internally in the Container class.
 type InternalResolver = {
@@ -58,25 +74,34 @@ export class Container<Reg extends Registry = {}> {
         Name extends string,
         const Deps extends readonly string[],
         Args extends any[],
-        Result
+        Result,
     >(
         name: Name,
-        dependencies: CheckDeps<Deps, Args, Reg>,
+        dependencies: Deps,
         resolver: (...args: Args) => Result,
     ): Container<Reg & Record<Name, { deps: Deps; result: Result }>> {
-
-        if (dependencies.some((dep) => this.resolvedComponents[dep] === undefined)) {
+        if (
+            dependencies.some(
+                (dep) => this.resolvedComponents[dep] === undefined,
+            )
+        ) {
             return new Container(
                 {
                     ...this.resolvers,
-                    [name]: { name, dependencies: [...dependencies], execute: resolver },
+                    [name]: {
+                        name,
+                        dependencies: [...dependencies],
+                        execute: resolver,
+                    },
                 },
                 { ...this.resolvedComponents },
             ) as any;
         }
 
-        const resolvedDependencies = dependencies.map((dep) => this.resolvedComponents[dep]);
-        const resolvedValue = resolver(...resolvedDependencies as any);
+        const resolvedDependencies = dependencies.map(
+            (dep) => this.resolvedComponents[dep],
+        );
+        const resolvedValue = resolver(...(resolvedDependencies as any));
 
         const newResolvers = { ...this.resolvers };
         if (name in newResolvers) delete newResolvers[name];
@@ -87,7 +112,11 @@ export class Container<Reg extends Registry = {}> {
         );
 
         for (const [_, currentResolver] of Object.entries(this.resolvers)) {
-            if (currentResolver.dependencies.every((dep) => dep in this.resolvedComponents || dep === name)) {
+            if (
+                currentResolver.dependencies.every(
+                    (dep) => dep in this.resolvedComponents || dep === name,
+                )
+            ) {
                 const deps = currentResolver.dependencies.map((dep) =>
                     dep === name ? resolvedValue : this.resolvedComponents[dep],
                 );
@@ -101,20 +130,23 @@ export class Container<Reg extends Registry = {}> {
 
     get<
         ResolvedMap extends ComputeResolved<Reg> = ComputeResolved<Reg>,
-        Name extends keyof ResolvedMap & string = keyof ResolvedMap & string
+        Name extends keyof ResolvedMap & string = keyof ResolvedMap & string,
     >(name: Name): ResolvedMap[Name] {
         if (name in this.resolvedComponents) {
             return this.resolvedComponents[name];
         }
-        throw new Error(`Component: ${name} is registered but its dependencies are not satisfied.`);
+        throw new Error(
+            `Component: ${name} is registered but its dependencies are not satisfied.`,
+        );
     }
 }
 
 export type AssumeSatisfied<
     C extends Container<any>,
     DepName extends string,
-    DepType = any
-> = C extends Container<infer Reg>
+    DepType = any,
+> =
+    C extends Container<infer Reg>
     ? Container<Reg & Record<DepName, { deps: []; result: DepType }>>
     : never;
 

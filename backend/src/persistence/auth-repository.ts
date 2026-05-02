@@ -12,13 +12,15 @@ import {
     type User as PersistedUser,
 } from "./generated/prisma/client.js";
 import { UserRole } from "./generated/prisma/enums.js";
+import type { AdminCounter } from "./first-launch-detector.js";
 
 export class PrismaAuthRepository
     implements
     RepositoryOf<"User", User, Pick<User, "email">>,
     RepositoryOf<"Password", string, User>,
     RepositoryOf<"Agent", Agent, Pick<Agent, "email">>,
-    RepositoryOf<"Admin", Admin, Pick<Admin, "email">> {
+    RepositoryOf<"Admin", Admin, Pick<Admin, "email">>,
+    AdminCounter {
     constructor(
         private prisma: PrismaClient,
         private logger: Logger,
@@ -181,6 +183,15 @@ export class PrismaAuthRepository
             UserRole.ADMIN,
         );
         return this.toDomainUser(deleted) as Admin;
+    }
+
+    async countAdmins(): Promise<number> {
+        this.logger.debug("Counting admins");
+        const count = await this.prisma.user.count({
+            where: { role: UserRole.ADMIN },
+        });
+        this.logger.debug(`Counted ${count} admins`);
+        return count;
     }
 
     private async createPrincipal(

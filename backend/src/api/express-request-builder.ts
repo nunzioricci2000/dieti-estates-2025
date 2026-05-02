@@ -51,6 +51,7 @@ export class ExpressRequestBuilder implements RequestBuilder {
             }
             headersMap.set(key, headers[key].toString());
         }
+        this.req.headers = headersMap;
     }
 
     getResult(): Request {

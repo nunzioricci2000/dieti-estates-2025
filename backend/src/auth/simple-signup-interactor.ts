@@ -33,12 +33,18 @@ export class SimpleSignupInteractor {
                 return null;
             } else {
                 this.logger.error("Unexpected error occurred");
+                this.presenter.presentError(
+                    err instanceof Error ? err : new Error("Unknown error"),
+                );
                 throw err;
             }
         }
         await this.authRegister.passwordRepository.createPassword(
             user,
             password,
+        );
+        this.presenter.present(
+            this.authRegister.tokenService.generateToken(user),
         );
         return user;
     }

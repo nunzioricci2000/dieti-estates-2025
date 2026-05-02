@@ -1,21 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
-  output   = "../src/persistence/generated/prisma"
+  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-}
-
-enum UserRole {
-  USER
-  ADMIN
-  AGENT
 }
 
 model User {
@@ -26,11 +15,6 @@ model User {
   role           UserRole        @default(USER)
   createdAt      DateTime        @default(now())
   advertisements Advertisement[]
-}
-
-enum AdvertisementType {
-  SALE
-  RENT
 }
 
 model Advertisement {
@@ -45,13 +29,24 @@ model Advertisement {
   energyClass        String
   available          Boolean           @default(true)
   price              Int
-  images             String[]
-  additionalServices String[]
-  nearbyPOIs         String[]
+  images             String
+  additionalServices String
+  nearbyPOIs         String
   views              Int               @default(0)
   visits             Int               @default(0)
   offers             Int               @default(0)
   type               AdvertisementType
   authorId           String
   author             User              @relation(fields: [authorId], references: [id])
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  AGENT
+}
+
+enum AdvertisementType {
+  SALE
+  RENT
 }

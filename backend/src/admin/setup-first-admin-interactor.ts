@@ -1,7 +1,4 @@
-import { 
-    Admin, 
-    User 
-} from "@dieti-estates-2025/common";
+import { Admin, User } from "@dieti-estates-2025/common";
 import type {
     CreateNewAdminPresenter,
     FirstAdminConfig,
@@ -27,7 +24,7 @@ export class SetupFirstAdminInteractor {
     }
 
     async execute(): Promise<Admin | null> {
-        if (!this.detector.isFirstLaunch()) {
+        if (!(await this.detector.isFirstLaunch())) {
             return null;
         }
 
