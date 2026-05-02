@@ -5,9 +5,9 @@ export class Config implements FirstAdminConfig {
         return process.env.FIRST_ADMIN_EMAIL || "admin@admin.com";
     }
     getUsername(): string {
-        return process.env.FIRST_ADMIN_USERNAME || "admin";
+        return process.env.FIRST_ADMIN_USERNAME || "admin-user";
     }
     getPassword(): string {
-        return process.env.FIRST_ADMIN_PASSWORD || "admin";
+        return process.env.FIRST_ADMIN_PASSWORD || "admin-pass";
     }
 }

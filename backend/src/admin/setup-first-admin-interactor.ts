@@ -15,7 +15,6 @@ export class SetupFirstAdminInteractor {
     constructor(
         private config: FirstAdminConfig,
         private detector: FirstLaunchDetector,
-        private presenter: CreateNewAdminPresenter,
         private adminCreator: CreatorOf<"Admin", Admin, { email: string }>,
         private passwordRepository: RepositoryOf<"Password", string, User>,
         private logger: Logger,
@@ -38,15 +37,13 @@ export class SetupFirstAdminInteractor {
             this.logger.error(
                 "Invalid configuration provided for first admin credentials.",
             );
-            this.presenter.presentError(new InvalidConfigurationError());
-            return null;
+            throw new InvalidConfigurationError();
         }
 
         const admin = await this.adminCreator.createAdmin(
             new Admin(email, username),
         );
         await this.passwordRepository.createPassword(admin, password);
-        this.presenter.present(admin);
         this.logger.info("First admin created!");
         return admin;
     }

@@ -17,11 +17,7 @@ export class HTTPCreateNewAdminPresenter {
         };
         const headers = new Map<string, string>();
 
-        const res = new Response(
-            200,
-            body,
-            headers,
-        );
+        const res = new Response(200, body, headers);
         this.responseManager.sendResponse(res);
         this.logger.debug("Admin created, success response sent");
     }
@@ -29,9 +25,8 @@ export class HTTPCreateNewAdminPresenter {
     presentError(error: Error): void {
         let res: Response;
         this.logger.debug("Failed in creating admin. Sending error response");
-        if(error instanceof AdminAlreadySignedException) {
+        if (error instanceof AdminAlreadySignedException) {
             res = Response.CONFLICT;
-            return;
         } else {
             res = Response.SERVER_ERROR;
             this.logger.error("Uknown error");

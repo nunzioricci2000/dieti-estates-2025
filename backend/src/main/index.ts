@@ -225,29 +225,43 @@ export const container = Container.create()
 
     .register(
         "create-new-admin-interactor",
-        ["create-new-admin-presenter", "admin-creator", "logger"],
+        [
+            "create-new-admin-presenter",
+            "admin-creator",
+            "password-repository",
+            "logger",
+        ],
         (
             createNewAdminPresenter: CreateNewAdminPresenter,
             adminCreator: CreatorOf<"Admin", Admin, { username: string }>,
+            passwordRepository: RepositoryOf<"Password", string, User>,
             logger: Logger,
         ) =>
             new CreateNewAdminInteractor(
                 createNewAdminPresenter,
                 adminCreator,
+                passwordRepository,
                 logger,
             ),
     )
     .register(
         "create-new-agent-interactor",
-        ["create-new-agent-presenter", "agent-creator", "logger"],
+        [
+            "create-new-agent-presenter",
+            "agent-creator",
+            "password-repository",
+            "logger",
+        ],
         (
             createNewAgentPresenter: CreateNewAgentPresenter,
             agentCreator: CreatorOf<"Agent", Agent, { username: string }>,
+            passwordRepository: RepositoryOf<"Password", string, User>,
             logger: Logger,
         ) =>
             new CreateNewAgentInteractor(
                 createNewAgentPresenter,
                 agentCreator,
+                passwordRepository,
                 logger,
             ),
     )
@@ -274,7 +288,6 @@ export const container = Container.create()
         [
             "first-admin-config",
             "first-launch-detector",
-            "create-new-admin-presenter",
             "admin-creator",
             "password-repository",
             "logger",
@@ -282,7 +295,6 @@ export const container = Container.create()
         (
             config: FirstAdminConfig,
             detector: FirstLaunchDetector,
-            presenter: CreateNewAdminPresenter,
             adminCreator: CreatorOf<"Admin", Admin, { email: string }>,
             passwordRepository: RepositoryOf<"Password", string, User>,
             logger: Logger,
@@ -290,7 +302,6 @@ export const container = Container.create()
             new SetupFirstAdminInteractor(
                 config,
                 detector,
-                presenter,
                 adminCreator,
                 passwordRepository,
                 logger,
@@ -814,6 +825,14 @@ const diMiddleware = (
     req.agentController = scoped.get("agent-controller");
     next();
 };
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                                                                           *
+ *                               PREBOOTSTRAP                                *
+ *                                                                           *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+await container.get("setup-first-admin-interactor").execute();
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                                           *
