@@ -1,4 +1,5 @@
 import type { User } from "@dieti-estates-2025/common";
+import type { ThirdPartyIdentity } from "./data-objects.js";
 
 export interface LoginPresenter {
     present(token: string): void;
@@ -16,7 +17,7 @@ export interface TokenService {
 }
 
 export interface ThirdPartyAuthService {
-    usernameFor(authorizationCode: string): string;
+    authenticateUser(authorizationCode: string): ThirdPartyIdentity;
 }
 
 export interface HashService {
