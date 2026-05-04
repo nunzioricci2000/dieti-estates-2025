@@ -19,7 +19,7 @@ export class Validator {
         type: BaseTypes | "array",
         ...fields: string[]): boolean 
     {
-        const condition = type === "array" ? (param: any) => Array.isArray(param)
+        const condition = type === "array" ? (param: any) => !Array.isArray(param)
             : (param: any) => typeof param !== type;
         for(const field of fields) {
             if(obj[field] === undefined || condition(obj[field]) ) {
@@ -30,7 +30,10 @@ export class Validator {
     }
 
     static checkArraysType(type: BaseTypes, ...arrays: any[]) {
-        for(const array in arrays) {
+        for(const array of arrays) {
+            if(!Array.isArray(array)) {
+                return false;
+            }
             for(const el of array) {
                 if(typeof el !== type) return false;
             }
@@ -62,7 +65,7 @@ export class Validator {
     }
 
     static validateIntegers(...params: number[]): boolean {
-        for(const num in params) {
+        for(const num of params) {
             if(!Number.isInteger(num)) {
                 return false
             }
@@ -123,7 +126,7 @@ class UserDTO {
         }
         const username: string = json.username;
         const email: string = json.email;
-        if(!(Validator.validateUsername(username) || Validator.validateEmail(email))) {
+        if(!(Validator.validateUsername(username) && Validator.validateEmail(email))) {
             return undefined;
         }
         return new UserDTO(username, email);
@@ -307,15 +310,17 @@ class AdvertisementDTO {
             Validator.hasFields(json, "array", "nearbyPOIs") && Validator.checkArraysType("string", json.nearbyPOIs) 
             ? json.nearbyPOIs : []
 
-        let isValid = Validator.validateCoordinates(coordinates) &&
-        Validator.validateIntegers(id, numberOfRooms)
-        Validator.validateAdKind(kind); // TODO add more validation if necessary
+        const isValid = Validator.validateCoordinates(coordinates) &&
+            Validator.validateIntegers(id, numberOfRooms, dimensions, price) &&
+            Validator.validateAdKind(kind);
 
+        if(!isValid) {
+            return undefined;
+        }
 
-
-        return isValid ? new AdvertisementDTO(id, address, city, coordinates, images, dimensions, 
+        return new AdvertisementDTO(id, address, city, coordinates, images, dimensions,
             description, numberOfRooms, energyClass, additionalServices, nearbyPOIs, kind as AdKinds, price,
-        ) : undefined;
+        );
     }
 
 

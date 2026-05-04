@@ -7,6 +7,8 @@ import {
     type Request,
     RequestBuilderDirector,
 } from "@dieti-estates-2025/common";
+import multer from "multer";
+import { advertisementMultipartHandler } from "./middleware.js";
 
 export class ExpressAPIBuilder implements APIBuilder<ExpressAPI> {
     private requestBuilderDirector = new RequestBuilderDirector();
@@ -41,7 +43,13 @@ export class ExpressAPIBuilder implements APIBuilder<ExpressAPI> {
         this.app.post("/advertisements/:id/offers", async (req) => {
             await req.advertisementController.postOffer(this.buildRequest(req));
         });
-        this.app.post("/advertisements", async (req) => {
+
+        const storage = multer.diskStorage({
+            destination: "images/",
+            filename:  (req, file, cb) => cb(null, Date.now() + "-" + file.originalname)
+        })
+        const upload = multer({ storage });
+        this.app.post("/advertisements", upload.array("images", 10), advertisementMultipartHandler, async (req) => {
             await req.advertisementController.postAdvertisement(
                 this.buildRequest(req),
             );
