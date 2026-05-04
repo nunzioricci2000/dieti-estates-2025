@@ -566,7 +566,7 @@ export const container = Container.create()
             new HTTPCreateNewAdvertisementPresenter(responseManager, logger),
     )
     .register(
-        "retrieve-advertisements-data-presenter",
+        "retrieve-advertisements-metrics-presenter",
         ["response-manager", "logger"],
         (responseManager: ResponseManager, logger: Logger) =>
             new HTTPRetrieveAdvertisementsMetricsPresenter(responseManager, logger),
