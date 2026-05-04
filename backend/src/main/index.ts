@@ -105,7 +105,6 @@ import { createPrismaClient } from "../persistence/create-prisma-client.js";
 import {
     StubCreateNewAdvertisementPresenter,
     StubEventPublisher,
-    StubHashService,
     StubRetrieveAdvertisementsMetricsPresenter,
     StubThirdPartyAuthService,
     StubTokenService,
@@ -117,6 +116,7 @@ import {
 } from "../persistence/first-launch-detector.js";
 import { Config } from "./config.js";
 import { GeoapifyService } from "../geoapify-services/geoapify-service.js";
+import { Argon2HashService } from "../persistence/argon2-hash-service.js";
 
 const prismaClient = await createPrismaClient(databaseConfigFromEnv());
 
@@ -698,9 +698,9 @@ export const container = Container.create()
     .register("prisma-client", [], () => prismaClient)
     .register(
         "auth-repository",
-        ["prisma-client", "logger"],
-        (prisma: PrismaClient, logger: Logger) =>
-            new PrismaAuthRepository(prisma, logger),
+        ["prisma-client", "hash-service", "logger"],
+        (prisma: PrismaClient, hashService: HashService, logger: Logger) =>
+            new PrismaAuthRepository(prisma, hashService, logger),
     )
     .register(
         "user-repository",
@@ -770,7 +770,7 @@ export const container = Container.create()
     //=======================================================================//
 
     .register("token-service", [], () => new StubTokenService())
-    .register("hash-service", [], () => new StubHashService())
+    .register("hash-service", [], () => new Argon2HashService())
     .register(
         "third-party-auth-service",
         [],
