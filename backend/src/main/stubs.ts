@@ -57,22 +57,3 @@ export class StubThirdPartyAuthService implements ThirdPartyAuthService {
     }
 }
 
-export class StubCreateNewAdvertisementPresenter implements CreateNewAdvertisementPresenter {
-    present(_advertisement: Advertisement): void {
-        notImplemented("StubCreateNewAdvertisementPresenter.present");
-    }
-    presentError(_error: Error): void {
-        notImplemented("StubCreateNewAdvertisementPresenter.presentError");
-    }
-}
-
-export class StubRetrieveAdvertisementsMetricsPresenter implements RetrieveAdvertisementsMetricsPresenter {
-    present(_data: AdvertisementsMetrics): void {
-        notImplemented("StubRetrieveAdvertisementsMetricsPresenter.present");
-    }
-    presentError(_error: Error): void {
-        notImplemented(
-            "StubRetrieveAdvertisementsMetricsPresenter.presentError",
-        );
-    }
-}
