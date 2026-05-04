@@ -35,10 +35,10 @@ export class SimpleLoginInteractor {
         const storedPassword =
             await this.authRegister.passwordRepository.readPassword(user);
         if (
-            !this.authRegister.hashService.verifyString(
+            !(await this.authRegister.hashService.verifyString(
                 password,
                 storedPassword,
-            )
+            ))
         ) {
             this.logger.warn(
                 `Attempted login as user ${email} with incorrect password`,
