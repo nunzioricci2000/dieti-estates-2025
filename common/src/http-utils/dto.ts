@@ -41,9 +41,9 @@ export class Validator {
 
     static validateEmail(email: string): boolean {
         const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
-        if(!email || regex.test(email)) {
+        if(!email || !regex.test(email)) {
             return false;
-        } 
+        }
         return true;
     }
 

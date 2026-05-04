@@ -39,7 +39,7 @@ export class BookVisitInteractor {
             }
         }
         this.publisher.publish(new BookVisitEvent(advertisementId));
-        this.presenter.present(advertisement.agent);
+        this.presenter.present(advertisement);
         this.logger.debug(
             `Booked visit for advertisement with id: ${advertisementId}`,
         );

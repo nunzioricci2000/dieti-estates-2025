@@ -1,7 +1,4 @@
-import { 
-    Admin, 
-    User 
-} from "@dieti-estates-2025/common";
+import { Admin, User } from "@dieti-estates-2025/common";
 import type {
     CreateNewAdminPresenter,
     FirstAdminConfig,
@@ -18,7 +15,6 @@ export class SetupFirstAdminInteractor {
     constructor(
         private config: FirstAdminConfig,
         private detector: FirstLaunchDetector,
-        private presenter: CreateNewAdminPresenter,
         private adminCreator: CreatorOf<"Admin", Admin, { email: string }>,
         private passwordRepository: RepositoryOf<"Password", string, User>,
         private logger: Logger,
@@ -27,7 +23,7 @@ export class SetupFirstAdminInteractor {
     }
 
     async execute(): Promise<Admin | null> {
-        if (!this.detector.isFirstLaunch()) {
+        if (!(await this.detector.isFirstLaunch())) {
             return null;
         }
 
@@ -41,15 +37,13 @@ export class SetupFirstAdminInteractor {
             this.logger.error(
                 "Invalid configuration provided for first admin credentials.",
             );
-            this.presenter.presentError(new InvalidConfigurationError());
-            return null;
+            throw new InvalidConfigurationError();
         }
 
         const admin = await this.adminCreator.createAdmin(
             new Admin(email, username),
         );
         await this.passwordRepository.createPassword(admin, password);
-        this.presenter.present(admin);
         this.logger.info("First admin created!");
         return admin;
     }

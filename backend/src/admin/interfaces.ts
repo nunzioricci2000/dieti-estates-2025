@@ -7,7 +7,7 @@ export interface FirstAdminConfig {
 }
 
 export interface FirstLaunchDetector {
-    isFirstLaunch(): boolean;
+    isFirstLaunch(): Promise<boolean>;
 }
 
 export interface CreateNewAdminPresenter {

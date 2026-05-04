@@ -19,62 +19,52 @@ export class ExpressAPIBuilder implements APIBuilder<ExpressAPI> {
     }
 
     buildAuthRouter(): void {
-        this.app.post("/auth/signup", (req, _, next) => {
-            req.authController.signup(this.buildRequest(req));
-            next();
+        this.app.post("/auth/signup", async (req) => {
+            await req.authController.signup(this.buildRequest(req));
         });
-        this.app.post("/auth/login", (req, _, next) => {
-            req.authController.login(this.buildRequest(req));
-            next();
+        this.app.post("/auth/login", async (req) => {
+            await req.authController.login(this.buildRequest(req));
         });
     }
 
     buildAdvertisementRouter(): void {
-        this.app.get("/advertisements", (req, _, next) => {
-            req.advertisementController.getAdvertisements(
+        this.app.get("/advertisements", async (req) => {
+            await req.advertisementController.getAdvertisements(
                 this.buildRequest(req),
             );
-            next();
         });
-        this.app.get("/advertisements/:id", (req, _, next) => {
-            req.advertisementController.getAdvertisement(
+        this.app.get("/advertisements/:id", async (req) => {
+            await req.advertisementController.getAdvertisement(
                 this.buildRequest(req),
             );
-            next();
         });
-        this.app.post("/advertisements/:id/offers", (req, _, next) => {
-            req.advertisementController.postOffer(this.buildRequest(req));
-            next();
+        this.app.post("/advertisements/:id/offers", async (req) => {
+            await req.advertisementController.postOffer(this.buildRequest(req));
         });
-        this.app.post("/advertisements", (req, _, next) => {
-            req.advertisementController.postAdvertisement(
+        this.app.post("/advertisements", async (req) => {
+            await req.advertisementController.postAdvertisement(
                 this.buildRequest(req),
             );
-            next();
         });
-        this.app.patch("/advertisements/:id", (req, _, next) => {
-            req.advertisementController.patchAdvertisement(
+        this.app.patch("/advertisements/:id", async (req) => {
+            await req.advertisementController.patchAdvertisement(
                 this.buildRequest(req),
             );
-            next();
         });
     }
 
     buildAdminRouter(): void {
-        this.app.post("/admins", (req, _, next) => {
-            req.adminController.postAdmin(this.buildRequest(req));
-            next();
+        this.app.post("/admins", async (req) => {
+            await req.adminController.postAdmin(this.buildRequest(req));
         });
-        this.app.patch("/admins", (req, _, next) => {
-            req.adminController.patchAdmin(this.buildRequest(req));
-            next();
+        this.app.patch("/admins", async (req) => {
+            await req.adminController.patchAdmin(this.buildRequest(req));
         });
     }
 
     buildAgentRouter(): void {
-        this.app.post("/agents", (req, _, next) => {
-            req.agentController.postAgent(this.buildRequest(req));
-            next();
+        this.app.post("/agents", async (req) => {
+            await req.agentController.postAgent(this.buildRequest(req));
         });
     }
 

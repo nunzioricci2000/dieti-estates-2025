@@ -17,7 +17,9 @@ export class CreateNewAdvertisementInteractor {
     }
 
     async execute(advertisement: Advertisement): Promise<Advertisement> {
-        const POIs = this.detectPOIsService.detectPOIs(advertisement.location);
+        const POIs = await this.detectPOIsService.detectPOIs(
+            advertisement.location,
+        );
         advertisement.nearbyPOIs = POIs;
         const newAd = await this.repository.createAdvertisement(advertisement);
         this.presenter.present(newAd);

@@ -26,6 +26,9 @@ export class SimpleLoginInteractor {
                 return null;
             } else {
                 this.logger.error("Unexpected error occurred");
+                this.presenter.presentError(
+                    err instanceof Error ? err : new Error("Unknown error"),
+                );
                 throw err;
             }
         }

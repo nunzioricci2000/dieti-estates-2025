@@ -10,7 +10,7 @@ export class ExpressResponseManager implements ResponseManager {
     }
 
     sendResponse(response: Response): void {
-        for(const entry of response.headers.entries()) {
+        for (const entry of response.headers.entries()) {
             this.response.set(entry[0], entry[1]);
         }
         this.response.status(response.code).json(response.body);

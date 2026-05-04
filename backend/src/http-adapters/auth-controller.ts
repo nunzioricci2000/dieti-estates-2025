@@ -1,4 +1,10 @@
-import { type Logger, Request, Response, LoginRequestDTO, SignUpRequestDTO } from "@dieti-estates-2025/common";
+import {
+    type Logger,
+    Request,
+    Response,
+    LoginRequestDTO,
+    SignUpRequestDTO,
+} from "@dieti-estates-2025/common";
 import type { SimpleLoginInteractor } from "../auth/simple-login-interactor.js";
 import type { SimpleSignupInteractor } from "../auth/simple-signup-interactor.js";
 import type { ThirdPartyLoginInteractor } from "../auth/third-party-login-interactor.js";
@@ -20,15 +26,15 @@ export class AuthController {
     async login(request: Request) {
         const credentials = LoginRequestDTO.fromJSON(request.body);
 
-        if(!credentials) {
+        if (!credentials) {
             this.logger.warn("Invalid request");
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
 
         this.logger.debug("Calling interactor");
-        this.simpleLoginInteractor.execute(
-            credentials.email, 
+        await this.simpleLoginInteractor.execute(
+            credentials.email,
             credentials.password,
         );
     }
@@ -36,16 +42,16 @@ export class AuthController {
     async signup(request: Request) {
         const credentials = SignUpRequestDTO.fromJSON(request.body);
 
-        if(!credentials) {
+        if (!credentials) {
             this.logger.warn("Invalid request");
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
 
         this.logger.debug("Calling interactor");
-        this.simpleSignupInteractor.execute(
-            credentials.username, 
-            credentials.email, 
+        await this.simpleSignupInteractor.execute(
+            credentials.username,
+            credentials.email,
             credentials.password,
         );
     }
