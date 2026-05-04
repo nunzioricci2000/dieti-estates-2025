@@ -5,7 +5,6 @@ import type {
 } from "@dieti-estates-2025/common";
 import { User } from "@dieti-estates-2025/common";
 import type {
-    HashService,
     ThirdPartyAuthService,
     TokenService,
 } from "../auth/interfaces.js";
@@ -34,15 +33,6 @@ export class StubTokenService implements TokenService {
         } catch (e) {
             return notImplemented("StubTokenService.verifyToken");
         }
-    }
-}
-
-export class StubHashService implements HashService {
-    hashString(value: string): string {
-        return value;
-    }
-    verifyString(value: string, hash: string): boolean {
-        return value === hash;
     }
 }
 

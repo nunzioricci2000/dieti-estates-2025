@@ -21,6 +21,6 @@ export interface ThirdPartyAuthService {
 }
 
 export interface HashService {
-    hashString(value: string): string;
-    verifyString(value: string, hash: string): boolean;
+    hashString(value: string): Promise<string>;
+    verifyString(value: string, hash: string): Promise<boolean>;
 }

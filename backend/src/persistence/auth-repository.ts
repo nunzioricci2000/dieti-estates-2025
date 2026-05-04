@@ -13,6 +13,7 @@ import {
 } from "./generated/prisma/client.js";
 import { UserRole } from "./generated/prisma/enums.js";
 import type { AdminCounter } from "./first-launch-detector.js";
+import type { HashService } from "../auth/interfaces.js";
 
 export class PrismaAuthRepository
     implements
@@ -26,6 +27,7 @@ export class PrismaAuthRepository
 
     constructor(
         private prisma: PrismaClient,
+        private hashService: HashService,
         private logger: Logger,
     ) {
         this.logger.info("AuthRepository created");
@@ -75,7 +77,7 @@ export class PrismaAuthRepository
 
         const updated = await this.prisma.user.update({
             where: { email: user.email },
-            data: { passwordHash: password },
+            data: { passwordHash: await this.hashService.hashString(password) },
         });
 
         this.logger.info(`Password created for user ${user.email}`);
@@ -101,7 +103,9 @@ export class PrismaAuthRepository
 
         await this.prisma.user.update({
             where: { email: user.email },
-            data: { passwordHash: newPassword },
+            data: {
+                passwordHash: await this.hashService.hashString(newPassword),
+            },
         });
 
         this.logger.info(`Password updated for user ${user.email}`);
