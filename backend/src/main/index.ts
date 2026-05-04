@@ -828,6 +828,25 @@ const diMiddleware = (
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                                           *
+ *                          ERROR HANDLING MIDDLEWARE                        *
+ *                                                                           *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+const errorHandlingMiddleware = (
+    err: Error,
+    _: ExpressRequest,
+    res: ExpressResponse,
+    next: NextFunction,
+): void => {
+    const logger = container.get("logger");
+    logger.error(`An unexpected error occurred: ${err.message}`, {
+        stack: err.stack,
+    });
+    res.status(500).json({ error: "An unexpected error occurred" });
+};
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                                                                           *
  *                               PREBOOTSTRAP                                *
  *                                                                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -842,6 +861,7 @@ await container.get("setup-first-admin-interactor").execute();
 
 const app = container.get("express-app");
 app.use(diMiddleware);
+app.use(errorHandlingMiddleware);
 const apiBuilder = container.get("api-builder");
 const apiDirector = container.get("api-builder-director");
 const api = apiDirector.makeAPI(apiBuilder);
