@@ -30,6 +30,8 @@ export const advertisementMultipartHandler: RequestHandler = (req, res, next) =>
     if (typeof req.body.agentEmail !== "string" && typeof req.body.email === "string") {
         req.body.agentEmail = req.body.email;
     }
+
+    req.body.agent = req.user;
     next();
 };
 

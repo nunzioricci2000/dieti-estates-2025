@@ -1,4 +1,4 @@
-import type { Advertisement } from "@dieti-estates-2025/common";
+import type { Advertisement, Agent } from "@dieti-estates-2025/common";
 import type { Logger } from "@dieti-estates-2025/common";
 import type {
     AdvertisementRepository,
@@ -16,7 +16,8 @@ export class CreateNewAdvertisementInteractor {
         logger.info("Created!");
     }
 
-    async execute(advertisement: Advertisement): Promise<Advertisement> {
+    async execute(advertisement: Advertisement, agent: Agent): Promise<Advertisement> {
+        advertisement.agent = agent;
         const POIs = await this.detectPOIsService.detectPOIs(
             advertisement.location,
         );
