@@ -87,6 +87,8 @@ import { HTTPLoginPresenter } from "../http-adapters/http-login-presenter.js";
 import { HTTPMakeOfferPresenter } from "../http-adapters/http-make-offer-presenter.js";
 import { HTTPSignupPresenter } from "../http-adapters/http-sign-up-presenter.js";
 import { HTTPViewAdvertisementPresenter } from "../http-adapters/http-view-advertisement-presenter.js";
+import { HTTPRetrieveAdvertisementsMetricsPresenter } from "../http-adapters/http-retrieve-advertisements-metrics-presenter.js";
+import { HTTPCreateNewAdvertisementPresenter } from "../http-adapters/http-create-new-advertisement-presenter.js";
 import type { ResponseManager } from "../http-adapters/response-manager.js";
 
 import { APIBuilderDirector } from "../api/api-builder.js";
@@ -103,9 +105,7 @@ import { PrismaClient } from "../persistence/generated/prisma/client.js";
 import { createPrismaClient } from "../persistence/create-prisma-client.js";
 
 import {
-    StubCreateNewAdvertisementPresenter,
     StubEventPublisher,
-    StubRetrieveAdvertisementsMetricsPresenter,
     StubThirdPartyAuthService,
     StubTokenService,
 } from "./stubs.js";
@@ -559,6 +559,18 @@ export const container = Container.create()
         (responseManager: ResponseManager, logger: Logger) =>
             new HTTPBookVisitPresenter(responseManager, logger),
     )
+    .register(
+        "create-new-advertisement-presenter",
+        ["response-manager", "logger"],
+        (responseManager: ResponseManager, logger: Logger) =>
+            new HTTPCreateNewAdvertisementPresenter(responseManager, logger),
+    )
+    .register(
+        "retrieve-advertisements-metrics-presenter",
+        ["response-manager", "logger"],
+        (responseManager: ResponseManager, logger: Logger) =>
+            new HTTPRetrieveAdvertisementsMetricsPresenter(responseManager, logger),
+    )
 
     //=======================================================================//
     //                          HTTP Controllers                             //
@@ -778,16 +790,6 @@ export const container = Container.create()
     )
     .register("event-publisher", [], () => new StubEventPublisher())
     .register("detect-pois-service", [], () => new GeoapifyService())
-    .register(
-        "create-new-advertisement-presenter",
-        [],
-        () => new StubCreateNewAdvertisementPresenter(),
-    )
-    .register(
-        "retrieve-advertisements-metrics-presenter",
-        [],
-        () => new StubRetrieveAdvertisementsMetricsPresenter(),
-    )
 
     //=======================================================================//
     //                                  API                                  //

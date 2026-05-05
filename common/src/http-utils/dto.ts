@@ -360,7 +360,6 @@ class SendEmailDTO {
     }
 
     toJSON(json?: any): any {
-
         json = this.agent.toJSON(json);
         this.advertisement.toJSON(json);
         return json;
@@ -399,5 +398,14 @@ class AdvertisementMetricsDTO {
             }
         }
         return new AdvertisementMetricsDTO(totalVisitsRequested, totalViews, ads);
+    }
+
+        toJSON(json?: any): any {
+        if(!json) {
+            json = {};
+        }
+        json.advertisements = this.advertisements.map((dto) => dto.toJSON());
+        json.totalVisitsRequested = this.totalVisitsRequested;
+        json.totalViews = this.totalViews;
     }
 }

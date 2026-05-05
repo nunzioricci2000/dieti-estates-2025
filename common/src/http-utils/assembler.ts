@@ -3,7 +3,7 @@ import { Advertisement, Rental, Sale } from "../entities/advertisement.js";
 import { Image } from "../entities/image.js";
 import { Price } from "../entities/price.js";
 import { Period, RentPrice } from "../entities/rent-price.js";
-import { User } from "../entities/user.js";
+import { Agent, User } from "../entities/user.js";
 import { AdvertisementDTO, UserDTO } from "./dto.js";
 
 export { 
