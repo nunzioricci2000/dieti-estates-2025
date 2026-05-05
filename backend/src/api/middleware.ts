@@ -7,7 +7,9 @@ export const advertisementMultipartHandler: RequestHandler = (req, res, next) =>
         return res.status(400).json({"error": "missing images"});
     }
 
-    req.body.images = req.files.map((f: any) => f.path) as string[];
+    req.body.images = req.files.map(f => 
+        `http://${process.env.IP!}:${process.env.PORT}/${f.path.replace("images/", "")}`
+    ) as string[];
     req.body.dimensions = Number(req.body.dimensions);
     req.body.numberOfRooms = Number(req.body.numberOfRooms);
     req.body.price = Number(req.body.price);

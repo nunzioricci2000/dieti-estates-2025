@@ -905,6 +905,7 @@ await container.get("setup-first-admin-interactor").execute();
 const app = container.get("express-app");
 app.use(diMiddleware);
 app.use(container.get("authentication-handler"));
+app.use(express.static("images"));
 app.use(errorHandlingMiddleware);
 const apiBuilder = container.get("api-builder");
 const apiDirector = container.get("api-builder-director");
