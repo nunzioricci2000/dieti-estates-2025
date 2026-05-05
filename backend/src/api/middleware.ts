@@ -74,6 +74,6 @@ export function authorizationHandlerFactory(
         if(authRequirement === "agent" && user instanceof Agent) {
             return next();
         } 
-        return res.status(401).json({"error": "unauthenticated"});
+        return res.status(401).json({"error": "unauthorized"});
     }
 }
