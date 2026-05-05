@@ -52,7 +52,7 @@ export class ExpressAPIBuilder implements APIBuilder<ExpressAPI> {
             filename:  (req, file, cb) => cb(null, Date.now() + "-" + file.originalname)
         })
         const upload = multer({ storage });
-        this.app.post("/advertisements", upload.array("images", 10), this.agentAthorizationMiddlware, advertisementMultipartHandler, async (req) => {
+        this.app.post("/advertisements", this.agentAthorizationMiddlware, upload.array("images", 10), advertisementMultipartHandler, async (req) => {
             await req.advertisementController.postAdvertisement(
                 this.buildRequest(req),
             );

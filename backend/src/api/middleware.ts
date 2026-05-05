@@ -38,21 +38,22 @@ export const advertisementMultipartHandler: RequestHandler = (req, res, next) =>
 export function authenticationHandlerFactory(
     tokenService: TokenService, 
 ): RequestHandler {
-    return (req, _res, next) => {
+    return async (req, _res, next) => {
         const authHeader = req.headers.authorization;
-        if (authHeader === undefined || authHeader.startsWith("Bearer ")) {
+        if (authHeader === undefined || !authHeader.startsWith("Bearer ")) {
             return next();
         }
 
         const jwt = authHeader.replace("Bearer ", "");
         let user: User;
         try {
-            user = tokenService.verifyToken(jwt);
+            user = await tokenService.verifyToken(jwt);
         } catch(e) {
             // Invalid jwt are ignored and the request is treated as unauthenticated
             return next();
         }
         req.user = user;
+        next();
     }
 }
 

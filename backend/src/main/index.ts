@@ -107,7 +107,6 @@ import { createPrismaClient } from "../persistence/create-prisma-client.js";
 import {
     StubEventPublisher,
     StubThirdPartyAuthService,
-    StubTokenService,
 } from "./stubs.js";
 import { databaseConfigFromEnv } from "../persistence/database-config.js";
 import {
@@ -119,7 +118,7 @@ import { GeoapifyService } from "../geoapify-services/geoapify-service.js";
 import { Argon2HashService } from "../persistence/argon2-hash-service.js";
 import { authenticationHandlerFactory } from "../api/middleware.js";
 import fs from "fs";
-import multer from "multer";
+import { JWTTokenService } from "./jwt-token-service.js";
 
 const prismaClient = await createPrismaClient(databaseConfigFromEnv());
 
@@ -784,7 +783,6 @@ export const container = Container.create()
     //                            Service Stubs                              //
     //=======================================================================//
 
-    .register("token-service", [], () => new StubTokenService())
     .register("hash-service", [], () => new Argon2HashService())
     .register(
         "third-party-auth-service",
@@ -814,6 +812,12 @@ export const container = Container.create()
         ["token-service"], 
         (tokenService: TokenService) => 
             authenticationHandlerFactory(tokenService)
+    )
+    .register(
+        "token-service", 
+        ["user-repository"], 
+        (userRepository: RepositoryOf<"User", User, {email: string}>) => 
+            new JWTTokenService(process.env.JWT_SECRET!, userRepository)
     );
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

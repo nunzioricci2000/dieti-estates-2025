@@ -14,22 +14,6 @@ const notImplemented = (name: string): never => {
     throw new Error(`${name} is a stub — provide a real implementation`);
 };
 
-export class StubTokenService implements TokenService {
-    generateToken(user: User): string {
-        const payload = { email: user.email, username: user.username };
-        return Buffer.from(JSON.stringify(payload)).toString("base64");
-    }
-    verifyToken(token: string): User {
-        try {
-            const decoded = Buffer.from(token, "base64").toString("utf8");
-            const obj = JSON.parse(decoded);
-            return new User(obj.email, obj.username);
-        } catch (e) {
-            return notImplemented("StubTokenService.verifyToken");
-        }
-    }
-}
-
 export class StubEventPublisher implements EventPublisher {
     publish(_event: Event): void { }
     addListener(_listener: EventListener): void { }
