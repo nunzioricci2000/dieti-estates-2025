@@ -102,7 +102,7 @@ class PasswordDTO {
         return new PasswordDTO(password);
     }
 
-    toJSON(json?: any): any {
+    toResponseObject(json?: any): any {
         if(!json) {
             json = {}
         }
@@ -132,7 +132,7 @@ class UserDTO {
         return new UserDTO(username, email);
     }
 
-    toJSON(json?: any): any {
+    toResponseObject(json?: any): any {
         if(!json) {
             json = {};
         }
@@ -158,7 +158,7 @@ class AuthResponseDTO {
         return new AuthResponseDTO(token);
     }
 
-    toJSON(json?: any): Response {
+    toResponseObject(json?: any): Response {
         if(!json) {
             json = {};
         }
@@ -191,7 +191,7 @@ class LoginRequestDTO {
         return new LoginRequestDTO(email, password);
     }
 
-    toJSON(json?: any): any {
+    toResponseObject(json?: any): any {
         if(!json) {
             json = {}
         }
@@ -229,7 +229,7 @@ class SignUpRequestDTO {
         return new SignUpRequestDTO(username, email, password);
     }
 
-    toJSON(json: any): any {
+    toResponseObject(json: any): any {
         if(!json) {
             json = {}
         }
@@ -324,7 +324,7 @@ class AdvertisementDTO {
     }
 
 
-    toJSON(json?: any): any {
+    toResponseObject(json?: any): any {
         if(!json) {
             json = {}
         }
@@ -364,9 +364,9 @@ class SendEmailDTO {
         return agent && advertisement && new SendEmailDTO(agent, advertisement);
     }
 
-    toJSON(json?: any): any {
-        json = this.agent.toJSON(json);
-        this.advertisement.toJSON(json);
+    toResponseObject(json?: any): any {
+        json = this.agent.toResponseObject(json);
+        this.advertisement.toResponseObject(json);
         return json;
     }
 }
@@ -405,11 +405,11 @@ class AdvertisementMetricsDTO {
         return new AdvertisementMetricsDTO(totalVisitsRequested, totalViews, ads);
     }
 
-        toJSON(json?: any): any {
+        toResponseObject(json?: any): any {
         if(!json) {
             json = {};
         }
-        json.advertisements = this.advertisements.map((dto) => dto.toJSON());
+        json.advertisements = this.advertisements.map((dto) => dto.toResponseObject());
         json.totalVisitsRequested = this.totalVisitsRequested;
         json.totalViews = this.totalViews;
     }

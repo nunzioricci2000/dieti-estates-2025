@@ -68,7 +68,7 @@ export class ExpressAPIBuilder implements APIBuilder<ExpressAPI> {
         this.app.post("/admins", this.adminAthorizationMiddlware, async (req) => {
             await req.adminController.postAdmin(this.buildRequest(req));
         });
-        this.app.patch("/admins", this.adminAthorizationMiddlware, async (req) => {
+        this.app.patch("/admins/me/password", this.adminAthorizationMiddlware, async (req) => {
             await req.adminController.patchAdmin(this.buildRequest(req));
         });
     }
