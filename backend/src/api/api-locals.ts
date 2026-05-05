@@ -1,3 +1,4 @@
+import type { User } from "@dieti-estates-2025/common";
 import type { AdminController } from "../http-adapters/admin-controller.js";
 import type { AdvertisementController } from "../http-adapters/advertisement-controller.js";
 import type { AgentController } from "../http-adapters/agent-controller.js";
@@ -9,5 +10,6 @@ declare module "express-serve-static-core" {
         advertisementController: AdvertisementController;
         adminController: AdminController;
         agentController: AgentController;
+        user?: User,
     }
 }

@@ -8,12 +8,6 @@ import type {
     ThirdPartyAuthService,
     TokenService,
 } from "../auth/interfaces.js";
-import type {
-    CreateNewAdvertisementPresenter,
-    RetrieveAdvertisementsMetricsPresenter,
-} from "../dashboard/interfaces.js";
-import type { AdvertisementsMetrics } from "../dashboard/data-objects.js";
-import type { Advertisement } from "@dieti-estates-2025/common";
 import type { ThirdPartyIdentity } from "../auth/data-objects.js";
 
 const notImplemented = (name: string): never => {

@@ -1,8 +1,10 @@
 import type { RequestHandler } from "express";
+import type { TokenService } from "../auth/interfaces.js";
+import { Admin, Agent, type User } from "@dieti-estates-2025/common";
 
 export const advertisementMultipartHandler: RequestHandler = (req, res, next) => {
     if (!req.files || !Array.isArray(req.files)) {
-        return res.status(400).json({"message": "missing images"});
+        return res.status(400).json({"error": "missing images"});
     }
 
     req.body.images = req.files.map((f: any) => f.path) as string[];
@@ -30,3 +32,46 @@ export const advertisementMultipartHandler: RequestHandler = (req, res, next) =>
     }
     next();
 };
+
+export function authenticationHandlerFactory(
+    tokenService: TokenService, 
+): RequestHandler {
+    return (req, _res, next) => {
+        const authHeader = req.headers.authorization;
+        if (authHeader === undefined || authHeader.startsWith("Bearer ")) {
+            return next();
+        }
+
+        const jwt = authHeader.replace("Bearer ", "");
+        let user: User;
+        try {
+            user = tokenService.verifyToken(jwt);
+        } catch(e) {
+            // Invalid jwt are ignored and the request is treated as unauthenticated
+            return next();
+        }
+        req.user = user;
+    }
+}
+
+export function authorizationHandlerFactory(
+    authRequirement: "user" | "admin" | "agent",
+): RequestHandler {
+    return (req, res, next) => {
+        const user = req.user;
+        if (user === undefined) {
+            return res.status(401).json({"error": "unauthenticated"});
+        }
+        if(authRequirement === "user") {
+            // All user types allowed
+            return next();            
+        }
+        if(authRequirement === "admin" && user instanceof Admin) {
+            return next();
+        }
+        if(authRequirement === "agent" && user instanceof Agent) {
+            return next();
+        } 
+        return res.status(401).json({"error": "unauthenticated"});
+    }
+}
