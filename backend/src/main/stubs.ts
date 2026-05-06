@@ -3,10 +3,8 @@ import type {
     EventListener,
     EventPublisher,
 } from "@dieti-estates-2025/common";
-import { User } from "@dieti-estates-2025/common";
 import type {
     ThirdPartyAuthService,
-    TokenService,
 } from "../auth/interfaces.js";
 import type { ThirdPartyIdentity } from "../auth/data-objects.js";
 

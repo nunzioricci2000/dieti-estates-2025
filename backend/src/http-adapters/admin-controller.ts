@@ -33,21 +33,14 @@ export class AdminController {
 
     async patchAdmin(request: Request) {
         const newPassword = PasswordDTO.fromObject(request.body);
-        const jwt = request.headers.get("authorization")?.replace("Bearer ", "");
-        if(!newPassword || !jwt) {
-            this.logger.warn("Invalid request");
-            this.responseManager.sendResponse(Response.INVALID_REQUEST);
-            return;
-        }
-        
-        const user = this.tokenService.verifyToken(jwt);
-        if(!(user instanceof Admin)) {
+        const admin = request.body.admin;
+        if(!newPassword) {
             this.logger.warn("Invalid request");
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
         
         this.logger.debug("Sending response");
-        this.editAdminPassword.execute(user, newPassword.password);
+        this.editAdminPassword.execute(admin, newPassword.password);
     }
 }
