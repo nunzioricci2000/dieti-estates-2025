@@ -42,9 +42,10 @@ export class AdvertisementController {
     }
 
     async getAdvertisements(request: Request) {
-        if(request.body.include === "metrics") {
+        if(request.queryParams.get("include") === "metrics") {
             this.logger.debug("Executing retrieve advertisement metrics");
             this.retrieveAdvertisementsMetricsInteractor.execute();
+            return;
         }
         let filters: SearchFilters = {};
         if(request.queryParams.size > 0) {

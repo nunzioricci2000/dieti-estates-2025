@@ -405,12 +405,13 @@ class AdvertisementMetricsDTO {
         return new AdvertisementMetricsDTO(totalVisitsRequested, totalViews, ads);
     }
 
-        toObject(json?: any): any {
+    toObject(json?: any): any {
         if(!json) {
             json = {};
         }
         json.advertisements = this.advertisements.map((dto) => dto.toObject());
         json.totalVisitsRequested = this.totalVisitsRequested;
         json.totalViews = this.totalViews;
+        return json;
     }
 }
