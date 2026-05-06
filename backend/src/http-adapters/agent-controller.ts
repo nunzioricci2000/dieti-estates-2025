@@ -12,7 +12,7 @@ export class AgentController {
     }
 
     async postAgent(request: Request) {
-        const agent =  SignUpRequestDTO.fromJSON(request.body);
+        const agent =  SignUpRequestDTO.fromObject(request.body);
         if(!agent) {
             this.logger.warn("Invalid request");
             this.responseManager.sendResponse(Response.INVALID_REQUEST);

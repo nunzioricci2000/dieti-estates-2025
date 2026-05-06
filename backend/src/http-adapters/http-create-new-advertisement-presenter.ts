@@ -12,7 +12,7 @@ export class HTTPCreateNewAdvertisementPresenter implements CreateNewAdvertiseme
 
     present(advertisement: Advertisement): void {
         const dto = AdvertisementAssembler.createDTO(advertisement);
-        const body = dto.toJSON();
+        const body = dto.toObject();
         const headers = new Map<string, string>();
 
         const res = new Response(200, body, headers);

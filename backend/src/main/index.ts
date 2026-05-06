@@ -107,7 +107,6 @@ import { createPrismaClient } from "../persistence/create-prisma-client.js";
 import {
     StubEventPublisher,
     StubThirdPartyAuthService,
-    StubTokenService,
 } from "./stubs.js";
 import { databaseConfigFromEnv } from "../persistence/database-config.js";
 import {
@@ -117,6 +116,9 @@ import {
 import { Config } from "./config.js";
 import { GeoapifyService } from "../geoapify-services/geoapify-service.js";
 import { Argon2HashService } from "../persistence/argon2-hash-service.js";
+import { authenticationHandlerFactory } from "../api/middleware.js";
+import fs from "fs";
+import { JWTTokenService } from "./jwt-token-service.js";
 
 const prismaClient = await createPrismaClient(databaseConfigFromEnv());
 
@@ -781,7 +783,6 @@ export const container = Container.create()
     //                            Service Stubs                              //
     //=======================================================================//
 
-    .register("token-service", [], () => new StubTokenService())
     .register("hash-service", [], () => new Argon2HashService())
     .register(
         "third-party-auth-service",
@@ -805,7 +806,19 @@ export const container = Container.create()
         ["express-app"],
         (app: express.Express) => new ExpressAPIBuilder(app),
     )
-    .register("api-builder-director", [], () => new APIBuilderDirector());
+    .register("api-builder-director", [], () => new APIBuilderDirector())
+    .register(
+        "authentication-handler", 
+        ["token-service"], 
+        (tokenService: TokenService) => 
+            authenticationHandlerFactory(tokenService)
+    )
+    .register(
+        "token-service", 
+        ["user-repository", "app-config"], 
+        (userRepository: RepositoryOf<"User", User, {email: string}>, config: Config) => 
+            new JWTTokenService(process.env.JWT_SECRET!, userRepository)
+    );
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                                                                           *
@@ -836,7 +849,7 @@ const diMiddleware = (
 
 const errorHandlingMiddleware = (
     err: Error,
-    _: ExpressRequest,
+    req: ExpressRequest,
     res: ExpressResponse,
     next: NextFunction,
 ): void => {
@@ -844,6 +857,34 @@ const errorHandlingMiddleware = (
     logger.error(`An unexpected error occurred: ${err.message}`, {
         stack: err.stack,
     });
+
+    try{
+        // Collect all file paths
+        if (req.file?.path) {
+            fs.unlinkSync(req.file.path);
+        }
+
+        if (req.files) {
+            if (Array.isArray(req.files)) {
+                for (const f of req.files) {
+                    if (f?.path) fs.unlinkSync(f.path);
+                }
+            } else if (typeof req.files === "object") {
+                for (const val of Object.values(req.files)) {
+                    if (Array.isArray(val)) {
+                        for (const f of val) {
+                            if (f?.path) fs.unlinkSync(f.path);
+                        }
+                    } else if ((val as any)?.path) {
+                        fs.unlinkSync((val as any).path);
+                    }
+                }
+            }
+        }
+    } catch(e) {
+        logger.error("Could not delete unused files:\n", e);
+    }
+
     res.status(500).json({ error: "An unexpected error occurred" });
 };
 
@@ -863,6 +904,8 @@ await container.get("setup-first-admin-interactor").execute();
 
 const app = container.get("express-app");
 app.use(diMiddleware);
+app.use(container.get("authentication-handler"));
+app.use(express.static("images"));
 app.use(errorHandlingMiddleware);
 const apiBuilder = container.get("api-builder");
 const apiDirector = container.get("api-builder-director");

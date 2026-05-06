@@ -13,7 +13,7 @@ export interface SignupPresenter {
 
 export interface TokenService {
     generateToken(user: User): string;
-    verifyToken(token: string): User;
+    verifyToken(token: string): Promise<User>;
 }
 
 export interface ThirdPartyAuthService {

@@ -60,21 +60,20 @@ export class GeoapifyService implements DetectPOIsService {
     ]
 
     async detectPOIs(location: Coordinates): Promise<string[]> {
-        var fetch = require('node-fetch');
-        var requestOptions = {
-            method: 'GET',
+        const requestOptions = {
+            method: 'GET' as const,
         };
         const response = await fetch(
             `https://api.geoapify.com/v2/places?categories=` +
-            `${this.filters.join(",")}`+ 
+            `${this.filters.join(",")}` + 
             `service,natural,pet&filter=circle:${location.latitude},${location.longitude},${this.radius}` + 
             `&bias=proximity:${location.latitude},${location.longitude}&limit=${this.limit}&apiKey=${this.apiKey}`,
             requestOptions
         ).then((response: Response) => response.json());
         // response is expected to have the array features
         const set = new Set<string>();
-        for(const feature of response.features) {
-            const categoryString = feature.properties.categories[1] as string;
+        for(const i in response.features) {
+            const categoryString = response.features[i].properties.categories[1] as string;
             const categories = categoryString.split(".");
             set.add(categories[1]!);
         }

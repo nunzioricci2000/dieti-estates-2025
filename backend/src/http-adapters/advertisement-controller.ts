@@ -42,9 +42,10 @@ export class AdvertisementController {
     }
 
     async getAdvertisements(request: Request) {
-        if(request.body.include === "metrics") {
+        if(request.queryParams.get("include") === "metrics") {
             this.logger.debug("Executing retrieve advertisement metrics");
             this.retrieveAdvertisementsMetricsInteractor.execute();
+            return;
         }
         let filters: SearchFilters = {};
         if(request.queryParams.size > 0) {
@@ -94,7 +95,8 @@ export class AdvertisementController {
     }
     
     async postAdvertisement(request: Request) {
-        const adDTO  = AdvertisementDTO.fromJSON(request.body)
+        const adDTO  = AdvertisementDTO.fromObject(request.body)
+        const agent = request.body.agent;
         if(!adDTO) {
             this.logger.warn("Invalid request");
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
@@ -102,7 +104,7 @@ export class AdvertisementController {
         }
         this.logger.debug("Calling interactors");
         const ad = AdvertisementAssembler.createDomainObject(adDTO);
-        this.createNewAdvertisementInteractor.execute(ad);
+        this.createNewAdvertisementInteractor.execute(ad, agent);
     }
     
     async patchAdvertisement(request: Request) {

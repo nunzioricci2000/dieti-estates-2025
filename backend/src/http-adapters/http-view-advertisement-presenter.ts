@@ -1,4 +1,4 @@
-import { type Logger, Rental, Sale, Advertisement, Response } from "@dieti-estates-2025/common";
+import { type Logger, Advertisement, Response, AdvertisementAssembler } from "@dieti-estates-2025/common";
 import type { ViewAdvertisementPresenter } from "../user/interfaces.js";
 import type { ResponseManager } from "./response-manager.js";
 import { AdvertisementNotExistsException } from "../user/errors.js";
@@ -12,26 +12,7 @@ export class HTTPViewAdvertisementPresenter implements ViewAdvertisementPresente
     }
 
     present(advertisement: Advertisement): void {
-        const body = {
-            address: advertisement.address,
-            city: advertisement.city,
-            coordinates: {
-                latitude: advertisement.location.latitude,
-                longitude: advertisement.location.longitude,
-            },
-            images: advertisement.images,
-            description: advertisement.description,
-            dimensions: advertisement.dimensions,
-            numberOfRooms: advertisement.numberOfRooms,
-            energyClass: advertisement.energyClass,
-            additionalServices: advertisement.additionalServices,
-            nearbyPOIs: advertisement.nearbyPOIs,
-            kind: 
-                advertisement instanceof Sale ? "sale" :
-                "rent",
-            price: advertisement instanceof Sale ? advertisement.price.value:
-                (advertisement as Rental).rentPrice.price.value, // TODO review this code
-        }
+        const body = AdvertisementAssembler.createDTO(advertisement);
         const headers = new Map<string, string>();
 
         const res = new Response(

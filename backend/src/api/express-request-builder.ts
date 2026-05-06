@@ -18,7 +18,7 @@ export class ExpressRequestBuilder implements RequestBuilder {
     }
 
     setBody(): void {
-        this.req.body = this.exprReq.body;
+        this.req.body = this.exprReq.body ?? {};
     }
 
     setPathParams(): void {
@@ -55,9 +55,10 @@ export class ExpressRequestBuilder implements RequestBuilder {
     }
 
     getResult(): Request {
-        if(!(this.req.method && this.req.path && this.req.body && this.req.headers && 
-            this.req.pathParams && this.req.queryParams
-        )) {
+        if(
+            this.req.method == undefined || this.req.path == undefined || this.req.body == undefined || 
+            this.req.headers == undefined || this.req.pathParams == undefined || this.req.queryParams == undefined
+        ) {
             throw new Error("Insufficient data");
         }
         return new Request(
