@@ -94,7 +94,7 @@ export class AdvertisementController {
     }
     
     async postAdvertisement(request: Request) {
-        const adDTO  = AdvertisementDTO.fromJSON(request.body)
+        const adDTO  = AdvertisementDTO.fromObject(request.body)
         const agent = request.body.agent;
         if(!adDTO) {
             this.logger.warn("Invalid request");

@@ -16,7 +16,7 @@ export class HTTPRetrieveAdvertisementsMetricsPresenter implements RetrieveAdver
             data.totalVisitRequested, 
             data.totalViews, 
             data.advertisements.map((ad) => AdvertisementAssembler.createDTO(ad)));
-        const body = dto.toJSON();
+        const body = dto.toObject();
         const headers = new Map<string, string>();
 
         const res = new Response(200, body, headers);

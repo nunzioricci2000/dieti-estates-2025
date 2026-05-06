@@ -90,7 +90,7 @@ class PasswordDTO {
         this.password = password;
     }
 
-    static fromJSON(json: any): PasswordDTO | undefined {
+    static fromObject(json: any): PasswordDTO | undefined {
         if(!Validator.hasFields(json, "string", "password")) {
             return undefined;
         }
@@ -102,7 +102,7 @@ class PasswordDTO {
         return new PasswordDTO(password);
     }
 
-    toResponseObject(json?: any): any {
+    toObject(json?: any): any {
         if(!json) {
             json = {}
         }
@@ -120,7 +120,7 @@ class UserDTO {
         this.email = email;
     }
 
-    static fromJSON(json: any): UserDTO | undefined {
+    static fromObject(json: any): UserDTO | undefined {
         if(!Validator.hasFields(json, "string", "username", "email")) {
             return undefined;
         }
@@ -132,7 +132,7 @@ class UserDTO {
         return new UserDTO(username, email);
     }
 
-    toResponseObject(json?: any): any {
+    toObject(json?: any): any {
         if(!json) {
             json = {};
         }
@@ -149,7 +149,7 @@ class AuthResponseDTO {
         this.token = token;
     }
 
-    static fromJSON(json: any): AuthResponseDTO | undefined {
+    static fromObject(json: any): AuthResponseDTO | undefined {
         if(!Validator.hasFields(json, "string", "token")) {
             return undefined;
         }
@@ -158,7 +158,7 @@ class AuthResponseDTO {
         return new AuthResponseDTO(token);
     }
 
-    toResponseObject(json?: any): Response {
+    toObject(json?: any): Response {
         if(!json) {
             json = {};
         }
@@ -176,7 +176,7 @@ class LoginRequestDTO {
         this.password = password;
     }
 
-    static fromJSON(json: any): LoginRequestDTO | undefined {
+    static fromObject(json: any): LoginRequestDTO | undefined {
         if(!Validator.hasFields(json, "string", "email", "password")) {
             return undefined;
         }
@@ -191,7 +191,7 @@ class LoginRequestDTO {
         return new LoginRequestDTO(email, password);
     }
 
-    toResponseObject(json?: any): any {
+    toObject(json?: any): any {
         if(!json) {
             json = {}
         }
@@ -212,7 +212,7 @@ class SignUpRequestDTO {
         this.password = password;
     }
 
-    static fromJSON(json: any): SignUpRequestDTO | undefined {
+    static fromObject(json: any): SignUpRequestDTO | undefined {
         if(!Validator.hasFields(json, "string", "username", "email", "password")) {
             return undefined;
         }
@@ -229,7 +229,7 @@ class SignUpRequestDTO {
         return new SignUpRequestDTO(username, email, password);
     }
 
-    toResponseObject(json: any): any {
+    toObject(json: any): any {
         if(!json) {
             json = {}
         }
@@ -279,7 +279,7 @@ class AdvertisementDTO {
 
     }
 
-    static fromJSON(json: any): AdvertisementDTO | undefined {
+    static fromObject(json: any): AdvertisementDTO | undefined {
         if(!(Validator.hasFields(json, "string", "address", "city", "description", "energyClass", "kind") && 
             Validator.hasFields(json, "number", "dimensions", "numberOfRooms", "price") &&
             Validator.hasFields(json, "array", "images", "additionalServices") &&
@@ -324,7 +324,7 @@ class AdvertisementDTO {
     }
 
 
-    toResponseObject(json?: any): any {
+    toObject(json?: any): any {
         if(!json) {
             json = {}
         }
@@ -357,16 +357,16 @@ class SendEmailDTO {
         this.advertisement = advertisement;
     }
 
-    static fromJSON(json: any): SendEmailDTO | undefined {
-        const agent = UserDTO.fromJSON(json)
-        const advertisement = AdvertisementDTO.fromJSON(json);
+    static fromObject(json: any): SendEmailDTO | undefined {
+        const agent = UserDTO.fromObject(json)
+        const advertisement = AdvertisementDTO.fromObject(json);
 
         return agent && advertisement && new SendEmailDTO(agent, advertisement);
     }
 
-    toResponseObject(json?: any): any {
-        json = this.agent.toResponseObject(json);
-        this.advertisement.toResponseObject(json);
+    toObject(json?: any): any {
+        json = this.agent.toObject(json);
+        this.advertisement.toObject(json);
         return json;
     }
 }
@@ -382,7 +382,7 @@ class AdvertisementMetricsDTO {
         this.advertisements = advertisements;
     }
 
-    static fromJSON(json: any): AdvertisementMetricsDTO | undefined {
+    static fromObject(json: any): AdvertisementMetricsDTO | undefined {
         if(!(Validator.hasFields(json, "number", "totalVisitsRequested", "totalViews")) &&
             Validator.hasFields(json, "array", "advertisements")
         ) {
@@ -395,7 +395,7 @@ class AdvertisementMetricsDTO {
         }
         const ads: AdvertisementDTO[] = [];
         for(const adJSON of json.advertisements) {
-            const ad = AdvertisementDTO.fromJSON(json);
+            const ad = AdvertisementDTO.fromObject(json);
             if(ad === undefined) {
                 return undefined;
             } else {
@@ -405,11 +405,11 @@ class AdvertisementMetricsDTO {
         return new AdvertisementMetricsDTO(totalVisitsRequested, totalViews, ads);
     }
 
-        toResponseObject(json?: any): any {
+        toObject(json?: any): any {
         if(!json) {
             json = {};
         }
-        json.advertisements = this.advertisements.map((dto) => dto.toResponseObject());
+        json.advertisements = this.advertisements.map((dto) => dto.toObject());
         json.totalVisitsRequested = this.totalVisitsRequested;
         json.totalViews = this.totalViews;
     }

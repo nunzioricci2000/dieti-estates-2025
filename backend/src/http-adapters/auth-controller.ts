@@ -24,7 +24,7 @@ export class AuthController {
     }
 
     async login(request: Request) {
-        const credentials = LoginRequestDTO.fromJSON(request.body);
+        const credentials = LoginRequestDTO.fromObject(request.body);
 
         if (!credentials) {
             this.logger.warn("Invalid request");
@@ -40,7 +40,7 @@ export class AuthController {
     }
 
     async signup(request: Request) {
-        const credentials = SignUpRequestDTO.fromJSON(request.body);
+        const credentials = SignUpRequestDTO.fromObject(request.body);
 
         if (!credentials) {
             this.logger.warn("Invalid request");

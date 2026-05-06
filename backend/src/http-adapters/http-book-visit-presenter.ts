@@ -15,8 +15,8 @@ export class HTTPBookVisitPresenter implements BookVisitPresenter {
         const adDTO = AdvertisementAssembler.createDTO(advertisement);
         const agentDTO = UserAssembler.createDTO(advertisement.agent);
         const body = {
-            agent: agentDTO.toJSON(),
-            advertisement: adDTO.toJSON(),
+            agent: agentDTO.toObject(),
+            advertisement: adDTO.toObject(),
         }
         const headers = new Map<string, string>();
 
