@@ -1,16 +1,19 @@
-import jwt, { type JwtPayload } from "jsonwebtoken";
+import jwt, { type JwtPayload, type SignOptions } from "jsonwebtoken";
 import type { TokenService } from "../auth/interfaces.js";
 import { User } from "@dieti-estates-2025/common";
 import { type RepositoryOf } from "@dieti-estates-2025/common";
+import ms from "ms";
+
 
 export class JWTTokenService implements TokenService {
   constructor(
     private readonly secret: string, 
-    private readonly userRepository: RepositoryOf<"User", User, {email: string}>) {}
+    private readonly userRepository: RepositoryOf<"User", User, {email: string}>,
+    private readonly tokenExpiration: ms.StringValue | number = "24h") {}
 
   generateToken(user: User): string {
     const payload: JwtPayload = { email: user.email, username: user.username };
-    return jwt.sign(payload, this.secret as jwt.Secret);
+    return jwt.sign(payload, this.secret as jwt.Secret, { expiresIn: this.tokenExpiration });
   }
 
 

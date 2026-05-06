@@ -815,9 +815,9 @@ export const container = Container.create()
     )
     .register(
         "token-service", 
-        ["user-repository"], 
-        (userRepository: RepositoryOf<"User", User, {email: string}>) => 
-            new JWTTokenService(process.env.JWT_SECRET!, userRepository)
+        ["user-repository", "app-config"], 
+        (userRepository: RepositoryOf<"User", User, {email: string}>, config: Config) => 
+            new JWTTokenService(process.env.JWT_SECRET!, userRepository, Number(process.env.TOKEN_EXPIRATION) ?? "2h")
     );
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
