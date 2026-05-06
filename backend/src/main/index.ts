@@ -104,10 +104,7 @@ import { PrismaAuthRepository } from "../persistence/auth-repository.js";
 import { PrismaClient } from "../persistence/generated/prisma/client.js";
 import { createPrismaClient } from "../persistence/create-prisma-client.js";
 
-import {
-    StubEventPublisher,
-    StubThirdPartyAuthService,
-} from "./stubs.js";
+import { StubEventPublisher, StubThirdPartyAuthService } from "./stubs.js";
 import { databaseConfigFromEnv } from "../persistence/database-config.js";
 import {
     AdminCounterFirstLaunchDetector,
@@ -571,7 +568,10 @@ export const container = Container.create()
         "retrieve-advertisements-metrics-presenter",
         ["response-manager", "logger"],
         (responseManager: ResponseManager, logger: Logger) =>
-            new HTTPRetrieveAdvertisementsMetricsPresenter(responseManager, logger),
+            new HTTPRetrieveAdvertisementsMetricsPresenter(
+                responseManager,
+                logger,
+            ),
     )
 
     //=======================================================================//
@@ -808,16 +808,18 @@ export const container = Container.create()
     )
     .register("api-builder-director", [], () => new APIBuilderDirector())
     .register(
-        "authentication-handler", 
-        ["token-service"], 
-        (tokenService: TokenService) => 
-            authenticationHandlerFactory(tokenService)
+        "authentication-handler",
+        ["token-service"],
+        (tokenService: TokenService) =>
+            authenticationHandlerFactory(tokenService),
     )
     .register(
-        "token-service", 
-        ["user-repository", "app-config"], 
-        (userRepository: RepositoryOf<"User", User, {email: string}>, config: Config) => 
-            new JWTTokenService(process.env.JWT_SECRET!, userRepository)
+        "token-service",
+        ["user-repository", "app-config"],
+        (
+            userRepository: RepositoryOf<"User", User, { email: string }>,
+            config: Config,
+        ) => new JWTTokenService(process.env.JWT_SECRET!, userRepository),
     );
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -858,7 +860,7 @@ const errorHandlingMiddleware = (
         stack: err.stack,
     });
 
-    try{
+    try {
         // Collect all file paths
         if (req.file?.path) {
             fs.unlinkSync(req.file.path);
@@ -881,7 +883,7 @@ const errorHandlingMiddleware = (
                 }
             }
         }
-    } catch(e) {
+    } catch (e) {
         logger.error("Could not delete unused files:\n", e);
     }
 
@@ -902,6 +904,7 @@ await container.get("setup-first-admin-interactor").execute();
  *                                                                           *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+await container.get("setup-first-admin-interactor").execute();
 const app = container.get("express-app");
 app.use(diMiddleware);
 app.use(container.get("authentication-handler"));

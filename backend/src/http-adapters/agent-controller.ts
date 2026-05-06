@@ -1,4 +1,9 @@
-import { type Logger, Request, Response, SignUpRequestDTO } from "@dieti-estates-2025/common";
+import {
+    type Logger,
+    Request,
+    Response,
+    SignUpRequestDTO,
+} from "@dieti-estates-2025/common";
 import type { CreateNewAgentInteractor } from "../admin/create-new-agent-interactor.js";
 import type { ResponseManager } from "./response-manager.js";
 
@@ -12,8 +17,8 @@ export class AgentController {
     }
 
     async postAgent(request: Request) {
-        const agent =  SignUpRequestDTO.fromObject(request.body);
-        if(!agent) {
+        const agent = SignUpRequestDTO.fromObject(request.body);
+        if (!agent) {
             this.logger.warn("Invalid request");
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
@@ -22,7 +27,7 @@ export class AgentController {
         this.createNewAgentInteractor.execute(
             agent.email,
             agent.username,
-            agent.password
+            agent.password,
         );
     }
 }
