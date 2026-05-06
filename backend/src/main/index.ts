@@ -817,7 +817,7 @@ export const container = Container.create()
         "token-service", 
         ["user-repository", "app-config"], 
         (userRepository: RepositoryOf<"User", User, {email: string}>, config: Config) => 
-            new JWTTokenService(process.env.JWT_SECRET!, userRepository, Number(process.env.TOKEN_EXPIRATION) ?? "2h")
+            new JWTTokenService(process.env.JWT_SECRET!, userRepository)
     );
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

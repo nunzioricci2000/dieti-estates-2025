@@ -9,7 +9,7 @@ export class JWTTokenService implements TokenService {
   constructor(
     private readonly secret: string, 
     private readonly userRepository: RepositoryOf<"User", User, {email: string}>,
-    private readonly tokenExpiration: ms.StringValue | number = "24h") {}
+    private readonly tokenExpiration: ms.StringValue | number = "2h") {}
 
   generateToken(user: User): string {
     const payload: JwtPayload = { email: user.email, username: user.username };
