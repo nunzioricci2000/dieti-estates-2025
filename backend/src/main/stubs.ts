@@ -3,9 +3,7 @@ import type {
     EventListener,
     EventPublisher,
 } from "@dieti-estates-2025/common";
-import type {
-    ThirdPartyAuthService,
-} from "../auth/interfaces.js";
+import type { ThirdPartyAuthService } from "../auth/interfaces.js";
 import type { ThirdPartyIdentity } from "../auth/data-objects.js";
 
 const notImplemented = (name: string): never => {
@@ -22,4 +20,3 @@ export class StubThirdPartyAuthService implements ThirdPartyAuthService {
         return notImplemented("StubThirdPartyAuthService.authenticateUser");
     }
 }
-

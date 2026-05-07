@@ -6,6 +6,7 @@ import type {
     RequestHandler,
     ErrorRequestHandler,
 } from "express";
+import fs from "fs";
 
 import type { TokenService } from "../auth/interfaces.js";
 import { Admin, Agent, type User } from "@dieti-estates-2025/common";
@@ -110,13 +111,41 @@ export function errorHandlingMiddlewareFactory(
 ): ErrorRequestHandler {
     return (
         err: Error,
-        _req: ExpressRequest,
+        req: ExpressRequest,
         res: ExpressResponse,
-        _next: NextFunction,
+        next: NextFunction,
     ): void => {
         logger.error(`An unexpected error occurred: ${err.message}`, {
             stack: err.stack,
         });
+
+        try {
+            // Collect all file paths
+            if (req.file?.path) {
+                fs.unlinkSync(req.file.path);
+            }
+
+            if (req.files) {
+                if (Array.isArray(req.files)) {
+                    for (const f of req.files) {
+                        if (f?.path) fs.unlinkSync(f.path);
+                    }
+                } else if (typeof req.files === "object") {
+                    for (const val of Object.values(req.files)) {
+                        if (Array.isArray(val)) {
+                            for (const f of val) {
+                                if (f?.path) fs.unlinkSync(f.path);
+                            }
+                        } else if ((val as any)?.path) {
+                            fs.unlinkSync((val as any).path);
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            logger.error("Could not delete unused files:\n", e);
+        }
+
         res.status(500).json({ error: "An unexpected error occurred" });
     };
 }
