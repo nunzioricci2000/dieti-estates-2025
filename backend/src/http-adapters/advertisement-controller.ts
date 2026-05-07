@@ -117,5 +117,6 @@ export class AdvertisementController {
         }
         this.logger.debug("Calling interactors");
         this.markAsTakenInteractor.execute(id);
+        this.viewAdvertisementInteractor.execute(id);
     }
 }
