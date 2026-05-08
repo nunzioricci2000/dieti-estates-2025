@@ -12,4 +12,9 @@ declare module "express-serve-static-core" {
         agentController: AgentController;
         user?: User,
     }
+
+    interface Response {
+        code: number;
+        body: any;
+    }
 }
