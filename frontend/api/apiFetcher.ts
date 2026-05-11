@@ -1,6 +1,6 @@
 import type { ApiContext } from "./apiContext";
 
-const baseUrl = process.env.NEXT_PUBLIC_API_URL || "";
+const baseUrl = ""; // TODO add your baseUrl
 
 export type ErrorWrapper<TError> =
   | TError

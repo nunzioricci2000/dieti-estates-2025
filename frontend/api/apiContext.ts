@@ -57,9 +57,9 @@ export function useApiContext<
 export const queryKeyFn = (operation: QueryOperation): QueryKey => {
   const queryKey: unknown[] = hasPathParams(operation)
     ? operation.path
-      .split("/")
-      .filter(Boolean)
-      .map((i) => resolvePathParam(i, operation.variables.pathParams))
+        .split("/")
+        .filter(Boolean)
+        .map((i) => resolvePathParam(i, operation.variables.pathParams))
     : operation.path.split("/").filter(Boolean);
 
   if (hasQueryParams(operation)) {
