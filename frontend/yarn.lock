@@ -2015,6 +2015,44 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@dieti-estates-2025/frontend@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@dieti-estates-2025/frontend@workspace:."
+  dependencies:
+    "@babel/core": "npm:^7.28.4"
+    "@mantine/core": "npm:9.1.1"
+    "@mantine/hooks": "npm:9.1.1"
+    "@next/bundle-analyzer": "npm:^16.0.0"
+    "@storybook/addon-themes": "npm:^10.0.0"
+    "@storybook/nextjs": "npm:^10.0.0"
+    "@storybook/react": "npm:^10.0.0"
+    "@tabler/icons-react": "npm:^3.35.0"
+    "@testing-library/dom": "npm:^10.4.1"
+    "@testing-library/jest-dom": "npm:^6.9.1"
+    "@testing-library/react": "npm:^16.3.0"
+    "@testing-library/user-event": "npm:^14.6.1"
+    "@types/jest": "npm:^30.0.0"
+    "@types/node": "npm:^25.0.0"
+    "@types/react": "npm:19.2.14"
+    babel-loader: "npm:^10.0.0"
+    jest: "npm:^30.2.0"
+    jest-environment-jsdom: "npm:^30.2.0"
+    next: "npm:16.2.4"
+    oxfmt: "npm:^0.47.0"
+    oxlint: "npm:^1.58.0"
+    postcss: "npm:^8.5.6"
+    postcss-preset-mantine: "npm:1.18.0"
+    postcss-simple-vars: "npm:^7.0.1"
+    react: "npm:19.2.5"
+    react-dom: "npm:19.2.5"
+    storybook: "npm:^10.0.0"
+    stylelint: "npm:^17.0.0"
+    stylelint-config-standard-scss: "npm:^17.0.0"
+    ts-jest: "npm:^29.4.4"
+    typescript: "npm:6.0.3"
+  languageName: unknown
+  linkType: soft
+
 "@discoveryjs/json-ext@npm:0.5.7":
   version: 0.5.7
   resolution: "@discoveryjs/json-ext@npm:0.5.7"
@@ -8586,44 +8624,6 @@ __metadata:
   checksum: 10c0/b0e6e599780ce6bab49cc413eba822f7d1f0dfebd1c103eaa3785c59e43e22c59018323cf9e1708f0ef5329e94a745d163fcbb6bff8e4c6742f9be9e86f3500c
   languageName: node
   linkType: hard
-
-"mantine-next-template@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "mantine-next-template@workspace:."
-  dependencies:
-    "@babel/core": "npm:^7.28.4"
-    "@mantine/core": "npm:9.1.1"
-    "@mantine/hooks": "npm:9.1.1"
-    "@next/bundle-analyzer": "npm:^16.0.0"
-    "@storybook/addon-themes": "npm:^10.0.0"
-    "@storybook/nextjs": "npm:^10.0.0"
-    "@storybook/react": "npm:^10.0.0"
-    "@tabler/icons-react": "npm:^3.35.0"
-    "@testing-library/dom": "npm:^10.4.1"
-    "@testing-library/jest-dom": "npm:^6.9.1"
-    "@testing-library/react": "npm:^16.3.0"
-    "@testing-library/user-event": "npm:^14.6.1"
-    "@types/jest": "npm:^30.0.0"
-    "@types/node": "npm:^25.0.0"
-    "@types/react": "npm:19.2.14"
-    babel-loader: "npm:^10.0.0"
-    jest: "npm:^30.2.0"
-    jest-environment-jsdom: "npm:^30.2.0"
-    next: "npm:16.2.4"
-    oxfmt: "npm:^0.47.0"
-    oxlint: "npm:^1.58.0"
-    postcss: "npm:^8.5.6"
-    postcss-preset-mantine: "npm:1.18.0"
-    postcss-simple-vars: "npm:^7.0.1"
-    react: "npm:19.2.5"
-    react-dom: "npm:19.2.5"
-    storybook: "npm:^10.0.0"
-    stylelint: "npm:^17.0.0"
-    stylelint-config-standard-scss: "npm:^17.0.0"
-    ts-jest: "npm:^29.4.4"
-    typescript: "npm:6.0.3"
-  languageName: unknown
-  linkType: soft
 
 "mathml-tag-names@npm:^4.0.0":
   version: 4.0.0

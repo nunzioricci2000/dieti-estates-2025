@@ -24,7 +24,7 @@ export class AgentController {
             return;
         }
         this.logger.debug("Calling interactor");
-        this.createNewAgentInteractor.execute(
+        await this.createNewAgentInteractor.execute(
             agent.email,
             agent.username,
             agent.password,

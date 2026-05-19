@@ -239,20 +239,32 @@ function normalizeBaseUrl(url: string): string {
     return url.endsWith("/") ? url.slice(0, -1) : url;
 }
 
+function isAbsoluteUrl(url: string): boolean {
+    return /^https?:\/\//i.test(url);
+}
+
 function buildUrl(
     path: string,
     query?: Record<string, string | number | undefined>,
 ): string {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
+    const baseUrl = (process.env.NEXT_PUBLIC_API_URL || "/backend-api").trim();
     const hasBaseUrl = Boolean(baseUrl);
     const runningInBrowser = typeof window !== "undefined";
-    const origin = hasBaseUrl
+    const normalizedBaseUrl = hasBaseUrl
         ? normalizeBaseUrl(baseUrl as string)
-        : runningInBrowser
-            ? window.location.origin
-            : "http://localhost";
+        : "";
+    const origin =
+        hasBaseUrl && isAbsoluteUrl(normalizedBaseUrl)
+            ? normalizedBaseUrl
+            : runningInBrowser
+                ? window.location.origin
+                : "http://localhost";
+    const requestPath =
+        hasBaseUrl && !isAbsoluteUrl(normalizedBaseUrl)
+            ? `${normalizedBaseUrl}${path}`
+            : path;
 
-    const url = new URL(path, origin);
+    const url = new URL(requestPath, origin);
     if (query) {
         for (const [key, value] of Object.entries(query)) {
             if (value !== undefined && value !== "") {

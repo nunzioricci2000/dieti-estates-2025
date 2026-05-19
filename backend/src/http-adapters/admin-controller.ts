@@ -1,4 +1,11 @@
-import { type Logger, Request, Response, PasswordDTO, SignUpRequestDTO, Admin } from "@dieti-estates-2025/common";
+import {
+    type Logger,
+    Request,
+    Response,
+    PasswordDTO,
+    SignUpRequestDTO,
+    Admin,
+} from "@dieti-estates-2025/common";
 import type { CreateNewAdminInteractor } from "../admin/create-new-admin-interactor.js";
 import type { EditAdminPasswordInteractor } from "../admin/edit-admin-password-interactor.js";
 import type { ResponseManager } from "./response-manager.js";
@@ -22,9 +29,9 @@ export class AdminController {
             return;
         }
 
-        this.createNewAdminInteractor.execute(
-            admin.email, 
-            admin.username, 
+        await this.createNewAdminInteractor.execute(
+            admin.email,
+            admin.username,
             admin.password,
         );
 
@@ -34,13 +41,13 @@ export class AdminController {
     async patchAdmin(request: Request) {
         const newPassword = PasswordDTO.fromObject(request.body);
         const admin = request.body.admin;
-        if(!newPassword) {
+        if (!newPassword) {
             this.logger.warn("Invalid request");
             this.responseManager.sendResponse(Response.INVALID_REQUEST);
             return;
         }
-        
+
         this.logger.debug("Sending response");
-        this.editAdminPassword.execute(admin, newPassword.password);
+        await this.editAdminPassword.execute(admin, newPassword.password);
     }
 }

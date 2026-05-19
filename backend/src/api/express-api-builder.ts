@@ -8,7 +8,10 @@ import {
     RequestBuilderDirector,
 } from "@dieti-estates-2025/common";
 import multer from "multer";
-import { advertisementMultipartHandler, authorizationHandlerFactory } from "./middleware.js";
+import {
+    advertisementMultipartHandler,
+    authorizationHandlerFactory,
+} from "./middleware.js";
 
 export class ExpressAPIBuilder implements APIBuilder<ExpressAPI> {
     private requestBuilderDirector = new RequestBuilderDirector();
@@ -24,60 +27,99 @@ export class ExpressAPIBuilder implements APIBuilder<ExpressAPI> {
     }
 
     buildAuthRouter(): void {
-        this.app.post("/auth/signup", async (req) => {
+        this.app.post("/auth/signup", async (req, _res, next) => {
             await req.authController.signup(this.buildRequest(req));
+            next();
         });
-        this.app.post("/auth/login", async (req) => {
+        this.app.post("/auth/login", async (req, _res, next) => {
             await req.authController.login(this.buildRequest(req));
+            next();
         });
     }
 
     buildAdvertisementRouter(): void {
-        this.app.get("/advertisements", async (req) => {
+        this.app.get("/advertisements", async (req, _res, next) => {
             await req.advertisementController.getAdvertisements(
                 this.buildRequest(req),
             );
+            next();
         });
-        this.app.get("/advertisements/:id", async (req) => {
+        this.app.get("/advertisements/:id", async (req, _res, next) => {
             await req.advertisementController.getAdvertisement(
                 this.buildRequest(req),
             );
+            next();
         });
-        this.app.post("/advertisements/:id/offers", this.userAthorizationMiddlware, async (req) => {
-            await req.advertisementController.postOffer(this.buildRequest(req));
-        });
+        this.app.post(
+            "/advertisements/:id/offers",
+            this.userAthorizationMiddlware,
+            async (req, _res, next) => {
+                await req.advertisementController.postOffer(
+                    this.buildRequest(req),
+                );
+                next();
+            },
+        );
 
         const storage = multer.diskStorage({
             destination: "images/",
-            filename:  (req, file, cb) => cb(null, Date.now() + "-" + file.originalname)
-        })
+            filename: (req, file, cb) =>
+                cb(null, Date.now() + "-" + file.originalname),
+        });
         const upload = multer({ storage });
-        this.app.post("/advertisements", this.agentAthorizationMiddlware, upload.array("images", 10), advertisementMultipartHandler, async (req) => {
-            await req.advertisementController.postAdvertisement(
-                this.buildRequest(req),
-            );
-        });
-        this.app.patch("/advertisements/:id", this.agentAthorizationMiddlware, async (req) => {
-            await req.advertisementController.patchAdvertisement(
-                this.buildRequest(req),
-            );
-        });
+        this.app.post(
+            "/advertisements",
+            this.agentAthorizationMiddlware,
+            upload.array("images", 10),
+            advertisementMultipartHandler,
+            async (req, _res, next) => {
+                await req.advertisementController.postAdvertisement(
+                    this.buildRequest(req),
+                );
+                next();
+            },
+        );
+        this.app.patch(
+            "/advertisements/:id",
+            this.agentAthorizationMiddlware,
+            async (req, _res, next) => {
+                await req.advertisementController.patchAdvertisement(
+                    this.buildRequest(req),
+                );
+                next();
+            },
+        );
     }
 
     buildAdminRouter(): void {
-        this.app.post("/admins", this.adminAthorizationMiddlware, async (req) => {
-            await req.adminController.postAdmin(this.buildRequest(req));
-        });
-        this.app.patch("/admins/me/password", this.adminAthorizationMiddlware, async (req) => {
-            req.body.admin = req.user;
-            await req.adminController.patchAdmin(this.buildRequest(req));
-        });
+        this.app.post(
+            "/admins",
+            this.adminAthorizationMiddlware,
+            async (req, _res, next) => {
+                await req.adminController.postAdmin(this.buildRequest(req));
+                next();
+            },
+        );
+        this.app.patch(
+            "/admins/me/password",
+            this.adminAthorizationMiddlware,
+            async (req, _res, next) => {
+                req.body.admin = req.user;
+                await req.adminController.patchAdmin(this.buildRequest(req));
+                next();
+            },
+        );
     }
 
     buildAgentRouter(): void {
-        this.app.post("/agents", this.adminAthorizationMiddlware, async (req) => {
-            await req.agentController.postAgent(this.buildRequest(req));
-        });
+        this.app.post(
+            "/agents",
+            this.adminAthorizationMiddlware,
+            async (req, _res, next) => {
+                await req.agentController.postAgent(this.buildRequest(req));
+                next();
+            },
+        );
     }
 
     getResult(): ExpressAPI {

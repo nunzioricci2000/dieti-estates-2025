@@ -5,11 +5,17 @@ const withBundleAnalyzer = bundleAnalyzer({
 });
 
 export default withBundleAnalyzer({
+  turbo: {
+    root: "../",
+  },
+  turbopack: {
+    root: "../",
+  },
   async rewrites() {
     return [
       {
-        source: "/api/:path*",
-        destination: "http://localhost:3000/api/:path*",
+        source: "/backend-api/:path*",
+        destination: "http://localhost:3001/:path*",
       },
     ];
   },

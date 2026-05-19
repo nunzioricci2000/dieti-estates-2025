@@ -1,0 +1,53 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
+      POSTGRES_DB: dieti_dev
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev -d dieti_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: postgres://dev:dev@db:5432/dieti_dev
+      JWT_SECRET: "dev-secret"
+    ports:
+      - "3001:3001"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      - ./backend/images:/usr/src/app/images:rw
+
+  frontend:
+    image: node:20-bullseye
+    working_dir: /usr/src/app/frontend
+    volumes:
+      - ./frontend:/usr/src/app/frontend:cached
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_API_URL: /backend-api
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    command: sh -c "corepack enable && corepack prepare yarn@4.14.1 --activate && yarn config set nodeLinker node-modules && cd /usr/src/app/frontend && npm install && yarn dev"
+    depends_on:
+      - backend
+
+volumes:
+  db-data:
