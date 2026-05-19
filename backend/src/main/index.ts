@@ -825,7 +825,13 @@ export const container = Container.create()
         (
             userRepository: RepositoryOf<"User", User, { email: string }>,
             config: Config,
-        ) => new JWTTokenService(process.env.JWT_SECRET!, userRepository),
+        ) =>
+            new JWTTokenService(
+                process.env.JWT_SECRET && process.env.JWT_SECRET.trim() !== ""
+                    ? process.env.JWT_SECRET
+                    : "dev-secret",
+                userRepository,
+            ),
     )
     .register(
         "error-handling-middleware",
@@ -877,5 +883,5 @@ const apiDirector = container.get("api-builder-director");
 const api = apiDirector.makeAPI(apiBuilder);
 app.use(container.get("response-sender-middleware"));
 app.use(container.get("error-handling-middleware"));
-const port = Number.parseInt(process.env.PORT ?? "3000", 10);
+const port = Number.parseInt(process.env.PORT ?? "3001", 10);
 api.start(port);

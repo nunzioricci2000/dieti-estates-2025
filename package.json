@@ -15,6 +15,7 @@
     "type": "module",
     "main": "index.js",
     "scripts": {
+        "generate-api": "ts-node api-gen.mts",
         "lint": "eslint .",
         "prettier": "prettier --check .",
         "test": "echo \"Error: no test specified\" && exit 1"
@@ -35,7 +36,11 @@
         "eslint-plugin-prettier": "^5.5.5",
         "globals": "^17.5.0",
         "prettier": "3.8.3",
+        "ts-node": "^10.9.2",
         "typescript": "^6.0.2",
         "typescript-eslint": "^8.58.2"
+    },
+    "dependencies": {
+        "swagger-axios-codegen": "^0.18.1"
     }
 }

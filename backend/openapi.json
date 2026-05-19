@@ -1,0 +1,970 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Default module",
+        "description": "",
+        "version": "1.0.0"
+    },
+    "tags": [],
+    "paths": {
+        "/auth/signup": {
+            "post": {
+                "summary": "signup",
+                "operationId": "authSignup",
+                "deprecated": false,
+                "description": "",
+                "tags": ["auth"],
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SignupRequestDTO"
+                            },
+                            "example": {
+                                "username": "Roxanne Abbott",
+                                "email": "Lelia_Klein21@hotmail.com",
+                                "password": "YXikvKpee4HzahF"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthResponseDTO"
+                                }
+                            }
+                        },
+                        "headers": {}
+                    }
+                },
+                "security": []
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "summary": "login",
+                "operationId": "authLogin",
+                "deprecated": false,
+                "description": "",
+                "tags": ["auth"],
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequestDTO"
+                            },
+                            "example": {
+                                "email": "Olin_Deckow69@hotmail.com",
+                                "password": "ruhb_llDKijuWfn"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {}
+                                }
+                            }
+                        },
+                        "headers": {}
+                    }
+                },
+                "security": []
+            }
+        },
+        "/auth/re-authenticate": {
+            "post": {
+                "summary": "re-authenticate",
+                "operationId": "authReAuthenticate",
+                "deprecated": false,
+                "description": "",
+                "tags": ["auth"],
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PasswordDTO"
+                            },
+                            "example": {
+                                "password": "YXikvKpee4HzahF"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthResponseDTO"
+                                }
+                            }
+                        },
+                        "headers": {}
+                    }
+                },
+                "security": [
+                    {
+                        "Default": []
+                    }
+                ]
+            }
+        },
+        "/admins": {
+            "post": {
+                "summary": "create admin",
+                "operationId": "createAdmin",
+                "deprecated": false,
+                "description": "",
+                "tags": ["admin"],
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SignupRequestDTO"
+                            },
+                            "example": {
+                                "username": "Lucille Wiegand",
+                                "email": "Zechariah.Nienow65@yahoo.com",
+                                "password": "GpLx4_RBFls6Bkp"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserDTO"
+                                },
+                                "example": {
+                                    "username": "Jon Doe",
+                                    "email": "jon.doe@example.com"
+                                }
+                            }
+                        },
+                        "headers": {}
+                    }
+                },
+                "security": [
+                    {
+                        "Default": []
+                    }
+                ]
+            }
+        },
+        "/admins/me/password": {
+            "patch": {
+                "summary": "change admin password",
+                "operationId": "changeAdminPassword",
+                "deprecated": false,
+                "description": "",
+                "tags": ["admin"],
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PasswordDTO"
+                            },
+                            "example": {
+                                "password": "2gDinTzmo7PaqU6"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserDTO"
+                                },
+                                "example": {
+                                    "username": "Jon Doe",
+                                    "email": "jon.doe@example.com"
+                                }
+                            }
+                        },
+                        "headers": {}
+                    }
+                },
+                "security": [
+                    {
+                        "Re-Authenticate": []
+                    }
+                ]
+            }
+        },
+        "/agents": {
+            "post": {
+                "summary": "create agent",
+                "operationId": "createAgent",
+                "deprecated": false,
+                "description": "",
+                "tags": ["agent"],
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SignupRequestDTO"
+                            },
+                            "example": {
+                                "username": "Jerald Schneider",
+                                "email": "Samson.Okuneva17@yahoo.com",
+                                "password": "hETc7GYapaQ3gvo"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserDTO"
+                                },
+                                "example": {
+                                    "username": "Jon Doe",
+                                    "email": "jon.doe@example.com"
+                                }
+                            }
+                        },
+                        "headers": {}
+                    }
+                },
+                "security": [
+                    {
+                        "Default": []
+                    }
+                ]
+            }
+        },
+        "/advertisements": {
+            "get": {
+                "summary": "advertisement metrics",
+                "operationId": "getAdvertisementsMetrics",
+                "deprecated": false,
+                "description": "",
+                "tags": ["advertisement"],
+                "parameters": [
+                    {
+                        "name": "include",
+                        "in": "query",
+                        "description": "This is available only for agents",
+                        "required": true,
+                        "example": "metrics",
+                        "schema": {
+                            "type": "string",
+                            "const": "metrics"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AdvertisementsMetricsDTO"
+                                },
+                                "example": {
+                                    "totalVisitsRequested": 10092254,
+                                    "totalViews": 4833431,
+                                    "advertisements": [
+                                        {
+                                            "id": 18,
+                                            "address": "964 General Tunnel",
+                                            "city": "South Elliestead",
+                                            "coordinates": {
+                                                "latitude": 82.8409,
+                                                "longitude": -91.0904
+                                            },
+                                            "images": [
+                                                "https://loremflickr.com/400/400?lock=3236465349930686",
+                                                "https://loremflickr.com/400/400?lock=1007529777685376"
+                                            ],
+                                            "description": "Creta terror apto. Utrum velit subvenio stipes. Cicuta crudelis omnis solitudo vulnero cena. Adeptio denuo animus speculum. Stips coruscus accusantium.",
+                                            "dimensions": 33633208.69498509,
+                                            "numberOfRooms": 92,
+                                            "energyClass": "in exercitation sed",
+                                            "additionalServices": [
+                                                "aliqua",
+                                                "fugiat ex in Excepteur"
+                                            ],
+                                            "nearbyPOIs": [
+                                                "nostrud elit nulla dolor cupidatat",
+                                                "incididunt",
+                                                "aute"
+                                            ],
+                                            "views": 32340806,
+                                            "visits": -90180383,
+                                            "offers": -20461607
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "headers": {}
+                    }
+                },
+                "security": [
+                    {
+                        "Default": []
+                    }
+                ]
+            },
+            "post": {
+                "summary": "new advertisement",
+                "operationId": "createAdvertisement",
+                "deprecated": false,
+                "description": "",
+                "tags": ["advertisement"],
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "address": {
+                                        "example": "",
+                                        "type": "string"
+                                    },
+                                    "city": {
+                                        "example": "",
+                                        "type": "string"
+                                    },
+                                    "latitude": {
+                                        "example": "",
+                                        "type": "string"
+                                    },
+                                    "longitude": {
+                                        "example": "",
+                                        "type": "string"
+                                    },
+                                    "images": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "description": "This an array of files",
+                                        "example": ""
+                                    },
+                                    "description": {
+                                        "example": "",
+                                        "type": "string"
+                                    },
+                                    "dimensions": {
+                                        "type": "number",
+                                        "example": 0
+                                    },
+                                    "numberOfRooms": {
+                                        "type": "integer",
+                                        "example": 0
+                                    },
+                                    "energyClass": {
+                                        "example": "",
+                                        "type": "string"
+                                    },
+                                    "additionalServices": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "example": ""
+                                    },
+                                    "kind": {
+                                        "type": "string",
+                                        "enum": ["sale", "rent"],
+                                        "example": ""
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "example": 0
+                                    }
+                                }
+                            },
+                            "examples": {}
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AdvertisementDTO"
+                                },
+                                "example": {
+                                    "id": 52,
+                                    "address": "5245 Vito Drive",
+                                    "city": "West Moriahchester",
+                                    "coordinates": {
+                                        "latitude": 85.8802,
+                                        "longitude": -19.309
+                                    },
+                                    "images": [
+                                        "https://loremflickr.com/400/400?lock=8018300757177670"
+                                    ],
+                                    "description": "Tondeo venia apto sono curia balbus clibanus sulum crastinus adipiscor. Alias amet ducimus conqueror quas laborum addo. Adulatio absens tergiversatio tergiversatio currus suus curvo. Degero quia impedit amiculum suadeo delectus comptus cubo. Exercitationem coadunatio incidunt conculco crastinus. Attonbitus caveo alter vergo consectetur degenero.",
+                                    "dimensions": -48011236.001135595,
+                                    "numberOfRooms": 64,
+                                    "energyClass": "eu irure aliquip pariatur sunt",
+                                    "additionalServices": [
+                                        "eu non officia adipisicing"
+                                    ],
+                                    "nearbyPOIs": [
+                                        "pariatur in nostrud mollit Ut",
+                                        "nostrud id qui dolor laborum",
+                                        "nulla consectetur"
+                                    ],
+                                    "kind": "sale",
+                                    "price": 196.66
+                                }
+                            }
+                        },
+                        "headers": {}
+                    }
+                },
+                "security": [
+                    {
+                        "Default": []
+                    }
+                ]
+            }
+        },
+        "/advertisements/{id}/offers": {
+            "post": {
+                "summary": "new offer",
+                "operationId": "createAdvertisementOffer",
+                "deprecated": false,
+                "description": "",
+                "tags": ["offer"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {}
+                            },
+                            "example": {}
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SendEmailDTO"
+                                },
+                                "example": {
+                                    "agent": {
+                                        "username": "Inez Kuvalis",
+                                        "email": "Howard7@hotmail.com"
+                                    },
+                                    "advertisement": {
+                                        "id": 40,
+                                        "address": "3764 Beier Unions",
+                                        "city": "South Kennediland",
+                                        "coordinates": {
+                                            "latitude": 85.8588,
+                                            "longitude": 171.5084
+                                        },
+                                        "images": [
+                                            "https://loremflickr.com/400/400?lock=5108081450686292"
+                                        ],
+                                        "description": "Tepidus pel barba quae chirographum dolore spoliatio vito conservo. Coniuratio curvo voluptatibus vulgaris consuasor altus delectus. Distinctio quidem dolore demitto acsi cruciamentum verto patrocinor balbus. Administratio absconditus maiores dignissimos.",
+                                        "dimensions": -11413039.657897726,
+                                        "numberOfRooms": 33,
+                                        "energyClass": "eu esse exercitation sed",
+                                        "additionalServices": ["ad elit nulla"],
+                                        "nearbyPOIs": [
+                                            "enim sint occaecat Ut laborum"
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "headers": {}
+                    }
+                },
+                "security": [
+                    {
+                        "Default": []
+                    }
+                ]
+            }
+        },
+        "/advertisements/{id}": {
+            "patch": {
+                "summary": "set ad as taken",
+                "operationId": "setAdvertisementTaken",
+                "deprecated": false,
+                "description": "",
+                "tags": ["advertisement"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "taken": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": ["taken"]
+                            },
+                            "examples": {}
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "description": "ID"
+                                        },
+                                        "address": {
+                                            "type": "string"
+                                        },
+                                        "city": {
+                                            "type": "string"
+                                        },
+                                        "coordinates": {
+                                            "type": "object",
+                                            "properties": {
+                                                "latitude": {
+                                                    "type": "number"
+                                                },
+                                                "longitude": {
+                                                    "type": "number"
+                                                }
+                                            },
+                                            "required": [
+                                                "latitude",
+                                                "longitude"
+                                            ]
+                                        },
+                                        "images": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "format": "uri"
+                                            }
+                                        },
+                                        "description": {
+                                            "type": "string"
+                                        },
+                                        "dimensions": {
+                                            "type": "number"
+                                        },
+                                        "numberOfRooms": {
+                                            "type": "integer"
+                                        },
+                                        "energyClass": {
+                                            "type": "string"
+                                        },
+                                        "additionalServices": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "nearbyPOIs": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "kind": {
+                                            "type": "string",
+                                            "enum": ["sale", "rent"]
+                                        },
+                                        "price": {
+                                            "type": "number"
+                                        },
+                                        "taken": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "required": [
+                                        "taken",
+                                        "id",
+                                        "address",
+                                        "city",
+                                        "coordinates",
+                                        "images",
+                                        "description",
+                                        "dimensions",
+                                        "numberOfRooms",
+                                        "energyClass",
+                                        "additionalServices",
+                                        "nearbyPOIs",
+                                        "kind",
+                                        "price"
+                                    ]
+                                }
+                            }
+                        },
+                        "headers": {}
+                    }
+                },
+                "security": [
+                    {
+                        "Default": []
+                    }
+                ]
+            }
+        }
+    },
+    "webhooks": {},
+    "components": {
+        "schemas": {
+            "SignupRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password"
+                    }
+                },
+                "required": ["username", "email", "password"]
+            },
+            "AuthResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "type": "string"
+                    }
+                },
+                "required": ["token"]
+            },
+            "LoginRequestDTO": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password"
+                    }
+                },
+                "required": ["email", "password"]
+            },
+            "UserDTO": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    }
+                },
+                "required": ["username", "email"]
+            },
+            "PasswordDTO": {
+                "type": "object",
+                "properties": {
+                    "password": {
+                        "type": "string",
+                        "format": "password"
+                    }
+                },
+                "required": ["password"]
+            },
+            "AdvertisementDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "ID"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "coordinates": {
+                        "type": "object",
+                        "properties": {
+                            "latitude": {
+                                "type": "number"
+                            },
+                            "longitude": {
+                                "type": "number"
+                            }
+                        },
+                        "required": ["latitude", "longitude"]
+                    },
+                    "images": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "uri"
+                        }
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "dimensions": {
+                        "type": "number"
+                    },
+                    "numberOfRooms": {
+                        "type": "integer"
+                    },
+                    "energyClass": {
+                        "type": "string"
+                    },
+                    "additionalServices": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "nearbyPOIs": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "kind": {
+                        "type": "string",
+                        "enum": ["sale", "rent"]
+                    },
+                    "price": {
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "id",
+                    "address",
+                    "city",
+                    "coordinates",
+                    "images",
+                    "description",
+                    "dimensions",
+                    "numberOfRooms",
+                    "energyClass",
+                    "additionalServices",
+                    "nearbyPOIs",
+                    "kind",
+                    "price"
+                ]
+            },
+            "AdvertisementsMetricsDTO": {
+                "type": "object",
+                "properties": {
+                    "totalVisitsRequested": {
+                        "type": "integer"
+                    },
+                    "totalViews": {
+                        "type": "integer"
+                    },
+                    "advertisements": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "description": "ID"
+                                },
+                                "address": {
+                                    "type": "string"
+                                },
+                                "city": {
+                                    "type": "string"
+                                },
+                                "coordinates": {
+                                    "type": "object",
+                                    "properties": {
+                                        "latitude": {
+                                            "type": "number"
+                                        },
+                                        "longitude": {
+                                            "type": "number"
+                                        }
+                                    },
+                                    "required": ["latitude", "longitude"]
+                                },
+                                "images": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string",
+                                        "format": "uri"
+                                    }
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "dimensions": {
+                                    "type": "number"
+                                },
+                                "numberOfRooms": {
+                                    "type": "integer"
+                                },
+                                "energyClass": {
+                                    "type": "string"
+                                },
+                                "additionalServices": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "nearbyPOIs": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "kind": {
+                                    "type": "string",
+                                    "enum": ["sale", "rent"]
+                                },
+                                "price": {
+                                    "type": "number"
+                                },
+                                "views": {
+                                    "type": "integer"
+                                },
+                                "visits": {
+                                    "type": "integer"
+                                },
+                                "offers": {
+                                    "type": "integer"
+                                }
+                            },
+                            "required": [
+                                "views",
+                                "visits",
+                                "offers",
+                                "id",
+                                "address",
+                                "city",
+                                "coordinates",
+                                "images",
+                                "description",
+                                "dimensions",
+                                "numberOfRooms",
+                                "energyClass",
+                                "additionalServices",
+                                "nearbyPOIs",
+                                "kind",
+                                "price"
+                            ]
+                        }
+                    }
+                },
+                "required": [
+                    "totalVisitsRequested",
+                    "totalViews",
+                    "advertisements"
+                ]
+            },
+            "SendEmailDTO": {
+                "type": "object",
+                "properties": {
+                    "agent": {
+                        "$ref": "#/components/schemas/UserDTO"
+                    },
+                    "advertisement": {
+                        "$ref": "#/components/schemas/AdvertisementDTO"
+                    }
+                },
+                "required": ["agent", "advertisement"]
+            }
+        },
+        "responses": {},
+        "securitySchemes": {
+            "Default": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            },
+            "Re-Authenticate": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    },
+    "servers": [],
+    "security": [
+        {
+            "Default": []
+        }
+    ]
+}

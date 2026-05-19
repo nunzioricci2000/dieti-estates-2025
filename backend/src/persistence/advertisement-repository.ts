@@ -87,8 +87,12 @@ export class PrismaAdvertisementRepository
                 energyClass: advertisement.energyClass,
                 available: advertisement.available,
                 price: this.extractPrice(advertisement),
-                images: JSON.stringify(advertisement.images.map((image) => image.url)),
-                additionalServices: JSON.stringify(advertisement.additionalServices),
+                images: JSON.stringify(
+                    advertisement.images.map((image) => image.url),
+                ),
+                additionalServices: JSON.stringify(
+                    advertisement.additionalServices,
+                ),
                 nearbyPOIs: JSON.stringify(advertisement.nearbyPOIs),
                 type: this.extractType(advertisement),
                 authorId: author.id,
@@ -151,8 +155,12 @@ export class PrismaAdvertisementRepository
                 energyClass: advertisement.energyClass,
                 available: advertisement.available,
                 price: this.extractPrice(advertisement),
-                images: JSON.stringify(advertisement.images.map((image) => image.url)),
-                additionalServices: JSON.stringify(advertisement.additionalServices),
+                images: JSON.stringify(
+                    advertisement.images.map((image) => image.url),
+                ),
+                additionalServices: JSON.stringify(
+                    advertisement.additionalServices,
+                ),
                 nearbyPOIs: JSON.stringify(advertisement.nearbyPOIs),
                 type: this.extractType(advertisement),
                 authorId: author.id,
@@ -203,8 +211,12 @@ export class PrismaAdvertisementRepository
             typeof filters.dimensionsMax === "number"
         ) {
             where.dimensions = {
-                ...(typeof filters.dimensionsMin === "number" ? { gte: filters.dimensionsMin } : {}),
-                ...(typeof filters.dimensionsMax === "number" ? { lte: filters.dimensionsMax } : {}),
+                ...(typeof filters.dimensionsMin === "number"
+                    ? { gte: filters.dimensionsMin }
+                    : {}),
+                ...(typeof filters.dimensionsMax === "number"
+                    ? { lte: filters.dimensionsMax }
+                    : {}),
             };
         }
         if (
@@ -212,8 +224,12 @@ export class PrismaAdvertisementRepository
             typeof filters.numberOfRoomsMax === "number"
         ) {
             where.numberOfRooms = {
-                ...(typeof filters.numberOfRoomsMin === "number" ? { gte: filters.numberOfRoomsMin } : {}),
-                ...(typeof filters.numberOfRoomsMax === "number" ? { lte: filters.numberOfRoomsMax } : {}),
+                ...(typeof filters.numberOfRoomsMin === "number"
+                    ? { gte: filters.numberOfRoomsMin }
+                    : {}),
+                ...(typeof filters.numberOfRoomsMax === "number"
+                    ? { lte: filters.numberOfRoomsMax }
+                    : {}),
             };
         }
         if (filters.acceptableEnergyClasses) {
@@ -443,15 +459,26 @@ export class PrismaAdvertisementRepository
             persisted.latitude,
             persisted.longitude,
         );
-        const images = (JSON.parse(persisted.images) as string[]).map(
-            (url: string) => ({ url }) as Advertisement["images"][number],
+        const images = (JSON.parse(persisted.images ?? "[]") as string[]).map(
+            (url: string) =>
+                ({
+                    url: this.normalizeImageUrl(url),
+                }) as Advertisement["images"][number],
         );
-        const additionalServices = JSON.parse(persisted.additionalServices) as string[];
-        const nearbyPOIs = JSON.parse(persisted.nearbyPOIs) as string[];
+        const additionalServices = JSON.parse(
+            persisted.additionalServices ?? "[]",
+        ) as string[];
+        const nearbyPOIs = JSON.parse(persisted.nearbyPOIs ?? "[]") as string[];
         const agent = new Agent(
             persisted.author.email,
             persisted.author.username,
         );
+
+        // Normalize price to integer to avoid runtime errors in domain Value objects
+        const rawPrice = Number(persisted.price ?? 0);
+        const normalizedPrice = Number.isFinite(rawPrice)
+            ? Math.round(rawPrice)
+            : 0;
 
         if (persisted.type === AdvertisementType.SALE) {
             return new Sale(
@@ -468,7 +495,7 @@ export class PrismaAdvertisementRepository
                 nearbyPOIs,
                 persisted.available,
                 agent,
-                new Price(persisted.price),
+                new Price(normalizedPrice),
             );
         }
 
@@ -486,8 +513,25 @@ export class PrismaAdvertisementRepository
             nearbyPOIs,
             persisted.available,
             agent,
-            new RentPrice(persisted.price, Period.Month),
+            new RentPrice(normalizedPrice, Period.Month),
         );
+    }
+
+    private normalizeImageUrl(url: string): string {
+        if (/^https?:\/\//i.test(url)) {
+            try {
+                const parsed = new URL(url);
+                if (parsed.hostname === "localhost" && parsed.port === "3000") {
+                    parsed.port = "3001";
+                }
+                return parsed.toString();
+            } catch {
+                return url;
+            }
+        }
+
+        const normalizedPath = url.replace(/^\/+/, "").replace(/^images\//, "");
+        return `http://localhost:3001/${normalizedPath}`;
     }
 
     private isRental(
